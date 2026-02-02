@@ -1,137 +1,133 @@
-# AerisQ - Drought Detection Platform
+# AerisQ - Advanced Drought Detection Platform
 
-**AI-powered drought detection using Sentinel-1 SAR satellite imagery**
+**Physics-backed soil moisture analysis using Sentinel-1 SAR satellite interpretation.**
 
-![AerisQ](https://img.shields.io/badge/Version-3.1.0-green) ![Physics](https://img.shields.io/badge/Physics-v2.0-blue) ![License](https://img.shields.io/badge/License-MIT-yellow)
+[![Version](https://img.shields.io/badge/Version-3.1.0-518a16?style=for-the-badge)](https://github.com/yourusername/aerisq)
+[![Status](https://img.shields.io/badge/Status-Production-518a16?style=for-the-badge)](https://aerisq.tech)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+[![Physics Engine](https://img.shields.io/badge/Physics-Sentinel--1_SAR-blueviolet?style=for-the-badge)](backend/app/agents/physicist.py)
 
-## 🌍 Overview
+---
 
-AerisQ uses radar backscatter analysis from Sentinel-1 SAR to detect drought conditions. Unlike optical imagery, SAR works through clouds and provides direct soil moisture information through the dielectric properties of the surface.
+## 🌍 Executive Summary
 
-## 🔬 Physics Model
+**AerisQ** is an advanced geospatial analysis platform designed to detect early signs of drought and soil moisture anomalies. By leveraging **Synthetic Aperture Radar (SAR)** technology from the Sentinel-1 constellation, AerisQ sees through clouds and weather conditions to provide reliable, day-and-night soil dielectric assessment.
 
-The drought detection is based on the relationship between soil moisture and radar backscatter:
+Unlike optical indices (NDVI) which only show vegetation stress *after* it occurs, AerisQ's **Physics Engine** analyzes the backscatter coefficient ($\sigma_0$) to estimate volumetric soil moisture directly, offering a leading indicator for water scarcity.
 
+## � Key capabilities
+
+### �🔬 The "Physicist" Engine
+At the core of AerisQ is a proprietary analysis agent capable of processing raw satellite telemetry into actionable insights:
+- **Radiometric Calibration**: Converts raw digital numbers into calibrated backscatter ($\sigma_0$ dB).
+- **Speckle Filtering**: Implements **Lee Filtering** and advanced noise reduction to ensure signal clarity.
+- **Incidence Angle Normalization**: Standardizes observations to a reference angle ($38^\circ$) for consistent temporal comparison.
+- **Dielectric Analysis**: Maps radar reflectivity directly to soil moisture content using empirical physical models.
+
+### 💻 Enterprise Frontend
+- **Interactive AOI Selection**: Precision polygon drawing tools based on `Leaflet-Draw`.
+- **Real-time Visualization**: Dynamic overlay of drought severity layers on global base maps.
+- **Secure Architecture**: JWT-based authentication with role-based access control.
+- **Reporting**: Automated generation of moisture analysis reports.
+
+---
+
+## 🏗️ System Architecture
+
+AerisQ follows a modern, decoupled service architecture:
+
+```mermaid
+graph TD
+    User[Clients] -->|HTTPS| FE[Next.js Frontend]
+    FE -->|API V1| BE[FastAPI Backend]
+    
+    subgraph "Core Engines"
+        BE -->|Tasking| PA[Physicist Agent]
+        PA -->|Query| CDSE[Copernicus Data Space]
+        PA -->|Processing| NP[NumPy/SciPy Compute]
+    end
+    
+    subgraph "Data Persistence"
+        BE -->|Auth/User Data| DB[(Supabase PostgreSQL)]
+        PA -->|Cache| Redis[(Redis Cache)]
+    end
 ```
-σ₀ = f(mv, θ, ε, s)
 
-Where:
-- mv = volumetric soil moisture
-- θ = incidence angle
-- ε = dielectric constant (related to moisture)
-- s = surface roughness
-```
+## 🛠️ Technology Stack
 
-**Drought Thresholds (VV Polarization):**
-| Condition | σ₀ (dB) | Drought % |
-|-----------|---------|-----------|
-| Normal | > -10 | < 10% |
-| Mild | -10 to -12 | 10-30% |
-| Moderate | -12 to -15 | 30-50% |
-| Severe | -15 to -18 | 50-70% |
-| Extreme | < -18 | > 70% |
+| Component | Technology | Description |
+|-----------|------------|-------------|
+| **Frontend** | ![Next.js](https://img.shields.io/badge/Next.js-black?style=flat-square) ![Tailwind](https://img.shields.io/badge/Tailwind-blue?style=flat-square) | Responsive React components with `leaflet` mapping. |
+| **Backend** | ![FastAPI](https://img.shields.io/badge/FastAPI-green?style=flat-square) ![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square) | High-performance async API with scientific computing libraries. |
+| **Science** | ![NumPy](https://img.shields.io/badge/NumPy-white?style=flat-square) ![Rasterio](https://img.shields.io/badge/Rasterio-purple?style=flat-square) | Geospatial raster processing and statistical analysis. |
+| **Satellite** | **Sentinel-1** (IW GRD) | C-Band Synthetic Aperture Radar data processing. |
 
-## 🚀 Quick Start
+---
+
+## ⚡ Getting Started
 
 ### Prerequisites
 - Node.js 18+
 - Python 3.11+
+- Sentinel-1 Data Access (CDSE Account recommended for live data)
 
-### Local Development
+### Installation
 
-1. **Clone the repository**
+1. **Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/aerisq.git
+git clone https://github.com/aerisq-tech/core.git
 cd aerisq
 ```
 
-2. **Start the backend**
+2. **Backend Setup**
 ```bash
 cd backend
 python -m venv venv
-.\venv\Scripts\activate  # Windows
-pip install -r requirements-standalone.txt
+# Windows
+.\venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+pip install -r requirements.txt
 python standalone.py
 ```
 
-3. **Start the frontend**
+3. **Frontend Setup**
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-4. **Access the app**
-- Frontend: http://localhost:3000
-- API Docs: http://localhost:8000/docs
-- Test credentials: `admin@aerisq.tech` / `password123`
-
-## 📁 Project Structure
-
-```
-aerisq/
-├── frontend/           # Next.js frontend
-│   ├── app/           # App router pages
-│   ├── components/    # React components
-│   └── lib/           # API client, auth context
-├── backend/           # FastAPI backend
-│   ├── app/           # Application modules
-│   │   └── agents/    # Physics engine
-│   └── standalone.py  # Dev server
-├── api/               # Vercel serverless API
-│   └── index.py       # API endpoint
-└── vercel.json        # Vercel configuration
-```
-
-## 🌐 Deployment
-
-### Vercel (Recommended)
-
-1. Push to GitHub
-2. Import project to Vercel
-3. Set environment variables:
-   - `SECRET_KEY`: JWT secret
-   - `GOD_MODE_EMAIL`: Admin email
-   - `GOD_MODE_PASSWORD`: Admin password
-
-### Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `SECRET_KEY` | JWT signing key | Yes (production) |
-| `CDSE_USERNAME` | Copernicus Data Space username | No (for real data) |
-| `CDSE_PASSWORD` | Copernicus Data Space password | No (for real data) |
-
-## 🧪 API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/token` | POST | Get access token |
-| `/api/v1/analyze/demo` | POST | Run demo analysis |
-| `/api/v1/jobs/{id}/public` | GET | Get job results |
-| `/api/v1/legend` | GET | Get severity legend |
-| `/api/v1/baselines` | GET | Get seasonal baselines |
-
-## 📊 Features
-
-- ✅ Interactive map for polygon drawing
-- ✅ Physics-based drought detection
-- ✅ Seasonal adjustment model
-- ✅ Historical baseline comparison
-- ✅ Soil Moisture Index (0-100)
-- ✅ Confidence scoring
-- ✅ Real-time analysis results
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
+The platform will be available at `http://localhost:3000`.
 
 ---
 
-Built with ❤️ by the AerisQ Team
+## 📊 Scientific Methodology
+
+AerisQ implements a multi-stage analysis pipeline compliant with ESA recommendations:
+
+1. **Ingestion**: Retrieval of Sentinel-1 Ground Range Detected (GRD) products.
+2. **Preprocessing**: Thermal noise removal and orbital correction.
+3. **Analysis**:
+   $$ \sigma_{0} (dB) = 10 \cdot \log_{10} \left( \frac{DN^2}{A_{n}^2} \right) $$
+   *(Where $DN$ is the pixel intensity and $A_n$ is the calibration vector)*
+4. **Classification**: Drought severity is classified based on deviation from historical baselines and absolute dielectric thresholds.
+
+## 🛡️ Security & Privacy
+
+- **Data Sovereignty**: User analysis data is processed ephemerally or stored in compliant regional databases.
+- **Authentication**: Industry-standard JWT flows.
+- **Secrets Management**: No hardcoded credentials; fully environment-variable driven configuration.
+
+## 🤝 Contributing
+
+We welcome contributions from the scientific and open-source community. Please read `CONTRIBUTING.md` for our code of conduct and pull request process.
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+© 2024 AerisQ Technologies. *Advanced Earth Observation Systems.*
+
