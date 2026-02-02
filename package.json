@@ -1,0 +1,16 @@
+{
+    "name": "aerisq-monorepo",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "build": "cd frontend && npm install && npm run build",
+        "gpt-build": "echo 'Custom build script running'",
+        "install-frontend": "cd frontend && npm install"
+    },
+    "engines": {
+        "node": "18.x"
+    },
+    "dependencies": {
+        "next": "^14.0.0"
+    }
+}
