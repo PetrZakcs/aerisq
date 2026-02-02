@@ -71,36 +71,6 @@ graph TD
 - Python 3.11+
 - Sentinel-1 Data Access (CDSE Account recommended for live data)
 
-### Installation
-
-1. **Clone the Repository**
-```bash
-git clone https://github.com/aerisq-tech/core.git
-cd aerisq
-```
-
-2. **Backend Setup**
-```bash
-cd backend
-python -m venv venv
-# Windows
-.\venv\Scripts\activate
-# Linux/Mac
-source venv/bin/activate
-
-pip install -r requirements.txt
-python standalone.py
-```
-
-3. **Frontend Setup**
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The platform will be available at `http://localhost:3000`.
-
 ---
 
 ## 📊 Scientific Methodology
@@ -124,10 +94,7 @@ AerisQ implements a multi-stage analysis pipeline compliant with ESA recommendat
 
 We welcome contributions from the scientific and open-source community. Please read `CONTRIBUTING.md` for our code of conduct and pull request process.
 
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
-© 2024 AerisQ Technologies. *Advanced Earth Observation Systems.*
+© 2026 AerisQ Technologies. *Advanced Earth Observation Systems.*
 
