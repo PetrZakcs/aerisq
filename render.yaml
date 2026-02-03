@@ -1,0 +1,38 @@
+# Render.com deployment configuration for AerisQ Backend
+# This enables REAL Google Earth Engine satellite data processing
+
+services:
+  # Backend API with GEE support
+  - type: web
+    name: aerisq-backend
+    runtime: python
+    repo: https://github.com/PetrZakcs/aerisq
+    region: frankfurt  # EU region for GDPR compliance
+    branch: master
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn standalone:app --host 0.0.0.0 --port $PORT
+    plan: free  # Free tier - 512 MB RAM, shared CPU
+    
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      
+      - key: GOD_MODE_EMAIL
+        value: admin@aerisq.tech
+      
+      - key: GOD_MODE_PASSWORD
+        sync: false  # Set manually in Render dashboard
+      
+      - key: GEE_PROJECT_ID
+        value: aerisq
+      
+      - key: GEE_SERVICE_ACCOUNT_JSON
+        sync: false  # Set manually - paste from vercel_env_value.txt
+      
+      - key: PYTHON_VERSION
+        value: 3.12
+    
+    healthCheckPath: /api/health
+    
+    autoDeploy: true  # Auto-deploy on git push

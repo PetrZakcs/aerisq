@@ -1,7 +1,8 @@
 """
-AerisQ API - Standalone Mode with REAL PHYSICS
+AerisQ API - Standalone Mode with REAL PHYSICS + GEE
 Run without Docker, Celery, Redis, or PostgreSQL for quick testing
 Uses physics-based drought analysis from Sentinel-1 SAR principles
++ Google Earth Engine for real satellite data
 """
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -20,6 +21,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 import logging
 import numpy as np
+
+# GEE Integration
+from gee_integration import GEE_AVAILABLE, gee_analyzer, try_gee_analysis
 
 # Configure logging
 logging.basicConfig(
@@ -480,16 +484,31 @@ def verify_token(user: dict = Depends(get_current_user)):
 
 @app.post("/api/v1/analyze", response_model=AnalyzeResponse)
 def create_analysis(request: AnalyzeRequest, user: dict = Depends(get_current_user)):
-    """Create authenticated analysis with full physics model"""
+    """Create authenticated analysis - tries GEE first, falls back to physics"""
     job_id = str(uuid.uuid4())
     
-    stats = run_physics_analysis(
+    # Try GEE first
+    gee_results, used_gee = try_gee_analysis(
         request.polygon.model_dump(),
         request.date_range.start,
         request.date_range.end,
-        job_id,
-        request.mode
+        job_id
     )
+    
+    if used_gee and gee_results:
+        stats = gee_results
+        logger.info(f"Using GEE analysis for job {job_id}")
+    else:
+        # Fallback to physics simulation
+        stats = run_physics_analysis(
+            request.polygon.model_dump(),
+            request.date_range.start,
+            request.date_range.end,
+            job_id,
+            request.mode
+        )
+        logger.info(f"Using physics simulation for job {job_id}")
+    
     
     severity_colors = {
         "NORMAL": "#22c55e",
@@ -544,16 +563,29 @@ def create_analysis(request: AnalyzeRequest, user: dict = Depends(get_current_us
 
 @app.post("/api/v1/analyze/demo")
 def create_demo_analysis(request: AnalyzeRequest):
-    """Demo endpoint - no auth required, same physics"""
+    """Demo endpoint - no auth required, tries GEE then physics"""
     job_id = str(uuid.uuid4())
     
-    stats = run_physics_analysis(
+    # Try GEE first
+    gee_results, used_gee = try_gee_analysis(
         request.polygon.model_dump(),
         request.date_range.start,
         request.date_range.end,
-        job_id,
-        request.mode
+        job_id
     )
+    
+    if used_gee and gee_results:
+        stats = gee_results
+    else:
+        # Fallback to physics simulation
+        stats = run_physics_analysis(
+            request.polygon.model_dump(),
+            request.date_range.start,
+            request.date_range.end,
+            job_id,
+            request.mode
+        )
+    
     
     severity_colors = {
         "NORMAL": "#22c55e",
