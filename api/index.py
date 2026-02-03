@@ -17,13 +17,26 @@ import numpy as np
 from scipy.stats import norm
 
 # Try to import GEE analyzer (for real SAR data)
+GEE_AVAILABLE = False
+gee_analyzer = None
+
 try:
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
-    from app.agents.gee_analyzer import gee_analyzer
+    from app.agents.gee_analyzer import GEEAnalyzer
+    
+    # Create instance with project ID from environment
+    gee_project_id = os.environ.get("GEE_PROJECT_ID", "aerisq")
+    gee_analyzer = GEEAnalyzer(project_id=gee_project_id)
     GEE_AVAILABLE = gee_analyzer.ready
+    
+    if GEE_AVAILABLE:
+        print(f"✅ GEE analyzer ready for API (project: {gee_project_id})")
+    else:
+        print(f"⚠️ GEE analyzer not ready - will use simulation")
+        
 except Exception as e:
-    print(f"⚠️ GEE not available: {e}")
+    print(f"⚠️ GEE import failed: {e}")
     GEE_AVAILABLE = False
 
 # ===== CONFIGURATION =====
