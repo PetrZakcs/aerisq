@@ -43,6 +43,10 @@ class GEEAnalyzer:
                        1. Parameter
                        2. GEE_PROJECT_ID env variable
                        3. .gee_project config file
+        
+        Environment Variables (for Vercel/production):
+            GEE_SERVICE_ACCOUNT_JSON: Single-line JSON with service account credentials
+            GEE_PROJECT_ID: Google Cloud project ID
         """
         self.project_id = None
         self.ready = False
@@ -53,7 +57,7 @@ class GEEAnalyzer:
         elif os.getenv('GEE_PROJECT_ID'):
             self.project_id = os.getenv('GEE_PROJECT_ID')
         else:
-            # Try to load from config file
+            # Try to load from config file (local development)
             from pathlib import Path
             config_file = Path(__file__).parent.parent.parent / 'backend' / '.gee_project'
             if config_file.exists():
@@ -61,15 +65,46 @@ class GEEAnalyzer:
                     self.project_id = f.read().strip()
         
         try:
+            # Check for service account credentials (Vercel/production)
+            service_account_json = os.getenv('GEE_SERVICE_ACCOUNT_JSON')
+            
+            if service_account_json:
+                # Parse service account JSON
+                import json
+                try:
+                    credentials_dict = json.loads(service_account_json)
+                    
+                    # Create service account credentials
+                    credentials = ee.ServiceAccountCredentials(
+                        email=credentials_dict['client_email'],
+                        key_data=credentials_dict['private_key']
+                    )
+                    
+                    # Initialize with service account
+                    ee.Initialize(
+                        credentials=credentials,
+                        project=self.project_id or credentials_dict.get('project_id', 'aerisq')
+                    )
+                    
+                    print(f"✅ GEE initialized with service account: {credentials_dict['client_email']}")
+                    self.ready = True
+                    return
+                    
+                except json.JSONDecodeError as je:
+                    print(f"⚠️ Invalid GEE_SERVICE_ACCOUNT_JSON format: {je}")
+                except KeyError as ke:
+                    print(f"⚠️ Missing key in service account JSON: {ke}")
+            
+            # Fallback to regular authentication (local development)
             if self.project_id:
                 ee.Initialize(project=self.project_id)
                 print(f"✅ GEE initialized with project: {self.project_id}")
+                self.ready = True
             else:
                 # Try without project (legacy)
                 ee.Initialize()
                 print("✅ GEE initialized (legacy mode)")
-            
-            self.ready = True
+                self.ready = True
             
         except Exception as e:
             print(f"⚠️ GEE initialization failed: {e}")
@@ -77,6 +112,9 @@ class GEEAnalyzer:
                 print("   → Need Google Cloud Project ID")
                 print("   → Set GEE_PROJECT_ID env variable")
                 print("   → Or create backend/.gee_project file")
+            elif "credentials" in str(e).lower():
+                print("   → Service account credentials invalid")
+                print("   → Check GEE_SERVICE_ACCOUNT_JSON env variable")
             self.ready = False
     
     def analyze_area(

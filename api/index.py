@@ -16,6 +16,16 @@ from jose import jwt
 import numpy as np
 from scipy.stats import norm
 
+# Try to import GEE analyzer (for real SAR data)
+try:
+    import sys
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
+    from app.agents.gee_analyzer import gee_analyzer
+    GEE_AVAILABLE = gee_analyzer.ready
+except Exception as e:
+    print(f"⚠️ GEE not available: {e}")
+    GEE_AVAILABLE = False
+
 # ===== CONFIGURATION =====
 SECRET_KEY = os.environ.get("SECRET_KEY", "aerisq-vercel-production-key")
 GOD_MODE_EMAIL = os.environ.get("GOD_MODE_EMAIL", "admin@aerisq.tech")
@@ -216,7 +226,36 @@ def verify_token_endpoint(user: dict = Depends(get_current_user)):
 @app.post("/api/v1/analyze")
 def create_analysis(request: AnalyzeRequest, user: dict = Depends(get_current_user)):
     job_id = str(uuid.uuid4())
-    stats = run_physics_analysis(request.polygon.model_dump(), request.date_range.start, request.date_range.end, job_id, request.mode)
+    
+    # Try GEE for real SAR data, fallback to simulation
+    stats = None
+    if GEE_AVAILABLE:
+        try:
+            print(f"📡 Attempting GEE analysis for job {job_id}...")
+            gee_result = gee_analyzer.analyze_area(
+                polygon_geojson=request.polygon.model_dump(),
+                date_start=request.date_range.start,
+                date_end=request.date_range.end
+            )
+            
+            if gee_result.get('quality_flag') == 'GEE_REALTIME':
+                print(f"✅ GEE analysis successful!")
+                stats = gee_result
+            else:
+                print(f"⚠️ GEE returned non-realtime data: {gee_result.get('error')}")
+        except Exception as e:
+            print(f"⚠️ GEE analysis failed: {e}")
+    
+    # Fallback to simulation if GEE not available or failed
+    if not stats:
+        print(f"🔄 Using simulation for job {job_id}")
+        stats = run_physics_analysis(
+            request.polygon.model_dump(),
+            request.date_range.start,
+            request.date_range.end,
+            job_id,
+            request.mode
+        )
     
     severity_colors = {"NORMAL": "#22c55e", "MILD": "#eab308", "MODERATE": "#f97316", "SEVERE": "#ef4444", "EXTREME": "#7c2d12"}
     
