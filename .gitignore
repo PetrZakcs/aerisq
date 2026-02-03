@@ -51,3 +51,12 @@ temp/
 
 # Sanity
 sanity/.sanity/
+
+# Google Earth Engine
+.gee_project
+**/earthengine-token.json
+
+# SAR Data (large files)
+data/sentinel1/raw/*.zip
+data/sentinel1/raw/*.SAFE
+data/sentinel1/processed/*.tif

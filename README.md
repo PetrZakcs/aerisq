@@ -101,7 +101,28 @@ npm run dev
 
 The platform will be available at `http://localhost:3000`.
 
+### 🔬 Demo Mode vs. Production Data
+
+**Default configuration runs in DEMO MODE** with simulated data for instant testing.
+
+For **real Sentinel-1 SAR analysis**:
+1. Register for free CDSE account: https://dataspace.copernicus.eu/
+2. Follow setup guide: [`backend/REAL_DATA_QUICKSTART.md`](backend/REAL_DATA_QUICKSTART.md)
+3. Configure CDSE credentials in `.env`
+
+**Why Demo Mode?**
+- ✅ Instant testing without satellite data downloads (~800MB per scene)
+- ✅ Predictable results for development/debugging  
+- ✅ No external dependencies or credentials needed
+
+**Production Mode Features:**
+- Real Sentinel-1 C-Band SAR data
+- Physics-based processing with Lee filtering
+- Ground-truth validated drought metrics
+- Historical baseline comparisons
+
 ---
+
 
 ## 📊 Scientific Methodology
 

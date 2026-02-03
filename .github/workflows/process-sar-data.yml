@@ -1,0 +1,97 @@
+name: Process SAR Data Automatically
+
+# Runs daily to download and process new Sentinel-1 data
+# Results are stored in Supabase for instant API access
+
+on:
+  # Run daily at 2 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Or trigger manually
+  workflow_dispatch:
+    inputs:
+      area:
+        description: 'Area (min_lat,min_lon,max_lat,max_lon)'
+        required: true
+        default: '37.5,-6.0,38.5,-5.0'
+      date:
+        description: 'Date (YYYY-MM-DD)'
+        required: true
+        default: '2023-07-15'
+
+jobs:
+  process-sar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+      
+      - name: Download Sentinel-1 data
+        env:
+          CDSE_USERNAME: ${{ secrets.CDSE_USERNAME }}
+          CDSE_PASSWORD: ${{ secrets.CDSE_PASSWORD }}
+        run: |
+          cd backend
+          
+          # Use workflow input or default
+          AREA="${{ github.event.inputs.area || '37.5,-6.0,38.5,-5.0' }}"
+          DATE="${{ github.event.inputs.date || $(date -d '7 days ago' +%Y-%m-%d) }}"
+          
+          echo "Processing area: $AREA"
+          echo "Date: $DATE"
+          
+          python scripts/download_real_sar.py \
+            --area "$AREA" \
+            --date "$DATE" \
+            --output ../data/sentinel1/raw \
+            --max 1
+      
+      - name: Process SAR data
+        run: |
+          cd backend
+          
+          # Process all downloaded scenes
+          for zipfile in ../data/sentinel1/raw/*.zip; do
+            if [ -f "$zipfile" ]; then
+              echo "Processing: $zipfile"
+              python scripts/process_sar.py "$zipfile" \
+                --output ../data/sentinel1/processed
+            fi
+          done
+      
+      - name: Upload results to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          cd backend
+          python scripts/upload_to_supabase.py \
+            --results ../data/sentinel1/processed/*.json
+      
+      - name: Cleanup large files
+        run: |
+          # Remove raw .zip files to save space
+          rm -rf data/sentinel1/raw/*.zip
+          
+          # Keep only processed results
+          echo "Processed results:"
+          ls -lh data/sentinel1/processed/
+      
+      - name: Summary
+        run: |
+          echo "✅ SAR processing complete!"
+          echo "Results uploaded to Supabase"
+          echo "Ready for API consumption"

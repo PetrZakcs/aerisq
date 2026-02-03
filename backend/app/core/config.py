@@ -36,6 +36,11 @@ class Settings(BaseSettings):
     CELERY_RESULT_BACKEND: str = "redis://redis:6379/0"
     
     # CDSE (Copernicus Data Space Ecosystem) API
+    # New OAuth2 authentication (username/password)
+    CDSE_USERNAME: str = ""
+    CDSE_PASSWORD: str = ""
+    
+    # Legacy fields (deprecated, kept for compatibility)
     CDSE_CLIENT_ID: str = ""
     CDSE_CLIENT_SECRET: str = ""
     CDSE_TOKEN_URL: str = "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token"
