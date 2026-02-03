@@ -34,8 +34,8 @@ Click **"+ CREATE SERVICE ACCOUNT"** (top of page)
 
 | Field | Value |
 |-------|-------|
-| **Service account name** | `aerisq-gee-vercel` |
-| **Service account ID** | `aerisq-gee-vercel` (auto-generated) |
+| **Service account name** | `aerisq-gee` |
+| **Service account ID** | `aerisq-gee` (auto-generated) |
 | **Description** | "GEE access for Vercel deployment" |
 
 Click **"CREATE AND CONTINUE"**
