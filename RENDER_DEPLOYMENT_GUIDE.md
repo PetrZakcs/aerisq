@@ -83,8 +83,15 @@ Value: aerisq
 
 # 5. GEE_SERVICE_ACCOUNT_JSON (IMPORTANT!)
 Name: GEE_SERVICE_ACCOUNT_JSON
-Value: [PASTE CONTENT FROM vercel_env_value.txt]
-       (Single line JSON - already formatted!)
+Value: [PASTE YOUR SERVICE ACCOUNT JSON KEY HERE]
+
+**❓ How to get this key:**
+1. Go to Google Cloud Console > IAM & Admin > Service Accounts
+2. Select your service account (`aerisq-gee-vercel` or similar)
+3. Keys tab > Add Key > Create new key > JSON
+4. Open the downloaded file
+5. Remove all newlines to make it a single line
+6. Paste the full JSON string into the Value field
 ```
 
 **⚠️ KRITICKÉ:**

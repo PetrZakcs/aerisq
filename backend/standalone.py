@@ -460,6 +460,7 @@ def health():
         "status": "healthy",
         "mode": "standalone",
         "physics_version": "2.0",
+        "gee_available": GEE_AVAILABLE,
         "features": ["drought_detection", "seasonal_model", "baseline_comparison"]
     }
 
