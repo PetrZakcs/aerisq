@@ -26,8 +26,8 @@ export default function Benefits() {
         <section className="py-24 bg-[#080808]">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="mb-16 text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">WHY PHYSICS MATTERS</h2>
-                    <p className="text-gray-500 max-w-2xl mx-auto font-mono text-sm">
+                    <h2 className="text-3xl md:text-4xl font-bold font-display text-white mb-4">WHY PHYSICS MATTERS</h2>
+                    <p className="text-gray-500 max-w-2xl mx-auto font-sans text-sm">
                         Optical vegetation indices (NDVI) are lagging indicators. Radar detects stress weeks before the plant changes color.
                     </p>
                 </div>
@@ -39,9 +39,9 @@ export default function Benefits() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="p-8 border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-radar-green/30 transition-all group rounded-lg"
+                            className="p-8 border border-white/5 bg-aeris-dark hover:bg-white/[0.05] hover:border-radar-green/30 transition-all group rounded-2xl"
                         >
-                            <div className="w-12 h-12 bg-radar-green/10 rounded-full flex items-center justify-center mb-6 group-hover:bg-radar-green/20 transition-colors">
+                            <div className="w-12 h-12 bg-radar-green/50 text-black rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 {b.icon}
                             </div>
                             <h3 className="text-xl font-bold text-white mb-3 font-sans h-[3.5rem] flex items-center">{b.title}</h3>

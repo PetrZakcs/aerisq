@@ -58,51 +58,53 @@ export default function MissionReports() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="group relative bg-[#0A0A0A] border border-white/10 hover:border-radar-green/50 transition-colors overflow-hidden"
+                            className="group relative bg-[#0A0A0A] rounded-2xl border border-white/10 hover:border-radar-green/50 transition-colors overflow-hidden block"
                         >
-                            {/* Image Header */}
-                            <div className="relative h-48 w-full overflow-hidden border-b border-white/10">
-                                <Image
-                                    src={item.image}
-                                    alt={item.title}
-                                    fill
-                                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
-                                />
-                                {/* Overlay */}
-                                <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors" />
+                            <a href={`/case-studies/${item.id}`} className="block h-full">
+                                {/* Image Header */}
+                                <div className="relative h-64 w-full overflow-hidden border-b border-white/10">
+                                    <Image
+                                        src={item.image}
+                                        alt={item.title}
+                                        fill
+                                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
+                                    />
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors" />
 
-                                {/* Redacted Badge */}
-                                <div className="absolute top-3 left-3 bg-black/80 backdrop-blur px-2 py-0.5 border border-white/20 text-[10px] font-mono text-gray-300">
-                                    CAMPAIGN #{1024 + i}
-                                </div>
-                            </div>
-
-                            {/* Content */}
-                            <div className="p-6">
-                                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-radar-green transition-colors">
-                                    {item.title}
-                                </h3>
-                                <div className="text-xs font-mono text-gray-500 mb-6 flex items-center gap-2">
-                                    <span>{item.location}</span>
-                                </div>
-
-                                <div className="space-y-3 font-mono text-sm">
-                                    <div className="flex justify-between border-b border-white/5 pb-2">
-                                        <span className="text-gray-500">DETECTION</span>
-                                        <span className="text-white">{item.detection}</span>
-                                    </div>
-                                    <div className="flex justify-between border-b border-white/5 pb-2">
-                                        <span className="text-gray-500">OUTCOME</span>
-                                        <span className="text-radar-green">{item.outcome}</span>
+                                    {/* Redacted Badge */}
+                                    <div className="absolute top-3 left-3 bg-black/80 backdrop-blur px-2 py-0.5 border border-white/20 text-[10px] font-mono text-gray-300">
+                                        CAMPAIGN #{1024 + i}
                                     </div>
                                 </div>
 
-                                <div className="mt-6 pt-2">
-                                    <button className="text-xs font-bold text-gray-400 group-hover:text-white flex items-center gap-2 transition-colors uppercase tracking-widest">
-                                        View Full Report <ArrowRight className="w-3 h-3" />
-                                    </button>
+                                {/* Content */}
+                                <div className="p-6">
+                                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-radar-green transition-colors">
+                                        {item.title}
+                                    </h3>
+                                    <div className="text-xs font-mono text-gray-500 mb-6 flex items-center gap-2">
+                                        <span>{item.location}</span>
+                                    </div>
+
+                                    <div className="space-y-3 font-mono text-sm">
+                                        <div className="flex justify-between border-b border-white/5 pb-2">
+                                            <span className="text-gray-500">DETECTION</span>
+                                            <span className="text-white">{item.detection}</span>
+                                        </div>
+                                        <div className="flex justify-between border-b border-white/5 pb-2">
+                                            <span className="text-gray-500">OUTCOME</span>
+                                            <span className="text-radar-green">{item.outcome}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-6 pt-2">
+                                        <button className="text-xs font-bold text-gray-400 group-hover:text-white flex items-center gap-2 transition-colors uppercase tracking-widest">
+                                            View Full Report <ArrowRight className="w-3 h-3" />
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </motion.div>
                     ))}
                 </div>

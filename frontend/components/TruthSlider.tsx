@@ -72,7 +72,7 @@ export default function TruthSlider({
     return (
         <div
             ref={containerRef}
-            className="relative w-full h-full min-h-[400px] bg-black rounded-lg border border-white/10 overflow-hidden select-none cursor-ew-resize group"
+            className="relative w-full h-full min-h-[600px] bg-black rounded-2xl border border-white/10 overflow-hidden select-none cursor-ew-resize group"
             onMouseDown={handleMouseDown}
             onTouchStart={handleMouseDown}
             onTouchMove={handleTouchMove}

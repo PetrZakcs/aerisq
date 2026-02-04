@@ -1,4 +1,4 @@
-import { Rajdhani, JetBrains_Mono } from "next/font/google";
+import { Rajdhani, JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
 const rajdhani = Rajdhani({
@@ -9,6 +9,11 @@ const rajdhani = Rajdhani({
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -30,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${rajdhani.variable} ${jetbrainsMono.variable} antialiased bg-aeris-black text-gray-100 font-sans`}
+        className={`${rajdhani.variable} ${jetbrainsMono.variable} ${inter.variable} antialiased bg-aeris-black text-gray-100 font-sans`}
       >
         <Providers>
           <HUDLayout>

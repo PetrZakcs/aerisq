@@ -4,10 +4,12 @@
   --color-aeris-black: #050505;
   --color-aeris-dark: #0A0A0A;
   --color-radar-green: #518a16;
+  --color-radar-green-hover: #63a51d;
   --color-alert-red: #FF3B30;
   --color-premium-silver: #E5E7EB;
 
-  --font-sans: var(--font-rajdhani);
+  --font-display: var(--font-rajdhani);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
 }
 

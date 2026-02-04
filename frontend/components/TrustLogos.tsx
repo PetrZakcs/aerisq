@@ -11,7 +11,7 @@ export default function TrustLogos() {
     return (
         <section className="py-12 border-b border-white/5 bg-aeris-black/50 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-6">
-                <p className="text-center font-mono text-xs text-gray-600 mb-8 uppercase tracking-widest">
+                <p className="text-center font-display text-xs text-gray-500 mb-12 uppercase tracking-[0.2em]">
                     Trusted by Scientific & Government Institutions
                 </p>
                 <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">

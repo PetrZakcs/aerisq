@@ -78,7 +78,7 @@ export default function Navbar() {
                                 whileTap={{ scale: 0.95 }}
                                 className="px-6 py-2 font-mono text-xs font-bold text-black uppercase bg-radar-green hover:bg-white transition-colors"
                             >
-                                Join Waitlist
+                                <a href="#waitlist">Join Waitlist</a>
                             </motion.button>
                         </div>
                     )}

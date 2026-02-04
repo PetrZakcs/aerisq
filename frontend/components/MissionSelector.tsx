@@ -14,8 +14,8 @@ export const MISSIONS = [
         coordinates: [48.8, 16.6],
         badge: 'COMMERCIAL',
         assets: {
-            optical: '/data/missions/agri_optical.png',
-            radar: '/data/missions/agri_radar.png'
+            optical: '/vysocina_optical.png',
+            radar: '/vysocina_radar.png'
         }
     },
     {
@@ -29,8 +29,8 @@ export const MISSIONS = [
         coordinates: [46.5, 30.7],
         badge: 'YC RFS #5',
         assets: {
-            optical: '/data/missions/defense_optical.png',
-            radar: '/data/missions/defense_radar.png'
+            optical: '/vysocina_optical.png', // Placeholder until specific assets uploaded
+            radar: '/vysocina_radar.png'
         }
     },
     {
@@ -44,8 +44,8 @@ export const MISSIONS = [
         coordinates: [50.5, 13.8],
         badge: 'CRITICAL',
         assets: {
-            optical: '/data/missions/industrial_optical.png',
-            radar: '/data/missions/industrial_radar.png'
+            optical: '/vysocina_optical.png', // Placeholder
+            radar: '/vysocina_radar.png'
         }
     }
 ];
