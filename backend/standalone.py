@@ -265,11 +265,11 @@ def run_physics_analysis(
     
     # Calculate percentage below threshold using normal distribution
     z_score = (drought_threshold - mean_db) / std_db
-    from scipy.stats import norm
     try:
+        from scipy.stats import norm
         drought_pct = norm.cdf(z_score) * 100
     except:
-        # Fallback without scipy
+        # Fallback without scipy (Render Deployment)
         drought_pct = max(0, min(100, 50 + (drought_threshold - mean_db) * 15))
     
     # Determine severity
