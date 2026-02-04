@@ -15,7 +15,7 @@ import os
 # Add parent to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from fastapi import FastAPI, Depends, HTTPException, status, Query
+from fastapi import FastAPI, Depends, HTTPException, status, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
@@ -576,72 +576,69 @@ def create_analysis(request: AnalyzeRequest, user: dict = Depends(get_current_us
 
 
 @app.post("/api/v1/analyze/demo")
-def create_demo_analysis(request: AnalyzeRequest):
-    """Demo endpoint - no auth required, tries GEE then physics"""
-    job_id = str(uuid.uuid4())
-    
-    # Try GEE first (SAFE MODE)
-    used_gee = False
-    gee_results = None
-
+async def create_demo_analysis(raw_request: Request):
+    """Demo endpoint - RAW MODE for debugging"""
     try:
-        if GEE_AVAILABLE:
-            gee_results, used_gee = try_gee_analysis(
-                request.polygon.model_dump(),
-                request.date_range.start,
-                request.date_range.end,
-                job_id
-            )
-    except Exception as e:
-        logger.error(f"GEE Error in demo handler: {e}")
+        # 1. Parse Raw JSON
+        data = await raw_request.json()
+        logger.info(f"debug_payload: {data}")
+        
+        # 2. Manual Extraction (No Pydantic Validation)
+        polygon = data.get("polygon", {
+            "type": "Polygon",
+            "coordinates": [[[-121.0, 37.0], [-120.0, 37.0], [-120.0, 38.0], [-121.0, 38.0], [-121.0, 37.0]]]
+        })
+        
+        date_range = data.get("date_range", {})
+        start_date = date_range.get("start", "2023-01-01")
+        end_date = date_range.get("end", "2023-01-31")
+        
+        mode_data = data.get("mode", {})
+        
+        job_id = str(uuid.uuid4())
+        
+        # 3. Execution (Safe Mode)
         used_gee = False
-    
-    if used_gee and gee_results:
-        stats = gee_results
-    else:
-        # Fallback to physics simulation
-        stats = run_physics_analysis(
-            request.polygon.model_dump(),
-            request.date_range.start,
-            request.date_range.end,
-            job_id,
-            request.mode
-        )
-    
-    
-    severity_colors = {
-        "NORMAL": "#22c55e",
-        "MILD": "#eab308",
-        "MODERATE": "#f97316",
-        "SEVERE": "#ef4444",
-        "EXTREME": "#7c2d12"
-    }
-    
-    summary = generate_analysis_summary(stats, request.date_range.model_dump())
-    
-    JOBS_STORE[job_id] = {
-        "job_id": job_id,
-        "status": "completed",
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "completed_at": datetime.now(timezone.utc).isoformat(),
-        "stats": stats,
-        "summary": summary,
-        "geojson": {
-            "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "id": job_id,
-                "geometry": request.polygon.model_dump(),
-                "properties": {
-                    **stats,
-                    "fill": severity_colors.get(stats["drought_severity"], "#888"),
-                    "fill-opacity": 0.5
-                }
-            }]
+        stats = None
+        
+        try:
+            if GEE_AVAILABLE:
+                stats, used_gee = try_gee_analysis(polygon, start_date, end_date, job_id)
+        except Exception as e:
+            logger.error(f"GEE_FAIL: {e}")
+            
+        if not stats:
+            # Physics Fallback
+            stats = run_physics_analysis(polygon, start_date, end_date, job_id, None)
+            
+        # 4. Save & Respond
+        summary = f"Analysis {stats['drought_severity']} ({stats['drought_percentage']}%)"
+        
+        response_data = {
+            "job_id": job_id,
+            "status": "completed",
+            "result": {
+                **stats,
+                "platform": "GEE" if used_gee else "SIMULATION"
+            },
+            "visualization": {
+                "map_overlay_url": f"/api/v1/visualize/{job_id}/overlay",
+                "chart_data_url": f"/api/v1/visualize/{job_id}/chart",
+                "colors": {"severity": "#888", "highlight": "#fff"}
+            }
         }
-    }
-    
-    return {"job_id": job_id, "status": "completed"}
+        
+        # Store in memory for visualization endpoints
+        JOBS_STORE[job_id] = {
+            "job_id": job_id,
+            "stats": stats
+        }
+        
+        return response_data
+
+    except Exception as e:
+        logger.error(f"CRITICAL_HANDLER_ERROR: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/api/v1/jobs/{job_id}")
