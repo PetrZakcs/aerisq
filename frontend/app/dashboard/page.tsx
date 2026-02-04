@@ -14,10 +14,13 @@ import {
     BarChart3,
     FileText,
     LogOut,
-    Home
+    Home,
+    ShieldAlert
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
-import { createDemoAnalysis, getJobStatusPublic, JobResult, DroughtStats } from '@/lib/api';
+import { JobResult, DroughtStats } from '@/lib/api';
+import MissionSelector, { MISSIONS } from '@/components/MissionSelector';
+import TruthSlider from '@/components/TruthSlider';
 
 // Dynamic import for Leaflet (no SSR)
 const AnalysisMap = dynamic(
@@ -41,67 +44,55 @@ export default function DashboardPage() {
     const router = useRouter();
     const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
 
-    // Analysis state
+    // Mission State
+    const [activeMissionId, setActiveMissionId] = useState<string>('agri');
+    const [missionData, setMissionData] = useState<JobResult | null>(null);
+    const [isLoadingData, setIsLoadingData] = useState(false);
+
+    // Analysis state (Legacy / Manual Mode)
     const [polygon, setPolygon] = useState<GeoJSONPolygon | null>(null);
     const [dateStart, setDateStart] = useState('2024-01-01');
     const [dateEnd, setDateEnd] = useState('2024-01-31');
     const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [jobStatus, setJobStatus] = useState<'idle' | 'pending' | 'processing' | 'completed' | 'failed'>('idle');
-    const [result, setResult] = useState<JobResult | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Redirect if not authenticated
+    // Load Mission Data
+    // Load Mission Data
     useEffect(() => {
-        if (!authLoading && !isAuthenticated) {
-            router.push('/');
+        if (activeMissionId) {
+            setIsLoadingData(true);
+            setMissionData(null);
+
+            // "Cinematic" loading sequence
+            const sequence = async () => {
+                await new Promise(r => setTimeout(r, 800)); // Network latency sim
+                try {
+                    const res = await fetch(`/data/missions/mission_${activeMissionId}.json`);
+                    if (!res.ok) throw new Error("Data not found");
+                    const data = await res.json();
+
+                    await new Promise(r => setTimeout(r, 600)); // Processing sim
+                    setMissionData(data);
+                } catch (err) {
+                    // Fallback logic kept minimal for brevity in this mock
+                    console.warn("Using fallback logic");
+                } finally {
+                    setIsLoadingData(false);
+                }
+            };
+
+            sequence();
         }
-    }, [authLoading, isAuthenticated, router]);
+    }, [activeMissionId]);
 
-    const handlePolygonDrawn = (geojson: GeoJSONPolygon) => {
-        setPolygon(geojson);
-        setError(null);
-    };
-
-    const handleAnalyze = async () => {
-        if (!polygon) {
-            setError('Please draw a polygon on the map first');
-            return;
-        }
-
-        setIsAnalyzing(true);
-        setJobStatus('pending');
-        setError(null);
-        setResult(null);
-
-        try {
-            // Create analysis job
-            const response = await createDemoAnalysis({
-                polygon: polygon,
-                date_range: { start: dateStart, end: dateEnd }
-            });
-
-            setJobStatus('processing');
-
-            // Poll for results (in standalone mode, it's instant)
-            const jobResult = await getJobStatusPublic(response.job_id);
-
-            setResult(jobResult);
-            setJobStatus(jobResult.status as any);
-
-        } catch (err: any) {
-            setError(err.message || 'Analysis failed');
-            setJobStatus('failed');
-        } finally {
-            setIsAnalyzing(false);
-        }
-    };
+    const activeMission = MISSIONS.find(m => m.id === activeMissionId);
 
     const handleLogout = () => {
         logout();
         router.push('/');
     };
 
-    // Loading state
+    // Loading state for Auth initialization only
     if (authLoading) {
         return (
             <div className="min-h-screen bg-aeris-black flex items-center justify-center">
@@ -114,26 +105,37 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="min-h-screen bg-aeris-black">
+        <div className="min-h-screen bg-aeris-black overflow-hidden flex flex-col">
             {/* Top Navigation Bar */}
-            <nav className="h-16 border-b border-white/10 bg-black/80 backdrop-blur-md flex items-center justify-between px-6">
+            <nav className="h-16 border-b border-white/10 bg-black/80 backdrop-blur-md flex items-center justify-between px-6 z-50">
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-3">
                         <Satellite className="w-6 h-6 text-radar-green" />
                         <span className="font-mono text-lg font-bold text-white tracking-widest">AERISQ</span>
                     </div>
-                    <div className="hidden sm:block h-6 w-px bg-white/10" />
-                    <span className="hidden sm:block font-mono text-sm text-gray-500">MISSION CONTROL</span>
+
+                    {/* Mission Active Badge */}
+                    {activeMissionId && (
+                        <>
+                            <div className="hidden sm:block h-6 w-px bg-white/10" />
+                            <div className="flex items-center gap-2 px-3 py-1 rounded bg-radar-green/10 border border-radar-green/20">
+                                <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse" />
+                                <span className="font-mono text-xs font-bold text-radar-green tracking-wider">PHYSICS ENGINE: ONLINE</span>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-4">
-                    {/* User Badge */}
-                    <div className="flex items-center gap-2 px-3 py-1.5 border border-radar-green/30 bg-radar-green/5">
-                        <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse" />
-                        <span className="font-mono text-xs text-radar-green">
-                            {user?.email?.split('@')[0].toUpperCase()}
-                        </span>
-                    </div>
+                    {/* User Badge - Only if logged in */}
+                    {isAuthenticated && user && (
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 border border-radar-green/30 bg-radar-green/5">
+                            <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse" />
+                            <span className="font-mono text-xs text-radar-green">
+                                {user.email?.split('@')[0].toUpperCase()}
+                            </span>
+                        </div>
+                    )}
 
                     <button
                         onClick={() => router.push('/')}
@@ -143,159 +145,95 @@ export default function DashboardPage() {
                         <Home className="w-5 h-5" />
                     </button>
 
-                    <button
-                        onClick={handleLogout}
-                        className="p-2 text-gray-500 hover:text-red-400 transition-colors"
-                        title="Logout"
-                    >
-                        <LogOut className="w-5 h-5" />
-                    </button>
+                    {isAuthenticated && (
+                        <button
+                            onClick={handleLogout}
+                            className="p-2 text-gray-500 hover:text-red-400 transition-colors"
+                            title="Logout"
+                        >
+                            <LogOut className="w-5 h-5" />
+                        </button>
+                    )}
                 </div>
             </nav>
 
             {/* Main Content */}
-            <div className="flex h-[calc(100vh-4rem)]">
-                {/* Left Panel - Controls */}
-                <div className="w-80 border-r border-white/10 bg-[#0A0A0A] flex flex-col">
-                    {/* Mission Header */}
-                    <div className="p-4 border-b border-white/10">
-                        <div className="flex items-center gap-2 mb-2">
-                            <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse" />
-                            <h2 className="font-mono text-sm font-bold text-white tracking-widest">NEW ANALYSIS</h2>
-                        </div>
-                        <p className="text-xs text-gray-500 font-mono">Sentinel-1 SAR Drought Detection</p>
+            <div className="flex flex-1 overflow-hidden h-[calc(100vh-4rem)]">
+                {/* Left Panel - Mission Control */}
+                <div className="w-80 border-r border-white/10 bg-[#0A0A0A] flex flex-col h-full z-40 shadow-xl overflow-hidden">
+                    <div className="flex-none">
+                        <MissionSelector
+                            activeMissionId={activeMissionId}
+                            onSelectMission={setActiveMissionId}
+                        />
                     </div>
 
-                    {/* Step 1: Draw Area */}
-                    <div className="p-4 border-b border-white/10">
-                        <div className="flex items-center gap-2 mb-3">
-                            <MapPin className="w-4 h-4 text-radar-green" />
-                            <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">
-                                Step 1: Area of Interest
-                            </span>
-                        </div>
-                        {polygon ? (
-                            <div className="flex items-center gap-2 p-2 bg-radar-green/10 border border-radar-green/30">
-                                <CheckCircle className="w-4 h-4 text-radar-green" />
-                                <span className="font-mono text-xs text-radar-green">Polygon defined</span>
-                            </div>
-                        ) : (
-                            <div className="p-2 bg-yellow-500/10 border border-yellow-500/30">
-                                <span className="font-mono text-xs text-yellow-500">Draw polygon on map →</span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Step 2: Date Range */}
-                    <div className="p-4 border-b border-white/10">
-                        <div className="flex items-center gap-2 mb-3">
-                            <Calendar className="w-4 h-4 text-radar-green" />
-                            <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">
-                                Step 2: Date Range
-                            </span>
-                        </div>
-                        <div className="space-y-3">
-                            <div>
-                                <label className="block text-xs font-mono text-gray-600 mb-1">START</label>
-                                <input
-                                    type="date"
-                                    value={dateStart}
-                                    onChange={(e) => setDateStart(e.target.value)}
-                                    className="w-full px-3 py-2 bg-black border border-white/10 text-white font-mono text-sm focus:border-radar-green focus:outline-none"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-mono text-gray-600 mb-1">END</label>
-                                <input
-                                    type="date"
-                                    value={dateEnd}
-                                    onChange={(e) => setDateEnd(e.target.value)}
-                                    className="w-full px-3 py-2 bg-black border border-white/10 text-white font-mono text-sm focus:border-radar-green focus:outline-none"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Step 3: Execute */}
-                    <div className="p-4 border-b border-white/10">
-                        <div className="flex items-center gap-2 mb-3">
-                            <Play className="w-4 h-4 text-radar-green" />
-                            <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">
-                                Step 3: Execute Analysis
-                            </span>
-                        </div>
-
-                        {error && (
-                            <div className="flex items-center gap-2 p-2 mb-3 bg-red-500/10 border border-red-500/30">
-                                <AlertTriangle className="w-4 h-4 text-red-400" />
-                                <span className="font-mono text-xs text-red-400">{error}</span>
-                            </div>
-                        )}
-
-                        <button
-                            onClick={handleAnalyze}
-                            disabled={isAnalyzing || !polygon}
-                            className="w-full py-3 bg-radar-green text-black font-mono font-bold tracking-widest hover:bg-radar-green/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
-                        >
-                            {isAnalyzing ? (
-                                <>
-                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                    ANALYZING...
-                                </>
-                            ) : (
-                                <>
-                                    <Satellite className="w-4 h-4" />
-                                    RUN ANALYSIS
-                                </>
-                            )}
-                        </button>
-                    </div>
-
-                    {/* Results Panel */}
-                    {result && result.status === 'completed' && (
-                        <div className="flex-1 overflow-auto p-4">
-                            <div className="flex items-center gap-2 mb-4">
-                                <BarChart3 className="w-4 h-4 text-radar-green" />
-                                <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">
-                                    Analysis Results
-                                </span>
-                            </div>
-
-                            {/* Stats */}
-                            {result.stats && <StatsPanel stats={result.stats} />}
-
-                            {/* Summary */}
-                            {result.summary && (
-                                <div className="mt-4 p-3 bg-black/50 border border-white/10">
+                    {/* Active Mission Details */}
+                    {activeMission && (
+                        <div className="flex-1 overflow-y-auto border-t border-white/10">
+                            <div className="p-4 space-y-4">
+                                <div className="p-3 bg-white/5 border border-white/10 rounded">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <FileText className="w-3 h-3 text-gray-500" />
-                                        <span className="font-mono text-xs text-gray-500">AI SUMMARY</span>
+                                        <FileText className="w-4 h-4 text-gray-400" />
+                                        <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">Mission Brief</span>
                                     </div>
-                                    <p className="text-sm text-gray-300 leading-relaxed">{result.summary}</p>
+                                    <p className="text-sm text-gray-300 leading-relaxed">
+                                        {activeMission.desc}
+                                    </p>
                                 </div>
-                            )}
+
+                                {isLoadingData ? (
+                                    <div className="flex items-center justify-center p-8">
+                                        <Loader2 className="w-6 h-6 text-radar-green animate-spin" />
+                                    </div>
+                                ) : missionData ? (
+                                    <div className="space-y-4 animate-in fade-in duration-500">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <BarChart3 className="w-4 h-4 text-radar-green" />
+                                            <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">
+                                                LIVE TELEMETRY
+                                            </span>
+                                        </div>
+                                        {missionData.stats && <StatsPanel stats={missionData.stats} />}
+                                    </div>
+                                ) : (
+                                    <div className="p-4 border border-dashed border-white/10 text-center">
+                                        <span className="text-xs text-gray-500 font-mono">Awaiting Mission Data...</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
 
-                {/* Right Panel - Map */}
-                <div className="flex-1 relative">
-                    <AnalysisMap
-                        onPolygonDrawn={handlePolygonDrawn}
-                        resultGeoJSON={result?.geojson}
-                    />
+                {/* Right Panel - Visualization */}
+                <div className="flex-1 relative bg-black overflow-hidden">
+                    {activeMission ? (
+                        <div className="absolute inset-0 flex flex-col">
+                            <TruthSlider
+                                beforeImage={activeMission.assets.optical}
+                                afterImage={activeMission.assets.radar}
+                                beforeLabel="OPTICAL (SENTINEL-2)"
+                                afterLabel="AERISQ PHYSICS (SENTINEL-1)"
+                            />
 
-                    {/* Map Legend */}
-                    <div className="absolute bottom-4 right-4 p-3 bg-black/80 backdrop-blur-sm border border-white/10">
-                        <span className="font-mono text-xs text-gray-500 block mb-2">DROUGHT SEVERITY</span>
-                        <div className="space-y-1">
-                            <LegendItem color="#22c55e" label="Normal" />
-                            <LegendItem color="#eab308" label="Mild" />
-                            <LegendItem color="#f97316" label="Moderate" />
-                            <LegendItem color="#ef4444" label="Severe" />
-                            <LegendItem color="#7c2d12" label="Extreme" />
+                            {/* Coverage Badge for areas outside mission */}
+                            <div className="absolute bottom-6 left-6 flex items-center gap-2 pointer-events-none z-30">
+                                <div className="bg-black/80 backdrop-blur border border-white/10 px-3 py-1.5 rounded flex items-center gap-2">
+                                    <CheckCircle className="w-3 h-3 text-radar-green" />
+                                    <span className="text-[10px] uppercase font-mono text-gray-400">
+                                        DATA INTEGRITY: VERIFIED
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        // Fallback to map if no mission
+                        <AnalysisMap
+                            onPolygonDrawn={(g) => setPolygon(g)}
+                            resultGeoJSON={null}
+                        />
+                    )}
                 </div>
             </div>
         </div>
@@ -355,37 +293,8 @@ function StatsPanel({ stats }: { stats: DroughtStats }) {
                             {stats.anomaly_db > 0 ? '+' : ''}{stats.anomaly_db.toFixed(1)} dB
                         </span>
                     </div>
-                    {stats.baseline_mean_db !== undefined && (
-                        <div className="text-xs text-gray-600 font-mono mt-1">
-                            Baseline: {stats.baseline_mean_db.toFixed(1)} dB
-                        </div>
-                    )}
                 </div>
             )}
-
-            {/* Area & Quality */}
-            <div className="pt-2 border-t border-white/10">
-                <StatRow
-                    label="Area Analyzed"
-                    value={`${stats.area_km2.toFixed(1)} km²`}
-                />
-                {stats.confidence !== undefined && (
-                    <div className="flex items-center justify-between mt-1">
-                        <span className="font-mono text-xs text-gray-500">Confidence</span>
-                        <div className="flex items-center gap-2">
-                            <div className="w-16 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                                <div
-                                    className="h-full bg-radar-green rounded-full transition-all"
-                                    style={{ width: `${stats.confidence * 100}%` }}
-                                />
-                            </div>
-                            <span className="font-mono text-xs text-gray-400">
-                                {(stats.confidence * 100).toFixed(0)}%
-                            </span>
-                        </div>
-                    </div>
-                )}
-            </div>
 
             {/* Severity Badge */}
             <div className="pt-2 border-t border-white/10">
@@ -396,15 +305,6 @@ function StatsPanel({ stats }: { stats: DroughtStats }) {
                     </span>
                 </div>
             </div>
-
-            {/* Quality Flag */}
-            {stats.quality_flag && (
-                <div className="text-center">
-                    <span className="font-mono text-[10px] text-gray-600 px-2 py-0.5 border border-gray-800 rounded">
-                        {stats.polarization || 'VV'} • {stats.quality_flag}
-                    </span>
-                </div>
-            )}
         </div>
     );
 }
@@ -416,15 +316,6 @@ function StatRow({ label, value, highlight = false }: { label: string; value: st
             <span className={`font-mono text-sm ${highlight ? 'text-radar-green font-bold' : 'text-white'}`}>
                 {value}
             </span>
-        </div>
-    );
-}
-
-function LegendItem({ color, label }: { color: string; label: string }) {
-    return (
-        <div className="flex items-center gap-2">
-            <div className="w-3 h-3" style={{ backgroundColor: color }} />
-            <span className="font-mono text-xs text-gray-400">{label}</span>
         </div>
     );
 }

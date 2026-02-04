@@ -1,0 +1,20 @@
+{
+    "job_id": "mission-agri-001",
+    "status": "completed",
+    "stats": {
+        "mean_sigma0_db": -14.2,
+        "min_sigma0_db": -24.5,
+        "max_sigma0_db": -5.1,
+        "std_sigma0_db": 2.1,
+        "drought_percentage": 68.4,
+        "drought_severity": "SEVERE",
+        "area_km2": 45.2,
+        "soil_moisture_index": 22,
+        "anomaly_db": -4.8,
+        "baseline_mean_db": -9.4,
+        "quality_flag": "PASSED",
+        "confidence": 0.94,
+        "polarization": "VV"
+    },
+    "summary": "CRITICAL ALERT: Root-zone moisture deficit detected in Sector 4 (South Moravia). Optical indices (NDVI) show healthy vegetation, but AerisQ SAR analysis reveals -4.8dB backscatter anomaly consistent with severe subterranean drought stress. Immediate irrigation intervention recommended."
+}

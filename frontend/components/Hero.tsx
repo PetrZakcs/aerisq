@@ -42,9 +42,9 @@ export default function Hero() {
                     transition={{ delay: 0.8 }}
                     className="mt-12 flex flex-col md:flex-row gap-6 items-center"
                 >
-                    <button className="px-8 py-3 bg-radar-green text-black font-mono font-bold tracking-widest hover:bg-white transition-all uppercase">
-                        Initiate Sequence
-                    </button>
+                    <a href="/dashboard" className="px-8 py-3 bg-radar-green text-black font-mono font-bold tracking-widest hover:bg-white transition-all uppercase no-underline">
+                        DEPLOY MISSION
+                    </a>
                     <span className="text-gray-600 text-sm font-mono flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-radar-green animate-pulse"></span>
                         SYSTEM ONLINE

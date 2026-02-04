@@ -1,0 +1,20 @@
+{
+    "job_id": "mission-defense-001",
+    "status": "completed",
+    "stats": {
+        "mean_sigma0_db": -2.4,
+        "min_sigma0_db": -10.1,
+        "max_sigma0_db": 5.2,
+        "std_sigma0_db": 4.5,
+        "drought_percentage": 0.0,
+        "drought_severity": "NORMAL",
+        "area_km2": 12.8,
+        "soil_moisture_index": 65,
+        "anomaly_db": 8.2,
+        "baseline_mean_db": -8.5,
+        "quality_flag": "PASSED",
+        "confidence": 0.98,
+        "polarization": "VH"
+    },
+    "summary": "TARGET DETECTED: 14 High-Coherence Man-Made Structures identified under 100% cloud cover. Strong double-bounce scattering signatures indicate heavy metallic equipment deployment at coordinates previously classified as empty terrain."
+}

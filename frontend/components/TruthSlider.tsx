@@ -1,111 +1,123 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { MoveHorizontal } from 'lucide-react';
 
-export default function TruthSlider() {
+interface TruthSliderProps {
+    beforeImage: string;
+    afterImage: string;
+    beforeLabel?: string;
+    afterLabel?: string;
+}
+
+export default function TruthSlider({
+    beforeImage,
+    afterImage,
+    beforeLabel = 'Optical (Sentinel-2)',
+    afterLabel = 'AerisQ Radar (Sentinel-1)'
+}: TruthSliderProps) {
     const [sliderPosition, setSliderPosition] = useState(50);
     const [isDragging, setIsDragging] = useState(false);
+    const [containerWidth, setContainerWidth] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const handleMove = (x: number) => {
-        if (containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            const percent = Math.min(Math.max((x - rect.left) / rect.width * 100, 0), 100);
-            setSliderPosition(percent);
-        }
-    };
+    // Update container width on resize
+    useEffect(() => {
+        if (!containerRef.current) return;
 
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (isDragging) handleMove(e.clientX);
-    };
+        const updateWidth = () => {
+            if (containerRef.current) {
+                setContainerWidth(containerRef.current.offsetWidth);
+            }
+        };
+
+        updateWidth();
+        window.addEventListener('resize', updateWidth);
+        return () => window.removeEventListener('resize', updateWidth);
+    }, []);
+
+    const handleMouseDown = () => setIsDragging(true);
+
+    useEffect(() => {
+        const handleGlobalMouseUp = () => setIsDragging(false);
+        const handleGlobalMouseMove = (e: MouseEvent) => {
+            if (!isDragging || !containerRef.current) return;
+
+            const containerRect = containerRef.current.getBoundingClientRect();
+            const relativeX = e.clientX - containerRect.left;
+            const percentage = Math.min(Math.max((relativeX / containerRect.width) * 100, 0), 100);
+
+            setSliderPosition(percentage);
+        };
+
+        if (isDragging) {
+            window.addEventListener('mouseup', handleGlobalMouseUp);
+            window.addEventListener('mousemove', handleGlobalMouseMove);
+        }
+
+        return () => {
+            window.removeEventListener('mouseup', handleGlobalMouseUp);
+            window.removeEventListener('mousemove', handleGlobalMouseMove);
+        };
+    }, [isDragging]);
 
     const handleTouchMove = (e: React.TouchEvent) => {
-        if (isDragging) handleMove(e.touches[0].clientX);
-    };
-
-    const handleClick = (e: React.MouseEvent) => {
-        handleMove(e.clientX);
+        if (!containerRef.current) return;
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const relativeX = e.touches[0].clientX - containerRect.left;
+        const percentage = Math.min(Math.max((relativeX / containerRect.width) * 100, 0), 100);
+        setSliderPosition(percentage);
     };
 
     return (
-        <section className="py-24 bg-aeris-black border-b border-white/10 overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4">
-
-                <div className="mb-12 text-center">
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">THE TRUTH TEST</h2>
-                    <p className="text-gray-400 font-mono">Drag to reveal what optical sensors miss.</p>
-                </div>
-
-                <div className="relative w-full aspect-video md:aspect-[21/9] rounded-xl overflow-hidden border border-white/20 select-none"
-                    ref={containerRef}
-                    onMouseDown={() => setIsDragging(true)}
-                    onMouseUp={() => setIsDragging(false)}
-                    onMouseLeave={() => setIsDragging(false)}
-                    onMouseMove={handleMouseMove}
-                    onTouchStart={() => setIsDragging(true)}
-                    onTouchEnd={() => setIsDragging(false)}
-                    onTouchMove={handleTouchMove}
-                    onClick={handleClick}
-                >
-                    {/* Background: RADAR (TRUTH) */}
-                    <div className="absolute inset-0 grayscale-[20%] contrast-125">
-                        <Image src="/vysocina_radar.png" alt="Radar Truth Analysis" fill className="object-cover" />
-                        <div className="absolute inset-0 bg-aeris-black/10 mix-blend-overlay pointer-events-none" />
-                        <div className="absolute top-8 right-8 text-right pointer-events-none">
-                            <div className="text-red-500 font-mono text-xs font-bold tracking-widest mb-1 border-b border-red-500/30 pb-1">
-                                LAYER: SAR [SENTINEL-1A]
-                            </div>
-                            <div className="text-[10px] text-red-400 font-mono">
-                                POLARIZATION: VV+VH <br />
-                                INTERFEROMETRY: ACTIVE <br />
-                                MOISTURE STRESS: <span className="text-red-500 font-bold">DETECTED</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Foreground: OPTICAL (FALSE) - Clipped */}
-                    <div
-                        className="absolute inset-0 z-10 overscroll-none"
-                        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-                    >
-                        <Image src="/vysocina_optical.png" alt="Optical Satellite View" fill className="object-cover" />
-                        <div className="absolute inset-0 bg-radar-green/10 mix-blend-overlay pointer-events-none" />
-                        <div className="absolute top-8 left-8 pointer-events-none">
-                            <div className="text-radar-green font-mono text-xs font-bold tracking-widest mb-1 border-b border-radar-green/30 pb-1">
-                                LAYER: OPTICAL [CNES]
-                            </div>
-                            <div className="text-[10px] text-radar-green/80 font-mono">
-                                SPECTRUM: RGB <br />
-                                CLOUD COVER: 0% <br />
-                                STATUS: <span className="text-radar-green font-bold">NOMINAL (FALSE POSTIVE)</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Slider Handle (Scanner Line) */}
-                    <div
-                        className="absolute top-0 bottom-0 w-px bg-white z-20 cursor-ew-resize group"
-                        style={{ left: `${sliderPosition}%` }}
-                    >
-                        {/* Glowing Laser Line */}
-                        <div className="absolute top-0 bottom-0 left-[-1px] w-[3px] bg-white/50 blur-[1px]" />
-                        <div className="absolute top-0 bottom-0 left-[-20px] w-[40px] opacity-0 group-hover:opacity-20 bg-gradient-to-r from-transparent via-white to-transparent transition-opacity" />
-
-                        {/* Handle UI */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-12 bg-aeris-black/90 border border-white/40 flex items-center justify-center backdrop-blur-sm">
-                            <div className="w-0.5 h-6 bg-white/50" />
-                        </div>
-
-                        {/* Scanner Data Label */}
-                        <div className="absolute bottom-8 left-4 text-[10px] font-mono whitespace-nowrap text-white/80 bg-black/60 px-1 border-l border-white/50">
-                            SCANX: {sliderPosition.toFixed(1)}%
-                        </div>
-                    </div>
-
+        <div
+            ref={containerRef}
+            className="relative w-full h-full min-h-[400px] bg-black rounded-lg border border-white/10 overflow-hidden select-none cursor-ew-resize group"
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleMouseDown}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={() => setIsDragging(false)}
+        >
+            {/* Background Image (After - Radar) */}
+            <div className="absolute inset-0 w-full h-full">
+                <img
+                    src={afterImage}
+                    alt="After Analysis"
+                    className="w-full h-full object-cover"
+                    draggable={false}
+                />
+                <div className="absolute top-4 right-4 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded border border-radar-green/50 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse" />
+                    <span className="text-radar-green font-mono text-xs font-bold tracking-wider">{afterLabel.toUpperCase()}</span>
                 </div>
             </div>
-        </section>
+
+            {/* Foreground Image (Before - Optical) */}
+            <div
+                className="absolute inset-0 h-full overflow-hidden border-r border-white/50"
+                style={{ width: `${sliderPosition}%`, zIndex: 10 }}
+            >
+                <img
+                    src={beforeImage}
+                    alt="Before Optical"
+                    className="h-full object-cover max-w-none"
+                    style={{ width: containerWidth ? `${containerWidth}px` : '100%' }}
+                    draggable={false}
+                />
+                <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded border border-white/20 flex items-center gap-2">
+                    <span className="text-white font-mono text-xs font-bold tracking-wider">{beforeLabel.toUpperCase()}</span>
+                </div>
+            </div>
+
+            {/* Handle */}
+            <div
+                className="absolute top-0 bottom-0 w-0.5 bg-white z-20 cursor-ew-resize shadow-[0_0_20px_rgba(0,0,0,0.8)]"
+                style={{ left: `${sliderPosition}%` }}
+            >
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
+                    <MoveHorizontal className="w-4 h-4 text-black" />
+                </div>
+            </div>
+        </div>
     );
 }

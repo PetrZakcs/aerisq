@@ -1,0 +1,20 @@
+{
+    "job_id": "mission-ind-001",
+    "status": "completed",
+    "stats": {
+        "mean_sigma0_db": -8.1,
+        "min_sigma0_db": -15.2,
+        "max_sigma0_db": -1.2,
+        "std_sigma0_db": 1.8,
+        "drought_percentage": 15.2,
+        "drought_severity": "MILD",
+        "area_km2": 82.5,
+        "soil_moisture_index": 45,
+        "anomaly_db": -2.1,
+        "baseline_mean_db": -6.0,
+        "quality_flag": "PASSED",
+        "confidence": 0.91,
+        "polarization": "VV"
+    },
+    "summary": "SUBSIDENCE WARNING: Interferometric analysis detects ground displacement of -12mm/year in the northern quadrant of the open-pit mine. Structural integrity of access road C-4 may be compromised. Slope stability index degraded by 15%."
+}
