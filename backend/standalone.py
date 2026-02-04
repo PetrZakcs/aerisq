@@ -435,7 +435,12 @@ This version uses **physics-based drought analysis** following Sentinel-1 SAR pr
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://aerisq.vercel.app",
+        "https://aerisq-frontend.vercel.app",
+        "*"  # Fallback for debugging
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
