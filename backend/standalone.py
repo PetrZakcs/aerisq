@@ -488,19 +488,28 @@ def create_analysis(request: AnalyzeRequest, user: dict = Depends(get_current_us
     """Create authenticated analysis - tries GEE first, falls back to physics"""
     job_id = str(uuid.uuid4())
     
-    # Try GEE first
-    gee_results, used_gee = try_gee_analysis(
-        request.polygon.model_dump(),
-        request.date_range.start,
-        request.date_range.end,
-        job_id
-    )
+    # Try GEE first (SAFE MODE)
+    used_gee = False
+    gee_results = None
     
+    try:
+        if GEE_AVAILABLE:
+            gee_results, used_gee = try_gee_analysis(
+                request.polygon.model_dump(),
+                request.date_range.start,
+                request.date_range.end,
+                job_id
+            )
+    except Exception as e:
+        logger.error(f"GEE Error in handler: {e}")
+        used_gee = False
+
     if used_gee and gee_results:
         stats = gee_results
         logger.info(f"Using GEE analysis for job {job_id}")
     else:
         # Fallback to physics simulation
+        logger.warning(f"Using physics fallback for job {job_id}")
         stats = run_physics_analysis(
             request.polygon.model_dump(),
             request.date_range.start,
@@ -508,7 +517,6 @@ def create_analysis(request: AnalyzeRequest, user: dict = Depends(get_current_us
             job_id,
             request.mode
         )
-        logger.info(f"Using physics simulation for job {job_id}")
     
     
     severity_colors = {
@@ -567,13 +575,21 @@ def create_demo_analysis(request: AnalyzeRequest):
     """Demo endpoint - no auth required, tries GEE then physics"""
     job_id = str(uuid.uuid4())
     
-    # Try GEE first
-    gee_results, used_gee = try_gee_analysis(
-        request.polygon.model_dump(),
-        request.date_range.start,
-        request.date_range.end,
-        job_id
-    )
+    # Try GEE first (SAFE MODE)
+    used_gee = False
+    gee_results = None
+
+    try:
+        if GEE_AVAILABLE:
+            gee_results, used_gee = try_gee_analysis(
+                request.polygon.model_dump(),
+                request.date_range.start,
+                request.date_range.end,
+                job_id
+            )
+    except Exception as e:
+        logger.error(f"GEE Error in demo handler: {e}")
+        used_gee = False
     
     if used_gee and gee_results:
         stats = gee_results
