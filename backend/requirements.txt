@@ -1,36 +1,25 @@
-# ===== AerisQ Backend Dependencies =====
-# Core Framework
+# ===== AerisQ Backend Layers (GEE Deployment) =====
+
+# Core
 fastapi==0.109.0
 uvicorn[standard]==0.27.0
 pydantic==2.5.3
-pydantic-settings==2.1.0
-
-# Security
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
 
-# Database (Not needed for Standalone/GEE mode)
-# sqlalchemy==2.0.25
-# psycopg2-binary==2.9.9
-# geoalchemy2==0.14.3
-
-# Async Workers (Not needed for Standalone)
-# celery[redis]==5.3.6
-# redis==5.0.1
-
-# HTTP Client
+# HTTP & Auth
 httpx==0.26.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
 
-# Geospatial (Not needed for GEE - GEE handles this in cloud)
-# rasterio==1.3.9
+# Data Processing
 numpy==1.26.3
-# scipy==1.12.0 (Failed build on Render - using fallback)
-# shapely==2.0.2
-# geopandas==0.14.2
-
-# Utilities
 python-dotenv==1.0.0
 
-# Google Earth Engine (Real-time SAR processing)
+# Google Earth Engine (CRITICAL)
 earthengine-api==1.7.12
+
+# REMOVED due to Render Free Tier Limits / Compilation Errors:
+# - scipy (Fortran missing)
+# - rasterio (GDAL missing)
+# - geopandas (GDAL missing)
+# - psycopg2 (No database)
