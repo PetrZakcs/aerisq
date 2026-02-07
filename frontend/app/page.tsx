@@ -21,6 +21,65 @@ export default function Home() {
       {/* 1. HERO SECTION */}
       <Hero />
 
+      {/* 1.5. PUBLIC DEMO ACCESS */}
+      <section className="py-24 bg-black relative border-y border-white/10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              ACCESS <span className="text-radar-green">INTELLIGENCE LAYER</span>
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Explore real-time radar analysis of critical infrastructure. No login required for public demonstrations.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* AGRICULTURE DEMO */}
+            <a href="/mission/alpha" className="group relative overflow-hidden rounded-xl border border-white/10 hover:border-radar-green/50 transition-all bg-white/5 aspect-video flex flex-col justify-end p-8">
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
+              {/* Placeholder for map image if available */}
+              <div className="absolute inset-0 bg-[url('/vysocina_radar.png')] bg-cover bg-center opacity-50 group-hover:opacity-75 transition-opacity duration-500 mix-blend-luminosity" />
+
+              <div className="relative z-20">
+                <div className="flex items-center gap-2 mb-2 text-radar-green">
+                  <span className="w-2 h-2 rounded-full bg-radar-green animate-pulse" />
+                  <span className="font-mono text-xs uppercase tracking-widest">Live Feed</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-radar-green transition-colors">AGRICULTURE INTELLIGENCE</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  Monitor crop health, soil moisture, and harvest readiness with Sentinel-1 SAR analysis.
+                </p>
+                <span className="inline-flex items-center gap-2 font-mono text-xs text-white uppercase tracking-widest border border-white/20 px-4 py-2 rounded group-hover:bg-radar-green group-hover:text-black group-hover:border-radar-green transition-all">
+                  Launch Mission Alpha
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </span>
+              </div>
+            </a>
+
+            {/* DEFENSE DEMO */}
+            <a href="/mission/beta" className="group relative overflow-hidden rounded-xl border border-white/10 hover:border-blue-500/50 transition-all bg-white/5 aspect-video flex flex-col justify-end p-8">
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
+              <div className="absolute inset-0 bg-[url('/vysocina_optical.png')] bg-cover bg-center opacity-50 group-hover:opacity-75 transition-opacity duration-500 mix-blend-luminosity" />
+
+              <div className="relative z-20">
+                <div className="flex items-center gap-2 mb-2 text-blue-400">
+                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                  <span className="font-mono text-xs uppercase tracking-widest">Restricted</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">DEFENSE & GOV</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  Infrastructure stability monitoring, flood detection, and change detection for strategic assets.
+                </p>
+                <span className="inline-flex items-center gap-2 font-mono text-xs text-white uppercase tracking-widest border border-white/20 px-4 py-2 rounded group-hover:bg-blue-500 group-hover:text-black group-hover:border-blue-500 transition-all">
+                  Launch Mission Beta
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* 2. TRUST / LOGOS - Hidden for now
       <TrustLogos /> 
       */}

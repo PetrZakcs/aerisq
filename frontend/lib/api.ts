@@ -68,6 +68,7 @@ export interface JobResult {
     stats?: DroughtStats;
     summary?: string;
     result_url?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     geojson?: any;
     error_message?: string;
 }
