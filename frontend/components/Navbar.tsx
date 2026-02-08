@@ -1,11 +1,17 @@
-'use client';
-
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { PopupModal } from 'react-calendly';
 
 
 export default function Navbar() {
+    const [openCalendly, setOpenCalendly] = useState(false);
+    // Solves hydration mismatch for accessing document
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+
+    if (!mounted) return null;
 
     return (
         <>
@@ -29,6 +35,14 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-4">
+                    {/* Book Demo CTA */}
+                    <button
+                        onClick={() => setOpenCalendly(true)}
+                        className="hidden sm:flex items-center gap-2 px-4 py-2 font-mono text-xs font-bold text-white border border-white/20 hover:bg-white/10 transition-all uppercase tracking-widest"
+                    >
+                        <span>BOOK DEMO</span>
+                    </button>
+
                     {/* Primary CTA */}
                     <Link
                         href="#waitlist"
@@ -39,8 +53,15 @@ export default function Navbar() {
                 </div>
             </nav>
 
+
             {/* Login Modal */}
 
+            <PopupModal
+                url="https://calendly.com/petr-zak/aerisq-demo"
+                onModalClose={() => setOpenCalendly(false)}
+                open={openCalendly}
+                rootElement={document.getElementById("root") || document.body}
+            />
         </>
     );
 }
