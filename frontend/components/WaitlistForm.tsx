@@ -33,26 +33,24 @@ export default function WaitlistForm() {
         setStatus('loading');
 
         try {
-            // Check for existing email to handle duplicates gracefully
-            const { data: existing } = await supabase
-                .from('waitlist')
-                .select('email')
-                .eq('email', email)
-                .single();
-
-            if (existing) {
-                setStatus('success');
-                setMessage('YOU ARE ALREADY IN THE QUEUE.');
-                return;
-            }
-
+            // Attempt blind insert. 
+            // If email exists, Supabase will return an error (23505 unique_violation)
+            // We shouldn't check beforehand because that requires SELECT permissions which leaks privacy.
             const { error } = await supabase
                 .from('waitlist')
                 .insert([
                     { email, interest, created_at: new Date().toISOString() },
                 ]);
 
-            if (error) throw error;
+            if (error) {
+                // Check for duplicate key error (Postgres code 23505)
+                if (error.code === '23505' || error.message.includes('duplicate')) {
+                    setStatus('success');
+                    setMessage('YOU ARE ALREADY IN THE QUEUE.');
+                    return;
+                }
+                throw error;
+            }
 
             setStatus('success');
             setMessage('TRANSMISSION RECEIVED. WELCOME TO THE INTELLIGENCE LAYER.');
