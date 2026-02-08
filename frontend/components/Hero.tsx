@@ -25,7 +25,7 @@ export default function Hero() {
                         <span className="text-xs font-mono text-gray-300 tracking-widest uppercase">Global Surveillance System</span>
                     </div>
 
-                    <h1 className="text-6xl md:text-9xl font-extrabold font-display tracking-tighter text-white mb-6 leading-none">
+                    <h1 className="text-4xl sm:text-6xl md:text-9xl font-extrabold font-display tracking-tighter text-white mb-6 leading-none">
                         PHYSICS, <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-400 to-gray-600">NOT ART.</span>
                     </h1>
@@ -35,9 +35,9 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
-                    className="text-lg md:text-xl text-gray-400 max-w-2xl text-center font-sans font-light leading-relaxed mb-10"
+                    className="text-base md:text-xl text-gray-400 max-w-2xl text-center font-sans font-light leading-relaxed mb-10 px-4"
                 >
-                    We analyze raw Sentinel-1 radar backscatter and phase history. <br />
+                    We analyze raw Sentinel-1 radar backscatter and phase history. <br className="hidden md:block" />
                     <span className="text-gray-200">Zero optical hallucinations. All-weather intelligence.</span>
                 </motion.p>
 
@@ -45,14 +45,14 @@ export default function Hero() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.8 }}
-                    className="flex flex-col md:flex-row gap-6 items-center"
+                    className="flex flex-col w-full sm:w-auto sm:flex-row gap-4 sm:gap-6 items-center px-6"
                 >
-                    <a href="#demos" className="relative group px-8 py-4 bg-white text-black font-sans font-bold tracking-widest hover:bg-gray-200 transition-all uppercase overflow-hidden">
+                    <a href="#demos" className="relative group w-full sm:w-auto px-8 py-4 bg-white text-black font-sans font-bold tracking-widest hover:bg-gray-200 transition-all uppercase overflow-hidden text-center text-sm sm:text-base">
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                         <span className="relative z-10">Start Mission</span>
                     </a>
 
-                    <a href="#process" className="px-8 py-4 border border-white/20 text-white font-sans tracking-widest hover:bg-white/5 hover:border-white/40 transition-all uppercase backdrop-blur-sm">
+                    <a href="#process" className="w-full sm:w-auto px-8 py-4 border border-white/20 text-white font-sans tracking-widest hover:bg-white/5 hover:border-white/40 transition-all uppercase backdrop-blur-sm text-center text-sm sm:text-base">
                         How it works
                     </a>
                 </motion.div>
