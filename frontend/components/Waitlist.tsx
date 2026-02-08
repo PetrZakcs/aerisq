@@ -14,7 +14,7 @@ export default function Waitlist() {
                 </h2>
                 <p className="text-gray-400 mb-10 text-lg">
                     Join the waitlist for early access to the AerisQ Physics Core.
-                    Limited spots for the Pilot Program (Q1 2026).
+                    Limited spots for the Pilot Program (Q2 2026).
                 </p>
 
                 <WaitlistForm />
