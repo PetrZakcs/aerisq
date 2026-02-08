@@ -11,23 +11,8 @@ const CASES = [
         location: "SOUTH MORAVIA [500ha]",
         detection: "-4.2dB SIGNAL DROP",
         outcome: "YIELD SAVED (+15%)",
-        image: "/vysocina_radar.png" // Reusing distinct asset for now
-    },
-    {
-        id: 2,
-        title: "SUBTERRANEAN MOVEMENT",
-        location: "BORDER SECTOR 4",
-        detection: "COHERENCE LOSS",
-        outcome: "CONVOY IDENTIFIED",
-        image: "/vysocina_radar.png" // Placeholder
-    },
-    {
-        id: 3,
-        title: "FOREST BIOMASS AUDIT",
-        location: "BOHEMIAN SWITZERLAND",
-        detection: "TEXTURE ANOMALY",
-        outcome: "ILLEGAL LOGGING HALTED",
-        image: "/vysocina_radar.png" // Placeholder
+        image: "/vysocina_radar.png",
+        link: "/mission/alpha" // Linking to the Alpha mission as the 'case study' demo for now, or pure text.
     }
 ];
 
@@ -51,16 +36,16 @@ export default function MissionReports() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="flex justify-center">
                     {CASES.map((item, i) => (
                         <motion.div
                             key={item.id}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="group relative bg-[#0A0A0A] rounded-2xl border border-white/10 hover:border-radar-green/50 transition-colors overflow-hidden block"
+                            className="group relative bg-[#0A0A0A] rounded-2xl border border-white/10 hover:border-radar-green/50 transition-colors overflow-hidden block w-full max-w-md"
                         >
-                            <a href={`/case-studies/${item.id}`} className="block h-full">
+                            <a href={item.link} className="block h-full">
                                 {/* Image Header */}
                                 <div className="relative h-64 w-full overflow-hidden border-b border-white/10">
                                     <Image
@@ -100,7 +85,7 @@ export default function MissionReports() {
 
                                     <div className="mt-6 pt-2">
                                         <button className="text-xs font-bold text-gray-400 group-hover:text-white flex items-center gap-2 transition-colors uppercase tracking-widest">
-                                            View Full Report <ArrowRight className="w-3 h-3" />
+                                            View Mission Data <ArrowRight className="w-3 h-3" />
                                         </button>
                                     </div>
                                 </div>

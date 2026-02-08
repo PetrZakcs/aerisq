@@ -22,7 +22,7 @@ export default function Home() {
       <Hero />
 
       {/* 1.5. PUBLIC DEMO ACCESS */}
-      <section className="py-24 bg-black relative border-y border-white/10">
+      <section id="demos" className="py-24 bg-black relative border-y border-white/10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -56,26 +56,26 @@ export default function Home() {
               </div>
             </a>
 
-            {/* DEFENSE DEMO */}
-            <a href="/mission/beta" className="group relative overflow-hidden rounded-xl border border-white/10 hover:border-blue-500/50 transition-all bg-white/5 aspect-video flex flex-col justify-end p-8">
+            {/* DEFENSE / FINANCE DEMO (PENDING) */}
+            <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 aspect-video flex flex-col justify-end p-8 opacity-75 grayscale hover:grayscale-0 transition-all cursor-not-allowed">
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
-              <div className="absolute inset-0 bg-[url('/vysocina_optical.png')] bg-cover bg-center opacity-50 group-hover:opacity-75 transition-opacity duration-500 mix-blend-luminosity" />
+              <div className="absolute inset-0 bg-[url('/vysocina_optical.png')] bg-cover bg-center opacity-30 mix-blend-luminosity" />
 
               <div className="relative z-20">
-                <div className="flex items-center gap-2 mb-2 text-blue-400">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                  <span className="font-mono text-xs uppercase tracking-widest">Restricted</span>
+                <div className="flex items-center gap-2 mb-2 text-yellow-500">
+                  <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
+                  <span className="font-mono text-xs uppercase tracking-widest">PENDING AUTHORIZATION</span>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">DEFENSE & GOV</h3>
+                <h3 className="text-2xl font-bold text-white mb-2">FINANCE & DEFENSE</h3>
                 <p className="text-gray-400 text-sm mb-4">
-                  Infrastructure stability monitoring, flood detection, and change detection for strategic assets.
+                  Infrastructure stability, flood detection, and strategic asset monitoring (Defense, Space, Finance).
                 </p>
-                <span className="inline-flex items-center gap-2 font-mono text-xs text-white uppercase tracking-widest border border-white/20 px-4 py-2 rounded group-hover:bg-blue-500 group-hover:text-black group-hover:border-blue-500 transition-all">
-                  Launch Mission Beta
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                <span className="inline-flex items-center gap-2 font-mono text-xs text-gray-500 uppercase tracking-widest border border-white/10 px-4 py-2 rounded">
+                  Status: Classified / In Development
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                 </span>
               </div>
-            </a>
+            </div>
           </div>
         </div>
       </section>

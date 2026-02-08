@@ -100,12 +100,15 @@ export default function Pricing() {
                                 ))}
                             </ul>
 
-                            <button className={`w-full py-4 font-bold font-mono uppercase tracking-widest text-xs rounded-xl transition-all ${tier.highlight
-                                ? "bg-radar-green text-black hover:bg-white hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-                                : "border border-white/20 text-white hover:bg-white/5 hover:border-white"
-                                }`}>
+                            <a
+                                href={tier.cta === 'Request Demo' ? 'https://calendly.com/petrrmarketing/aerisq' : '#waitlist'}
+                                className={`block w-full py-4 text-center font-bold font-mono uppercase tracking-widest text-xs rounded-xl transition-all ${tier.highlight
+                                    ? "bg-radar-green text-black hover:bg-white hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                                    : "border border-white/20 text-white hover:bg-white/5 hover:border-white"
+                                    }`}
+                            >
                                 {tier.cta}
-                            </button>
+                            </a>
                         </div>
                     ))}
                 </div>

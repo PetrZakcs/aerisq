@@ -8,7 +8,7 @@ export default function ProcessSteps() {
     ];
 
     return (
-        <section className="py-24 bg-aeris-black border-t border-white/5">
+        <section id="process" className="py-24 bg-aeris-black border-t border-white/5">
             <div className="max-w-7xl mx-auto px-6">
                 <h2 className="text-3xl md:text-4xl font-bold font-display text-white mb-16 text-center">MISSION PROTOCOL</h2>
 

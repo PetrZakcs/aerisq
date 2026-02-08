@@ -47,12 +47,12 @@ export default function Hero() {
                     transition={{ delay: 0.8 }}
                     className="flex flex-col md:flex-row gap-6 items-center"
                 >
-                    <a href="/dashboard" className="relative group px-8 py-4 bg-white text-black font-sans font-bold tracking-widest hover:bg-gray-200 transition-all uppercase overflow-hidden">
+                    <a href="#demos" className="relative group px-8 py-4 bg-white text-black font-sans font-bold tracking-widest hover:bg-gray-200 transition-all uppercase overflow-hidden">
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                         <span className="relative z-10">Start Mission</span>
                     </a>
 
-                    <a href="#how-it-works" className="px-8 py-4 border border-white/20 text-white font-sans tracking-widest hover:bg-white/5 hover:border-white/40 transition-all uppercase backdrop-blur-sm">
+                    <a href="#process" className="px-8 py-4 border border-white/20 text-white font-sans tracking-widest hover:bg-white/5 hover:border-white/40 transition-all uppercase backdrop-blur-sm">
                         How it works
                     </a>
                 </motion.div>

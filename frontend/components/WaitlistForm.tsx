@@ -17,6 +17,7 @@ const supabase = (supabaseUrl && supabaseAnonKey)
 export default function WaitlistForm() {
     const [email, setEmail] = useState('');
     const [interest, setInterest] = useState('other');
+    const [country, setCountry] = useState('other');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
 
@@ -39,7 +40,7 @@ export default function WaitlistForm() {
             const { error } = await supabase
                 .from('waitlist')
                 .insert([
-                    { email, interest, created_at: new Date().toISOString() },
+                    { email, interest, country, created_at: new Date().toISOString() },
                 ]);
 
             if (error) {
@@ -102,20 +103,41 @@ export default function WaitlistForm() {
                                 />
                             </div>
 
-                            <div className="relative">
-                                <select
-                                    value={interest}
-                                    onChange={(e) => setInterest(e.target.value)}
-                                    disabled={status === 'loading'}
-                                    className="w-full bg-black/50 border border-white/20 px-4 py-3 text-white font-mono appearance-none focus:outline-none focus:border-radar-green focus:ring-1 focus:ring-radar-green transition-all rounded-md cursor-pointer"
-                                >
-                                    <option value="agriculture">SECTOR: AGRICULTURE</option>
-                                    <option value="defense">SECTOR: DEFENSE & GOV</option>
-                                    <option value="investor">SECTOR: INVESTOR</option>
-                                    <option value="other">SECTOR: OTHER</option>
-                                </select>
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="relative">
+                                    <select
+                                        value={interest}
+                                        onChange={(e) => setInterest(e.target.value)}
+                                        disabled={status === 'loading'}
+                                        className="w-full bg-black/50 border border-white/20 px-4 py-3 text-white font-mono appearance-none focus:outline-none focus:border-radar-green focus:ring-1 focus:ring-radar-green transition-all rounded-md cursor-pointer text-xs"
+                                    >
+                                        <option value="agriculture">AGRI-INTEL</option>
+                                        <option value="defense">DEFENSE/GOV</option>
+                                        <option value="investor">INVESTOR</option>
+                                        <option value="other">OTHER</option>
+                                    </select>
+                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+                                </div>
+
+                                <div className="relative">
+                                    <select
+                                        value={country}
+                                        onChange={(e) => setCountry(e.target.value)}
+                                        disabled={status === 'loading'}
+                                        className="w-full bg-black/50 border border-white/20 px-4 py-3 text-white font-mono appearance-none focus:outline-none focus:border-radar-green focus:ring-1 focus:ring-radar-green transition-all rounded-md cursor-pointer text-xs"
+                                    >
+                                        <option value="other">SELECT REGION</option>
+                                        <option value="us">NORTH AMERICA</option>
+                                        <option value="eu">EUROPE</option>
+                                        <option value="apac">ASIA PACIFIC</option>
+                                        <option value="latam">LATAM</option>
+                                        <option value="mea">MIDDLE EAST/AFRICA</option>
+                                    </select>
+                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
                                 </div>
                             </div>
 
