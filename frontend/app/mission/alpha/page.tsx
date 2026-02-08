@@ -87,9 +87,10 @@ export default function MissionAlphaPage() {
                         <span className="font-mono text-lg font-bold text-white tracking-widest">MISSION ALPHA</span>
                     </div>
 
-                    <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded bg-radar-green/10 border border-radar-green/20">
-                        <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse" />
-                        <span className="font-mono text-xs font-bold text-radar-green tracking-wider">LIVE FEED: ACTIVE</span>
+                    <div className="flex items-center gap-2 px-2 py-0.5 md:px-3 md:py-1 rounded bg-radar-green/10 border border-radar-green/20">
+                        <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse flex-shrink-0" />
+                        <span className="font-mono text-[10px] md:text-xs font-bold text-radar-green tracking-wider whitespace-nowrap">LIVE</span>
+                        <span className="font-mono text-[10px] md:text-xs font-bold text-radar-green tracking-wider hidden sm:inline">FEED: ACTIVE</span>
                     </div>
                 </div>
 

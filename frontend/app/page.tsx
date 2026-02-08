@@ -49,7 +49,7 @@ export default function Home() {
                 <p className="text-gray-400 text-sm mb-4">
                   Monitor crop health, soil moisture, and harvest readiness with Sentinel-1 SAR analysis.
                 </p>
-                <span className="inline-flex items-center gap-2 font-mono text-xs text-white uppercase tracking-widest border border-white/20 px-4 py-2 rounded group-hover:bg-radar-green group-hover:text-black group-hover:border-radar-green transition-all">
+                <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest px-4 py-2 rounded transition-all bg-radar-green text-black border border-radar-green md:bg-transparent md:text-white md:border-white/20 md:group-hover:bg-radar-green md:group-hover:text-black md:group-hover:border-radar-green">
                   Launch Mission Alpha
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </span>

@@ -52,10 +52,10 @@ export default function MissionReports() {
                                         src={item.image}
                                         alt={item.title}
                                         fill
-                                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
+                                        className="object-cover transition-all duration-500 hover:scale-105"
                                     />
-                                    {/* Overlay */}
-                                    <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors" />
+                                    {/* Overlay - Removed for clarity on mobile */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-60" />
 
                                     {/* Redacted Badge */}
                                     <div className="absolute top-3 left-3 bg-black/80 backdrop-blur px-2 py-0.5 border border-white/20 text-[10px] font-mono text-gray-300">
@@ -84,7 +84,7 @@ export default function MissionReports() {
                                     </div>
 
                                     <div className="mt-6 pt-2">
-                                        <button className="text-xs font-bold text-gray-400 group-hover:text-white flex items-center gap-2 transition-colors uppercase tracking-widest">
+                                        <button className="text-xs font-bold flex items-center gap-2 transition-colors uppercase tracking-widest text-radar-green md:text-gray-400 md:group-hover:text-white">
                                             View Mission Data <ArrowRight className="w-3 h-3" />
                                         </button>
                                     </div>
