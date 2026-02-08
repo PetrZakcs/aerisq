@@ -57,7 +57,7 @@ export default function Navbar() {
             {/* Login Modal */}
 
             <PopupModal
-                url="https://calendly.com/petr-zak/aerisq-demo"
+                url="https://calendly.com/petrrmarketing/aerisq"
                 onModalClose={() => setOpenCalendly(false)}
                 open={openCalendly}
                 rootElement={document.getElementById("root") || document.body}
