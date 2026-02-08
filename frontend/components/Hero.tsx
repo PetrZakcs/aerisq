@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
     return (
-        <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-aeris-black border-b border-white/10">
+        <section className="relative h-screen w-full flex flex-col items-center justify-start pt-32 md:justify-center md:pt-0 overflow-hidden bg-aeris-black border-b border-white/10">
 
             {/* Radar Background Effect */}
             <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
