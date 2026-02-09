@@ -1,4 +1,4 @@
-# ===== AerisQ Backend Layers (GEE Deployment) =====
+# ===== AerisQ Backend Layers (Render.com Deployment) =====
 
 # Core
 fastapi>=0.115.0  # Upgrade for Python 3.13 support
@@ -15,11 +15,9 @@ passlib[bcrypt]==1.7.4
 numpy==1.26.3
 python-dotenv==1.0.0
 
-# Google Earth Engine (CRITICAL)
-earthengine-api==1.7.12
+# Google Earth Engine (ENABLED for Render.com - higher memory limit)
+earthengine-api>=1.0.0
 
-# REMOVED due to Render Free Tier Limits / Compilation Errors:
-# - scipy (Fortran missing)
-# - rasterio (GDAL missing)
-# - geopandas (GDAL missing)
-# - psycopg2 (No database)
+# NOTE: Render.com Free tier has 512MB RAM - sufficient for GEE
+# These were removed for Vercel (250MB limit) but work fine on Render
+
