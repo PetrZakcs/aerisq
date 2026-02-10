@@ -705,6 +705,156 @@ def get_baselines(
     }
 
 
+# ===== PROMPT-BASED ANALYSIS =====
+from app.agents.prompt_parser import parse_prompt, get_available_analyses, generate_example_prompts
+from app.agents.ndvi_analyzer import analyze_ndvi
+from app.agents.ndwi_analyzer import analyze_ndwi
+
+
+class PromptAnalyzeRequest(BaseModel):
+    prompt: str = Field(..., description="Natural language analysis request")
+    polygon: Optional[GeoJSONGeometry] = None
+    coordinates: Optional[Dict[str, float]] = None  # {"lat": 49.8, "lon": 15.4}
+    date_range: Optional[DateRange] = None
+
+
+@app.post("/api/v1/analyze/prompt")
+async def analyze_by_prompt(request: PromptAnalyzeRequest):
+    """
+    Prompt-based satellite analysis.
+    
+    Send a natural language prompt and we'll route to the right analyzer.
+    
+    Examples:
+    - "Analyze NDVI vegetation health"
+    - "Check soil moisture levels"
+    - "Detect water bodies with NDWI"
+    - "Show drought severity"
+    """
+    job_id = str(uuid.uuid4())
+    
+    # Parse the prompt
+    analysis_type, metadata = parse_prompt(request.prompt)
+    
+    # Build polygon from coordinates if no polygon provided
+    polygon = None
+    if request.polygon:
+        polygon = request.polygon.model_dump()
+    elif request.coordinates:
+        # Create ~10km bounding box around coordinates
+        lat = request.coordinates.get("lat", 49.8)
+        lon = request.coordinates.get("lon", 15.4)
+        delta = 0.05  # ~5km in each direction
+        polygon = {
+            "type": "Polygon",
+            "coordinates": [[[lon-delta, lat-delta], [lon+delta, lat-delta],
+                             [lon+delta, lat+delta], [lon-delta, lat+delta],
+                             [lon-delta, lat-delta]]]
+        }
+    elif metadata.get("extracted_coordinates"):
+        coords = metadata["extracted_coordinates"]
+        lat, lon = coords["lat"], coords["lon"]
+        delta = 0.05
+        polygon = {
+            "type": "Polygon",
+            "coordinates": [[[lon-delta, lat-delta], [lon+delta, lat-delta],
+                             [lon+delta, lat+delta], [lon-delta, lat+delta],
+                             [lon-delta, lat-delta]]]
+        }
+    else:
+        # Default to Czech Republic area for demo
+        polygon = {
+            "type": "Polygon",
+            "coordinates": [[[15.4, 49.7], [15.6, 49.7], [15.6, 49.9], [15.4, 49.9], [15.4, 49.7]]]
+        }
+    
+    # Date range
+    if request.date_range:
+        date_start = request.date_range.start
+        date_end = request.date_range.end
+    else:
+        # Default to last 30 days
+        from datetime import timedelta
+        end = datetime.now()
+        start = end - timedelta(days=30)
+        date_start = start.strftime("%Y-%m-%d")
+        date_end = end.strftime("%Y-%m-%d")
+    
+    # Route to appropriate analyzer
+    logger.info(f"Prompt analysis: type={analysis_type}, prompt='{request.prompt}'")
+    
+    results = {}
+    try:
+        if analysis_type == "ndvi":
+            results = analyze_ndvi(polygon, date_start, date_end)
+        elif analysis_type == "ndwi":
+            results = analyze_ndwi(polygon, date_start, date_end)
+        elif analysis_type in ("sar_moisture", "sar_drought"):
+            # Use existing physics/GEE analysis
+            used_gee = False
+            gee_results = None
+            
+            if GEE_AVAILABLE:
+                try:
+                    gee_results, used_gee = try_gee_analysis(polygon, date_start, date_end, job_id)
+                except Exception as e:
+                    logger.error(f"GEE error: {e}")
+            
+            if used_gee and gee_results:
+                results = gee_results
+                results["index_type"] = "SAR_MOISTURE" if analysis_type == "sar_moisture" else "SAR_DROUGHT"
+            else:
+                stats = run_physics_analysis(polygon, date_start, date_end, job_id)
+                results = {
+                    "index_type": "SAR_DROUGHT",
+                    "satellite": "Sentinel-1",
+                    "mean_value": stats["mean_sigma0_db"],
+                    "std_value": stats["std_sigma0_db"],
+                    "min_value": stats["min_sigma0_db"],
+                    "max_value": stats["max_sigma0_db"],
+                    "median_value": stats["median_sigma0_db"],
+                    "classification": stats["drought_severity"],
+                    "classification_description": f"Drought severity: {stats['drought_severity']}",
+                    "drought_percentage": stats["drought_percentage"],
+                    "soil_moisture_index": stats["soil_moisture_index"],
+                    "anomaly_db": stats["anomaly_db"],
+                    "area_km2": stats["area_km2"],
+                    "quality_flag": stats["quality_flag"],
+                    "confidence": stats["confidence"],
+                    "date_range": {"start": date_start, "end": date_end},
+                }
+    except Exception as e:
+        logger.error(f"Analysis error: {e}")
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+    
+    # Build response
+    response = {
+        "job_id": job_id,
+        "status": "completed",
+        "prompt": request.prompt,
+        "analysis_type": analysis_type,
+        "analysis_info": metadata["analysis_info"],
+        "prompt_confidence": metadata["confidence"],
+        "results": results,
+        "polygon_used": polygon,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    
+    # Store for retrieval
+    JOBS_STORE[job_id] = response
+    
+    return response
+
+
+@app.get("/api/v1/analyze/types")
+def get_analysis_types():
+    """Get available analysis types and example prompts."""
+    return {
+        "types": get_available_analyses(),
+        "examples": generate_example_prompts(),
+    }
+
+
 # ===== ROUTE ALIASES FOR VERCEL COMPATIBILITY =====
 # These duplicate routes allow the same API to work with /api prefix (Vercel) and without (local)
 @app.get("/api")

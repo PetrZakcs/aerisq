@@ -15,12 +15,17 @@ import {
     FileText,
     LogOut,
     Home,
-    ShieldAlert
+    ShieldAlert,
+    Zap,
+    Target
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { JobResult, DroughtStats } from '@/lib/api';
 import MissionSelector, { MISSIONS } from '@/components/MissionSelector';
 import TruthSlider from '@/components/TruthSlider';
+import PromptAnalysis from '@/components/PromptAnalysis';
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://aerisq-backend.onrender.com';
 
 // Dynamic import for Leaflet (no SSR)
 const AnalysisMap = dynamic(
@@ -43,6 +48,9 @@ interface GeoJSONPolygon {
 export default function DashboardPage() {
     const router = useRouter();
     const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
+
+    // Dashboard mode: 'missions' | 'analysis'
+    const [dashboardMode, setDashboardMode] = useState<'missions' | 'analysis'>('analysis');
 
     // Mission State
     const [activeMissionId, setActiveMissionId] = useState<string>('agri');
@@ -120,7 +128,9 @@ export default function DashboardPage() {
                             <div className="hidden sm:block h-6 w-px bg-white/10" />
                             <div className="flex items-center gap-2 px-3 py-1 rounded bg-radar-green/10 border border-radar-green/20">
                                 <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse" />
-                                <span className="font-mono text-xs font-bold text-radar-green tracking-wider">PHYSICS ENGINE: ONLINE</span>
+                                <span className="font-mono text-xs font-bold text-radar-green tracking-wider">
+                                    {dashboardMode === 'analysis' ? 'LIVE ANALYSIS' : 'PHYSICS ENGINE: ONLINE'}
+                                </span>
                             </div>
                         </>
                     )}
@@ -159,56 +169,99 @@ export default function DashboardPage() {
 
             {/* Main Content */}
             <div className="flex flex-1 overflow-hidden h-[calc(100vh-4rem)]">
-                {/* Left Panel - Mission Control */}
+                {/* Left Panel */}
                 <div className="w-80 border-r border-white/10 bg-[#0A0A0A] flex flex-col h-full z-40 shadow-xl overflow-hidden">
-                    <div className="flex-none">
-                        <MissionSelector
-                            activeMissionId={activeMissionId}
-                            onSelectMission={setActiveMissionId}
-                        />
+                    {/* Mode Tabs */}
+                    <div className="flex-none flex border-b border-white/10">
+                        <button
+                            onClick={() => setDashboardMode('analysis')}
+                            className={`flex-1 flex items-center justify-center gap-2 py-3 font-mono text-xs uppercase tracking-wider transition-all ${dashboardMode === 'analysis'
+                                    ? 'text-radar-green bg-radar-green/5 border-b-2 border-radar-green'
+                                    : 'text-gray-500 hover:text-gray-300'
+                                }`}
+                        >
+                            <Zap className="w-3.5 h-3.5" />
+                            Live Analysis
+                        </button>
+                        <button
+                            onClick={() => setDashboardMode('missions')}
+                            className={`flex-1 flex items-center justify-center gap-2 py-3 font-mono text-xs uppercase tracking-wider transition-all ${dashboardMode === 'missions'
+                                    ? 'text-radar-green bg-radar-green/5 border-b-2 border-radar-green'
+                                    : 'text-gray-500 hover:text-gray-300'
+                                }`}
+                        >
+                            <Target className="w-3.5 h-3.5" />
+                            Missions
+                        </button>
                     </div>
 
-                    {/* Active Mission Details */}
-                    {activeMission && (
-                        <div className="flex-1 overflow-y-auto border-t border-white/10">
-                            <div className="p-4 space-y-4">
-                                <div className="p-3 bg-white/5 border border-white/10 rounded">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <FileText className="w-4 h-4 text-gray-400" />
-                                        <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">Mission Brief</span>
-                                    </div>
-                                    <p className="text-sm text-gray-300 leading-relaxed">
-                                        {activeMission.desc}
-                                    </p>
-                                </div>
-
-                                {isLoadingData ? (
-                                    <div className="flex items-center justify-center p-8">
-                                        <Loader2 className="w-6 h-6 text-radar-green animate-spin" />
-                                    </div>
-                                ) : missionData ? (
-                                    <div className="space-y-4 animate-in fade-in duration-500">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <BarChart3 className="w-4 h-4 text-radar-green" />
-                                            <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">
-                                                LIVE TELEMETRY
-                                            </span>
-                                        </div>
-                                        {missionData.stats && <StatsPanel stats={missionData.stats} />}
-                                    </div>
-                                ) : (
-                                    <div className="p-4 border border-dashed border-white/10 text-center">
-                                        <span className="text-xs text-gray-500 font-mono">Awaiting Mission Data...</span>
-                                    </div>
-                                )}
-                            </div>
+                    {/* Mode Content */}
+                    {dashboardMode === 'analysis' ? (
+                        /* LIVE ANALYSIS MODE */
+                        <div className="flex-1 overflow-hidden flex flex-col">
+                            <PromptAnalysis
+                                drawnPolygon={polygon}
+                                apiBaseUrl={BACKEND_URL}
+                            />
                         </div>
+                    ) : (
+                        /* MISSIONS MODE */
+                        <>
+                            <div className="flex-none">
+                                <MissionSelector
+                                    activeMissionId={activeMissionId}
+                                    onSelectMission={setActiveMissionId}
+                                />
+                            </div>
+
+                            {activeMission && (
+                                <div className="flex-1 overflow-y-auto border-t border-white/10">
+                                    <div className="p-4 space-y-4">
+                                        <div className="p-3 bg-white/5 border border-white/10 rounded">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <FileText className="w-4 h-4 text-gray-400" />
+                                                <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">Mission Brief</span>
+                                            </div>
+                                            <p className="text-sm text-gray-300 leading-relaxed">
+                                                {activeMission.desc}
+                                            </p>
+                                        </div>
+
+                                        {isLoadingData ? (
+                                            <div className="flex items-center justify-center p-8">
+                                                <Loader2 className="w-6 h-6 text-radar-green animate-spin" />
+                                            </div>
+                                        ) : missionData ? (
+                                            <div className="space-y-4 animate-in fade-in duration-500">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <BarChart3 className="w-4 h-4 text-radar-green" />
+                                                    <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">
+                                                        LIVE TELEMETRY
+                                                    </span>
+                                                </div>
+                                                {missionData.stats && <StatsPanel stats={missionData.stats} />}
+                                            </div>
+                                        ) : (
+                                            <div className="p-4 border border-dashed border-white/10 text-center">
+                                                <span className="text-xs text-gray-500 font-mono">Awaiting Mission Data...</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
 
                 {/* Right Panel - Visualization */}
                 <div className="flex-1 relative bg-black overflow-hidden">
-                    {activeMission ? (
+                    {dashboardMode === 'analysis' ? (
+                        /* MAP with drawing tools for live analysis */
+                        <AnalysisMap
+                            onPolygonDrawn={(g) => setPolygon(g)}
+                            resultGeoJSON={null}
+                        />
+                    ) : activeMission ? (
                         <div className="absolute inset-0 flex flex-col">
                             <TruthSlider
                                 beforeImage={activeMission.assets.optical}
@@ -217,7 +270,6 @@ export default function DashboardPage() {
                                 afterLabel="AERISQ PHYSICS (SENTINEL-1)"
                             />
 
-                            {/* Coverage Badge for areas outside mission */}
                             <div className="absolute bottom-6 left-6 flex items-center gap-2 pointer-events-none z-30">
                                 <div className="bg-black/80 backdrop-blur border border-white/10 px-3 py-1.5 rounded flex items-center gap-2">
                                     <CheckCircle className="w-3 h-3 text-radar-green" />
@@ -228,7 +280,6 @@ export default function DashboardPage() {
                             </div>
                         </div>
                     ) : (
-                        // Fallback to map if no mission
                         <AnalysisMap
                             onPolygonDrawn={(g) => setPolygon(g)}
                             resultGeoJSON={null}
