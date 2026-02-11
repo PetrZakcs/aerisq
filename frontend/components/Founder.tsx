@@ -9,6 +9,7 @@ const TEAM = [
         role: "FOUNDER & CEO",
         bio: "As a GIS specialist and high-agency builder, I solo re-engineered AerisQ’s core physics engine in just 14 days to replace unreliable AI hallucinations with raw signal truth, detecting subsurface drought and hidden assets where others only see pixels.",
         image: "/team/petr-zak.jpg",
+        linkedin: "https://www.linkedin.com/in/petrzak01/",
         id: "CMD-01"
     },
     {
@@ -84,14 +85,13 @@ export default function Founder() {
                                     {member.bio}
                                 </p>
 
-                                <div className="flex gap-4 opacity-50 group-hover:opacity-100 transition-opacity">
-                                    <a href="#" className="p-2 border border-white/10 rounded-full hover:bg-white text-white hover:text-black transition-all">
-                                        <Linkedin className="w-4 h-4" />
-                                    </a>
-                                    <a href="#" className="p-2 border border-white/10 rounded-full hover:bg-white text-white hover:text-black transition-all">
-                                        <Twitter className="w-4 h-4" />
-                                    </a>
-                                </div>
+                                {member.linkedin && (
+                                    <div className="flex gap-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 border border-white/10 rounded-full hover:bg-white text-white hover:text-black transition-all">
+                                            <Linkedin className="w-4 h-4" />
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     ))}
