@@ -15,7 +15,7 @@ const TIERS = [
             "Variable Rate Maps (VRA)",
             "Unlimited Users"
         ],
-        cta: "Calculate ROI",
+        cta: "Start Monitoring",
         highlight: true
     },
     {

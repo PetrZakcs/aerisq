@@ -148,7 +148,7 @@ export default function MissionAlphaPage() {
                         <TruthSlider
                             beforeImage={MISSION_CONFIG.assets.optical}
                             afterImage={MISSION_CONFIG.assets.radar}
-                            beforeLabel="SENTINEL-1"
+                            beforeLabel="OPTICAL (SENTINEL-2)"
                             afterLabel="AERISQ PHYSICS (SENTINEL-1)"
                         />
 
@@ -212,15 +212,21 @@ function StatsPanel({ stats }: { stats: DroughtStats }) {
                 )}
             </div>
 
-            {/* Anomaly Detection */}
+            {/* Anomaly Detection - Translated for Farmers */}
             {stats.anomaly_db !== undefined && (
                 <div className="pt-2 border-t border-white/10">
+                    <div className="flex items-center justify-between mb-1">
+                        <span className="font-mono text-xs text-gray-400">FIELD DIAGNOSIS</span>
+                    </div>
                     <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs text-gray-500">vs Baseline</span>
+                        <span className="text-xs text-gray-500">Signal Loss (Dryness)</span>
                         <span className={`font-mono text-sm font-bold ${getAnomalyColor(stats.anomaly_db)}`}>
                             {stats.anomaly_db > 0 ? '+' : ''}{stats.anomaly_db.toFixed(1)} dB
                         </span>
                     </div>
+                    <p className="text-[10px] text-gray-400 mt-1 leading-tight">
+                        Radar signal parses deep soil structure. A drop of -4.8 dB confirms critical subsurface drying not yet visible on the surface.
+                    </p>
                 </div>
             )}
 
@@ -232,6 +238,17 @@ function StatsPanel({ stats }: { stats: DroughtStats }) {
                         {stats.drought_severity}
                     </span>
                 </div>
+            </div>
+
+            {/* Actionable Insight - For Farmers */}
+            <div className="pt-2 border-t border-white/10">
+                <div className="flex items-center gap-2 mb-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                    <span className="font-mono text-[10px] text-red-400 font-bold uppercase tracking-wider">ACTION REQUIRED</span>
+                </div>
+                <p className="text-xs text-gray-300 leading-relaxed">
+                    Immediate variable-rate irrigation recommended for the 68% affected area. Yield risk is high.
+                </p>
             </div>
         </div>
     );
