@@ -5,25 +5,18 @@ import { Linkedin, Twitter } from 'lucide-react';
 
 const TEAM = [
     {
-        name: "PETR ZAK",
+        name: "PETR ŽÁK",
         role: "FOUNDER & CEO",
-        bio: "Aerospace engineer with 10+ years in SAR signal processing.",
-        image: "🧑‍🚀",
+        bio: "As a GIS specialist and high-agency builder, I solo re-engineered AerisQ’s core physics engine in just 14 days to replace unreliable AI hallucinations with raw signal truth, detecting subsurface drought and hidden assets where others only see pixels.",
+        image: "/team/petr-zak.jpg",
         id: "CMD-01"
     },
     {
-        name: "SARAH CONNOR",
-        role: "LEAD RADAR SCIENTIST",
-        bio: "PhD in Microwave Remote Sensing. Expert in interferometry.",
-        image: "👩‍🔬",
+        name: "JAN RUDOLF",
+        role: "CTO",
+        bio: "From engineering VW/Audi autopilots and US-based GenAI to architecting AerisQ’s signal intelligence based on radar physics and CTU research.",
+        image: "/team/jan-rudolf.jpg",
         id: "SCI-01"
-    },
-    {
-        name: "DAVID BOWMAN",
-        role: "MISSION SYSTEMS ARCHITECT",
-        bio: "Former JPL engineer. Scales data pipelines to petabyte levels.",
-        image: "👨‍💻",
-        id: "SYS-01"
     }
 ];
 
@@ -62,9 +55,17 @@ export default function Founder() {
                         >
                             {/* Image Placeholder */}
                             <div className="aspect-[4/5] bg-white/5 relative flex items-center justify-center overflow-hidden group-hover:bg-white/10 transition-colors">
-                                <div className="text-6xl filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110 transform">
-                                    {member.image}
-                                </div>
+                                {member.image.startsWith('/') ? (
+                                    <img
+                                        src={member.image}
+                                        alt={member.name}
+                                        className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110 transform"
+                                    />
+                                ) : (
+                                    <div className="text-6xl filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110 transform">
+                                        {member.image}
+                                    </div>
+                                )}
 
                                 {/* Overlay Stats */}
                                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent flex justify-between items-end">
