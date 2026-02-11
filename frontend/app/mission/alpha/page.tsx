@@ -148,7 +148,7 @@ export default function MissionAlphaPage() {
                         <TruthSlider
                             beforeImage={MISSION_CONFIG.assets.optical}
                             afterImage={MISSION_CONFIG.assets.radar}
-                            beforeLabel="OPTICAL (SENTINEL-2)"
+                            beforeLabel="SENTINEL-1"
                             afterLabel="AERISQ PHYSICS (SENTINEL-1)"
                         />
 
