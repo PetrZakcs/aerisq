@@ -25,7 +25,11 @@ import MissionSelector, { MISSIONS } from '@/components/MissionSelector';
 import TruthSlider from '@/components/TruthSlider';
 import PromptAnalysis from '@/components/PromptAnalysis';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://aerisq-backend.onrender.com';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (
+    typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+        ? '' // Same origin in production (Vercel)
+        : 'http://localhost:8000'
+);
 
 // Dynamic import for Leaflet (no SSR)
 const AnalysisMap = dynamic(

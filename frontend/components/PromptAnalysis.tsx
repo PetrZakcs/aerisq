@@ -331,8 +331,13 @@ export default function PromptAnalysis({ drawnPolygon, apiBaseUrl }: PromptAnaly
                             <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[10px] text-gray-400">
                                 {result.results.satellite}
                             </span>
-                            <span className={`px-2 py-0.5 rounded font-mono text-[10px] ${result.results.quality_flag === 'GEE_REALTIME' ? 'bg-green-500/10 border border-green-500/30 text-green-400' : 'bg-yellow-500/10 border border-yellow-500/30 text-yellow-400'}`}>
-                                {result.results.quality_flag === 'GEE_REALTIME' ? '● LIVE' : '○ SIMULATED'}
+                            <span className={`px-2 py-0.5 rounded font-mono text-[10px] ${result.results.quality_flag === 'GEE_REALTIME'
+                                    ? 'bg-green-500/10 border border-green-500/30 text-green-400'
+                                    : result.results.quality_flag === 'MODELED'
+                                        ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400'
+                                        : 'bg-yellow-500/10 border border-yellow-500/30 text-yellow-400'
+                                }`}>
+                                {result.results.quality_flag === 'GEE_REALTIME' ? '● LIVE DATA' : result.results.quality_flag === 'MODELED' ? '● PHYSICS MODEL' : '○ SIMULATED'}
                             </span>
                             {result.results.scene_count !== undefined && (
                                 <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[10px] text-gray-400">
