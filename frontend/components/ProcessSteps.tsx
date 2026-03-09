@@ -1,29 +1,121 @@
 'use client';
 
+import { motion } from 'framer-motion';
+
+const steps = [
+    {
+        num: '01',
+        title: 'Define Area of Interest',
+        desc: 'Select your coordinates. We continuously stream calibrated Sentinel-1 GRD data for your exact location — no hardware needed.',
+        tag: 'Input'
+    },
+    {
+        num: '02',
+        title: 'Signal Processing',
+        desc: 'Physics-based pipeline converts raw SAR backscatter (σ⁰ dB) into moisture maps, subsidence fields, and structural health indices.',
+        tag: 'Processing'
+    },
+    {
+        num: '03',
+        title: 'Intelligence Delivered',
+        desc: 'Reports, GeoTIFFs, and vector masks — ready for decision-making, not interpretation. Delivered weekly or on-demand.',
+        tag: 'Output'
+    },
+];
+
 export default function ProcessSteps() {
-    const steps = [
-        { num: '01', title: 'Target Acquisition', desc: 'Select your AOI (Area of Interest). We stream calibrated Sentinel-1 GRD data for your coordinates.' },
-        { num: '02', title: 'Signal Processing', desc: 'Our four automated agents convert raw backscatter (dB) into moisture and structural health maps.' },
-        { num: '03', title: 'Actionable Intel', desc: 'Receive a Mission Report with vector masks for your machinery and plain English summaries.' },
-    ];
-
     return (
-        <section id="process" className="py-24 bg-aeris-black border-t border-white/5">
-            <div className="max-w-7xl mx-auto px-6">
-                <h2 className="text-3xl md:text-4xl font-bold font-display text-white mb-16 text-center">MISSION PROTOCOL</h2>
+        <section
+            id="process"
+            style={{
+                padding: '120px 0',
+                background: '#060606',
+                borderTop: '1px solid #1a1a1a',
+            }}
+        >
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+                <div className="section-label">Process</div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-                    {/* Connector Line (Desktop) */}
-                    <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-px bg-gradient-to-r from-transparent via-radar-green/50 to-transparent z-0" />
+                <h2
+                    style={{
+                        fontSize: 'clamp(2rem, 4vw, 4rem)',
+                        fontWeight: 800,
+                        lineHeight: 1.05,
+                        letterSpacing: '-0.02em',
+                        textTransform: 'uppercase',
+                        color: '#fff',
+                        margin: '0 0 80px 0',
+                    }}
+                >
+                    From satellite<br />
+                    to insight.
+                </h2>
 
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
                     {steps.map((step, i) => (
-                        <div key={i} className="relative z-10 flex flex-col items-center text-center group">
-                            <div className="w-24 h-24 bg-aeris-dark border border-white/10 text-radar-green flex items-center justify-center font-display text-3xl font-bold mb-6 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] group-hover:border-radar-green/50 group-hover:scale-110 transition-all duration-300">
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.1, duration: 0.6 }}
+                            viewport={{ once: true }}
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: '80px 1fr 200px',
+                                alignItems: 'center',
+                                gap: '40px',
+                                padding: '48px 0',
+                                borderBottom: '1px solid #1a1a1a',
+                            }}
+                        >
+                            {/* Number */}
+                            <div
+                                style={{
+                                    fontFamily: 'var(--font-space-mono)',
+                                    fontSize: '13px',
+                                    color: '#cc0000',
+                                    letterSpacing: '0.1em',
+                                }}
+                            >
                                 {step.num}
                             </div>
-                            <h3 className="text-xl font-bold font-display text-white mb-2">{step.title}</h3>
-                            <p className="text-gray-400 text-sm font-sans max-w-xs">{step.desc}</p>
-                        </div>
+
+                            {/* Content */}
+                            <div>
+                                <h3
+                                    style={{
+                                        fontSize: '22px',
+                                        fontWeight: 700,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '-0.01em',
+                                        color: '#fff',
+                                        margin: '0 0 12px 0',
+                                    }}
+                                >
+                                    {step.title}
+                                </h3>
+                                <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, maxWidth: '600px', fontWeight: 300 }}>
+                                    {step.desc}
+                                </p>
+                            </div>
+
+                            {/* Tag */}
+                            <div style={{ textAlign: 'right' }}>
+                                <span
+                                    style={{
+                                        fontFamily: 'var(--font-space-mono)',
+                                        fontSize: '10px',
+                                        letterSpacing: '0.15em',
+                                        textTransform: 'uppercase',
+                                        color: '#444',
+                                        border: '1px solid #222',
+                                        padding: '4px 12px',
+                                    }}
+                                >
+                                    {step.tag}
+                                </span>
+                            </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

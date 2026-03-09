@@ -1,51 +1,124 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { MousePointerClick, ShieldCheck, Zap } from 'lucide-react';
 
 const BENEFITS = [
     {
-        title: "Physics-First Precision",
-        desc: "We analyze raw Sentinel-1 backscatter. No optical hallucinations, no AI guesswork. Just pure dielectric constant measurements.",
-        icon: <Zap className="w-6 h-6 text-radar-green" />
+        num: '01',
+        title: 'Physics-First',
+        desc: 'We analyze raw Sentinel-1 radar backscatter — not optical imagery. Dielectric constant measurements from orbit. No AI hallucinations.',
     },
     {
-        title: "All-Weather Intelligence",
-        desc: "Radar penetrates clouds, smoke, and darkness. Get actionable insights when optical satellites are blind.",
-        icon: <ShieldCheck className="w-6 h-6 text-radar-green" />
+        num: '02',
+        title: 'All-Weather',
+        desc: 'C-band SAR penetrates clouds, smoke, and total darkness. Intelligence when optical satellites are completely blind.',
     },
     {
-        title: "Zero-Integration Config",
-        desc: "No complex GIS software required. Receive weekly PDF reports and GeoTIFFs directly to your executive dashboard.",
-        icon: <MousePointerClick className="w-6 h-6 text-radar-green" />
+        num: '03',
+        title: 'Zero-Friction',
+        desc: 'No GIS expertise required. Weekly reports, export-ready GeoTIFFs, and decision-ready maps delivered to your dashboard.',
     }
 ];
 
 export default function Benefits() {
     return (
-        <section className="py-24 bg-[#080808]">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="mb-16 text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold font-display text-white mb-4">WHY PHYSICS MATTERS</h2>
-                    <p className="text-gray-500 max-w-2xl mx-auto font-sans text-sm">
-                        Optical vegetation indices (NDVI) are lagging indicators. Radar detects stress weeks before the plant changes color.
+        <section
+            style={{
+                padding: '120px 0',
+                background: '#000',
+                borderTop: '1px solid #1a1a1a',
+            }}
+        >
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+                {/* Section label */}
+                <div className="section-label">Advantages</div>
+
+                {/* Heading */}
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '80px',
+                        alignItems: 'start',
+                        marginBottom: '80px',
+                    }}
+                    className="md:grid"
+                >
+                    <h2
+                        style={{
+                            fontSize: 'clamp(2rem, 4vw, 4rem)',
+                            fontWeight: 800,
+                            lineHeight: 1.05,
+                            letterSpacing: '-0.02em',
+                            textTransform: 'uppercase',
+                            color: '#fff',
+                            margin: 0,
+                        }}
+                    >
+                        The physics<br />
+                        <span style={{ color: '#cc0000' }}>advantage</span>
+                    </h2>
+                    <p
+                        style={{
+                            color: '#666',
+                            fontSize: '15px',
+                            lineHeight: 1.8,
+                            margin: 0,
+                            paddingTop: '8px',
+                            fontWeight: 300,
+                        }}
+                    >
+                        Optical NDVI indices are lagging indicators — they only show stress after visible damage occurs.
+                        SAR radar detects subsurface moisture changes 2 weeks earlier. The difference between reacting and preventing.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Three columns */}
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        borderTop: '1px solid #1a1a1a',
+                    }}
+                    className="grid-cols-1 md:grid-cols-3"
+                >
                     {BENEFITS.map((b, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.1 }}
-                            className="p-8 border border-white/5 bg-aeris-dark hover:bg-white/[0.05] hover:border-radar-green/30 transition-all group rounded-2xl"
+                            transition={{ delay: i * 0.12, duration: 0.6 }}
+                            viewport={{ once: true }}
+                            style={{
+                                padding: '48px 40px 48px 0',
+                                borderRight: i < 2 ? '1px solid #1a1a1a' : 'none',
+                                paddingLeft: i > 0 ? '40px' : '0',
+                            }}
                         >
-                            <div className="w-12 h-12 bg-radar-green/50 text-black rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                {b.icon}
+                            <div
+                                style={{
+                                    fontFamily: 'var(--font-space-mono)',
+                                    fontSize: '11px',
+                                    letterSpacing: '0.15em',
+                                    color: '#cc0000',
+                                    marginBottom: '24px',
+                                }}
+                            >
+                                {b.num}
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-3 font-sans h-[3.5rem] flex items-center">{b.title}</h3>
-                            <p className="text-gray-400 text-sm leading-relaxed font-sans min-h-[5rem]">
+                            <h3
+                                style={{
+                                    fontSize: '20px',
+                                    fontWeight: 700,
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '-0.01em',
+                                    color: '#fff',
+                                    margin: '0 0 16px 0',
+                                }}
+                            >
+                                {b.title}
+                            </h3>
+                            <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
                                 {b.desc}
                             </p>
                         </motion.div>

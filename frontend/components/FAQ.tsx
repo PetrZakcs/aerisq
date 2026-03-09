@@ -1,63 +1,157 @@
 'use client';
 
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Plus } from "lucide-react";
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const FAQS = [
     {
-        q: "How does AerisQ differ from NDVI optical imagery?",
-        a: "NDVI is a 'lagging indicator'—it only shows stress after the plant has already turned yellow (chlorophyll loss). AerisQ uses Synthetic Aperture Radar (SAR) to measure dielectric constant changes in the root zone. We detect water stress 2 weeks before visual signs appear, allowing you to irrigate and save yield."
+        q: 'How does AerisQ differ from NDVI optical imagery?',
+        a: 'NDVI is a lagging indicator — it only reveals stress after chlorophyll loss occurs visibly. AerisQ uses C-band SAR to measure dielectric constant changes in the root zone, detecting water stress 14 days before any visual signals appear. The difference is prevention vs. reaction.',
     },
     {
-        q: "What makes your 'Physics-Based' approach unique?",
-        a: "Most competitors use 'Black Box AI' to guess outcomes from optical images. We utilize deep physical modeling of radar backscatter (Sigma Naught). We solve the radar equation for soil moisture and texture, meaning our results are essentially lab-grade measurements from orbit, not hallucinations."
+        q: 'What makes the physics-based approach unique?',
+        a: 'Competitors apply pattern-matching ML to optical images. We solve the radar equation — modeling backscatter physics (σ⁰ Naught) to derive soil moisture and structural properties from first principles. Results are grounded in electromagnetics, not learned correlations.',
     },
     {
-        q: "Can you detect military vehicles under camouflage?",
-        a: "Yes. Metal reflects radar waves essentially perfectly (corner reflection). Even if a tank is under a camouflage net or in a forest, the radar signal often penetrates lightweight cover and bounces off the hard metal surfaces, creating a distinct 'double-bounce' signature."
+        q: 'Can radar detect assets under concealment?',
+        a: 'Yes. Metal surfaces have near-perfect radar reflectivity (corner reflection). Radar energy penetrates lightweight foliage, camouflage nets, and thin cover — returning a distinct double-bounce signature from hard surfaces that is impossible to mask.',
     },
     {
-        q: "Do I need to install sensors in my fields?",
-        a: "Zero hardware required. We use the Sentinel-1 satellite constellation (and others) which revisits every point on Earth every 6-12 days. We process this petabyte-scale stream in the cloud and deliver actionable maps directly to your phone."
+        q: 'Do I need hardware or ground sensors?',
+        a: 'Zero hardware. The Sentinel-1 constellation revisits every coordinate on Earth every 6–12 days. We process petabyte-scale SAR archives in cloud infrastructure and deliver ready-to-use intelligence — no installation, no calibration.',
     },
     {
-        q: "Is my data secure?",
-        a: "We operate on a strictly 'Need-to-Know' architecture. Our servers are air-gapped from public AI models. Your AOI (Area of Interest) coordinates are encrypted, and for Defense clients, we offer on-premise deployment options."
-    }
+        q: 'How is data kept secure?',
+        a: 'Area of interest coordinates and analysis outputs are encrypted end-to-end. We do not share data with third parties or train external models on your inputs. Defense and government clients may request fully air-gapped, on-premise deployment.',
+    },
 ];
 
 export default function FAQ() {
+    const [openIndex, setOpenIndex] = useState<number | null>(null);
+
     return (
-        <section className="py-32 bg-aeris-black border-t border-white/5">
-            <div className="max-w-4xl mx-auto px-6">
-                <h2 className="text-3xl md:text-5xl font-bold font-display text-white mb-16 text-center uppercase tracking-tight">
-                    Mission Critical <span className="text-radar-green">Intel</span>
-                </h2>
+        <section
+            style={{
+                padding: '120px 0',
+                background: '#060606',
+                borderTop: '1px solid #1a1a1a',
+            }}
+        >
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+                <div className="section-label">FAQ</div>
 
-                <div className="space-y-4">
-                    {FAQS.map((faq, i) => (
-                        <div key={i} className="border-b border-white/10 last:border-0">
-                            <details className="group [&_summary::-webkit-details-marker]:hidden">
-                                <summary className="flex cursor-pointer items-center justify-between gap-1.5 py-6 text-white hover:text-radar-green transition-colors">
-                                    <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-wide">
-                                        {faq.q}
-                                    </h3>
-                                    <div className="white-icon group-open:-rotate-45 transition-transform duration-300">
-                                        <Plus className="w-5 h-5 text-gray-500 group-hover:text-radar-green" />
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 2fr',
+                        gap: '80px',
+                        alignItems: 'start',
+                    }}
+                >
+                    <h2
+                        style={{
+                            fontSize: 'clamp(2rem, 3vw, 3.5rem)',
+                            fontWeight: 800,
+                            lineHeight: 1.05,
+                            letterSpacing: '-0.02em',
+                            textTransform: 'uppercase',
+                            color: '#fff',
+                            margin: 0,
+                            position: 'sticky',
+                            top: '120px',
+                        }}
+                    >
+                        Questions<br />
+                        &amp; answers.
+                    </h2>
+
+                    <div style={{ borderTop: '1px solid #1a1a1a' }}>
+                        {FAQS.map((faq, i) => (
+                            <div
+                                key={i}
+                                style={{
+                                    borderBottom: '1px solid #1a1a1a',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        gap: '20px',
+                                        padding: '28px 0',
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+                                        <span
+                                            style={{
+                                                fontFamily: 'var(--font-space-mono)',
+                                                fontSize: '10px',
+                                                color: '#cc0000',
+                                                letterSpacing: '0.1em',
+                                                paddingTop: '4px',
+                                                flexShrink: 0,
+                                            }}
+                                        >
+                                            {String(i + 1).padStart(2, '0')}
+                                        </span>
+                                        <h3
+                                            style={{
+                                                fontSize: '16px',
+                                                fontWeight: 600,
+                                                color: openIndex === i ? '#fff' : '#ccc',
+                                                margin: 0,
+                                                lineHeight: 1.4,
+                                                transition: 'color 0.15s ease',
+                                            }}
+                                        >
+                                            {faq.q}
+                                        </h3>
                                     </div>
-                                </summary>
+                                    <span
+                                        style={{
+                                            fontFamily: 'var(--font-space-mono)',
+                                            fontSize: '18px',
+                                            color: '#444',
+                                            flexShrink: 0,
+                                            transition: 'transform 0.3s ease, color 0.15s ease',
+                                            transform: openIndex === i ? 'rotate(45deg)' : 'rotate(0deg)',
+                                            color: openIndex === i ? '#cc0000' : '#444',
+                                            display: 'inline-block',
+                                        }}
+                                    >
+                                        +
+                                    </span>
+                                </div>
 
-                                <p className="font-sans text-gray-400 leading-relaxed mb-6 pl-4 border-l-2 border-radar-green/30">
-                                    {faq.a}
-                                </p>
-                            </details>
-                        </div>
-                    ))}
+                                <AnimatePresence>
+                                    {openIndex === i && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                            style={{ overflow: 'hidden' }}
+                                        >
+                                            <p
+                                                style={{
+                                                    color: '#666',
+                                                    fontSize: '14px',
+                                                    lineHeight: 1.9,
+                                                    margin: '0 0 28px 42px',
+                                                    fontWeight: 300,
+                                                }}
+                                            >
+                                                {faq.a}
+                                            </p>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

@@ -1,115 +1,284 @@
 'use client';
 
-import { Check, ShieldAlert } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
 
 const TIERS = [
     {
-        name: "AGRICULTURE",
-        price: "$5",
-        period: "/ ha / year",
-        desc: "Precision moisture monitoring for modern farming.",
+        id: 'AGR',
+        name: 'Agriculture',
+        price: '$5',
+        period: '/ ha / year',
+        desc: 'Precision moisture monitoring for modern farms.',
         features: [
-            "Weekly Root-Zone Updates",
-            "Drought Prediction Models",
-            "Yield Forecasting",
-            "Variable Rate Maps (VRA)",
-            "Unlimited Users"
+            'Weekly root-zone updates',
+            'Drought prediction models',
+            'Yield forecasting',
+            'Variable rate maps (VRA)',
+            'Unlimited team access',
         ],
-        cta: "Start Monitoring",
-        highlight: true
+        cta: 'Start Monitoring ↗',
+        ctaLink: '#waitlist',
+        highlight: true,
     },
     {
-        name: "DEFENSE & GOV",
-        price: "CUSTOM",
-        period: "",
-        desc: "Persistent surveillance for strategic sectors.",
+        id: 'DEF',
+        name: 'Defense & Gov',
+        price: 'Custom',
+        period: '',
+        desc: 'Persistent surveillance. Strategic-grade analysis.',
         features: [
-            "Daily Revisit (Constellation)",
-            "Sub-millimeter Subsidence",
-            "Dark Vessel Detection",
-            "On-Premise Deployment",
-            "Dedicated Analyst Team"
+            'Daily revisit (constellation)',
+            'Sub-mm subsidence detection',
+            'Dark vessel detection',
+            'On-premise deployment',
+            'Dedicated analyst support',
         ],
-        cta: "Contact Command",
-        highlight: false
+        cta: 'Contact Us ↗',
+        ctaLink: '#waitlist',
+        highlight: false,
     },
     {
-        name: "INFRASTRUCTURE",
-        price: "CUSTOM",
-        period: "",
-        desc: "Stability monitoring for critical assets.",
+        id: 'INF',
+        name: 'Infrastructure',
+        price: 'Custom',
+        period: '',
+        desc: 'Continuous stability monitoring for critical assets.',
         features: [
-            "Pipeline Integrity",
-            "Dam Stability Monitoring",
-            "Bridge Vibration Analysis",
-            "Landslide Early Warning",
-            "Raw Phase Data Access"
+            'Pipeline integrity analysis',
+            'Dam stability monitoring',
+            'Bridge vibration analysis',
+            'Landslide early warning',
+            'Raw phase data access',
         ],
-        cta: "Request Demo",
-        highlight: false
-    }
+        cta: 'Request Demo ↗',
+        ctaLink: 'https://calendly.com/petrrmarketing/aerisq',
+        highlight: false,
+    },
 ];
 
 export default function Pricing() {
     return (
-        <section className="py-24 bg-[#080808] border-t border-white/5 relative overflow-hidden">
-            {/* Background Grid */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none" />
+        <section
+            id="pricing"
+            style={{
+                padding: '120px 0',
+                background: '#000',
+                borderTop: '1px solid #1a1a1a',
+            }}
+        >
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+                <div className="section-label">Pricing</div>
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold font-display text-white mb-6 uppercase tracking-tight">Deployment Tiers</h2>
-                    <p className="text-gray-400 font-sans text-lg max-w-2xl mx-auto">
-                        Scalable intelligence for any operational theatre. From single fields to national borders.
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-end',
+                        marginBottom: '80px',
+                        gap: '40px',
+                        flexWrap: 'wrap',
+                    }}
+                >
+                    <h2
+                        style={{
+                            fontSize: 'clamp(2rem, 4vw, 4rem)',
+                            fontWeight: 800,
+                            lineHeight: 1.05,
+                            letterSpacing: '-0.02em',
+                            textTransform: 'uppercase',
+                            color: '#fff',
+                            margin: 0,
+                        }}
+                    >
+                        Transparent<br />
+                        pricing.
+                    </h2>
+                    <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, maxWidth: '400px', fontWeight: 300 }}>
+                        Scalable intelligence from single fields to national-scale monitoring.
+                        One platform, any operational scope.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        borderTop: '1px solid #1a1a1a',
+                        borderLeft: '1px solid #1a1a1a',
+                    }}
+                    className="grid-cols-1 md:grid-cols-3"
+                >
                     {TIERS.map((tier, i) => (
-                        <div
+                        <motion.div
                             key={i}
-                            className={`p-10 border rounded-3xl flex flex-col relative transition-all duration-300 ${tier.highlight
-                                ? "bg-white/[0.03] border-radar-green/40 shadow-[0_0_50px_rgba(81,138,22,0.1)] scale-105 z-10"
-                                : "bg-[#0A0A0A] border-white/10 hover:border-white/20"
-                                }`}
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            viewport={{ once: true }}
+                            style={{
+                                padding: '48px 40px',
+                                borderRight: '1px solid #1a1a1a',
+                                borderBottom: '1px solid #1a1a1a',
+                                background: tier.highlight ? '#0a0a0a' : 'transparent',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                position: 'relative',
+                            }}
                         >
                             {tier.highlight && (
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-radar-green text-black px-4 py-1 text-xs font-bold font-mono rounded-full tracking-widest uppercase shadow-[0_0_20px_rgba(81,138,22,0.4)]">
-                                    Most Deployed
-                                </div>
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        height: '2px',
+                                        background: '#cc0000',
+                                    }}
+                                />
                             )}
 
-                            <h3 className="text-sm font-mono font-bold text-gray-500 mb-4 uppercase tracking-widest">{tier.name}</h3>
-                            <div className="text-5xl font-bold font-display text-white mb-6">
-                                {tier.price} <span className="text-lg font-sans font-normal text-gray-400">{tier.period}</span>
+                            {/* Tier ID */}
+                            <div
+                                style={{
+                                    fontFamily: 'var(--font-space-mono)',
+                                    fontSize: '10px',
+                                    letterSpacing: '0.2em',
+                                    textTransform: 'uppercase',
+                                    color: '#cc0000',
+                                    marginBottom: '20px',
+                                }}
+                            >
+                                [{tier.id}]
                             </div>
-                            <p className="text-gray-300 text-sm mb-8 leading-relaxed h-10">
+
+                            <div
+                                style={{
+                                    fontFamily: 'var(--font-space-mono)',
+                                    fontSize: '11px',
+                                    letterSpacing: '0.15em',
+                                    textTransform: 'uppercase',
+                                    color: '#666',
+                                    marginBottom: '12px',
+                                }}
+                            >
+                                {tier.name}
+                            </div>
+
+                            <div style={{ marginBottom: '8px' }}>
+                                <span
+                                    style={{
+                                        fontFamily: 'var(--font-space-mono)',
+                                        fontSize: tier.price === 'Custom' ? '28px' : '42px',
+                                        fontWeight: 700,
+                                        color: '#fff',
+                                        letterSpacing: '-0.02em',
+                                    }}
+                                >
+                                    {tier.price}
+                                </span>
+                                {tier.period && (
+                                    <span
+                                        style={{
+                                            fontFamily: 'var(--font-space-mono)',
+                                            fontSize: '11px',
+                                            color: '#555',
+                                            marginLeft: '8px',
+                                            letterSpacing: '0.05em',
+                                        }}
+                                    >
+                                        {tier.period}
+                                    </span>
+                                )}
+                            </div>
+
+                            <p style={{ color: '#555', fontSize: '13px', lineHeight: 1.7, margin: '0 0 32px 0', fontWeight: 300 }}>
                                 {tier.desc}
                             </p>
 
-                            <div className="w-full h-px bg-white/5 mb-8" />
+                            <div
+                                style={{
+                                    width: '100%',
+                                    height: '1px',
+                                    background: '#1a1a1a',
+                                    marginBottom: '28px',
+                                }}
+                            />
 
-                            <ul className="space-y-4 mb-10 flex-1">
+                            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 40px 0', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                 {tier.features.map((f, fi) => (
-                                    <li key={fi} className="flex items-start gap-3 text-sm text-gray-300 group">
-                                        <div className={`mt-0.5 p-0.5 rounded-full ${tier.highlight ? 'bg-radar-green/20 text-radar-green' : 'bg-white/10 text-gray-400'}`}>
-                                            <Check className="w-3 h-3" />
-                                        </div>
-                                        <span className="font-sans group-hover:text-white transition-colors">{f}</span>
+                                    <li
+                                        key={fi}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'flex-start',
+                                            gap: '12px',
+                                            fontSize: '13px',
+                                            color: '#888',
+                                            fontWeight: 300,
+                                        }}
+                                    >
+                                        <span
+                                            style={{
+                                                width: '14px',
+                                                height: '14px',
+                                                background: tier.highlight ? '#cc0000' : '#1a1a1a',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                flexShrink: 0,
+                                                marginTop: '2px',
+                                            }}
+                                        >
+                                            <Check style={{ width: '8px', height: '8px', color: tier.highlight ? '#fff' : '#666' }} />
+                                        </span>
+                                        {f}
                                     </li>
                                 ))}
                             </ul>
 
                             <a
-                                href={tier.cta === 'Request Demo' ? 'https://calendly.com/petrrmarketing/aerisq' : '#waitlist'}
-                                className={`block w-full py-4 text-center font-bold font-mono uppercase tracking-widest text-xs rounded-xl transition-all ${tier.highlight
-                                    ? "bg-radar-green text-black hover:bg-white hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-                                    : "border border-white/20 text-white hover:bg-white/5 hover:border-white"
-                                    }`}
+                                href={tier.ctaLink}
+                                style={{
+                                    display: 'block',
+                                    padding: '14px 24px',
+                                    textAlign: 'center',
+                                    fontFamily: 'var(--font-space-mono)',
+                                    fontSize: '11px',
+                                    letterSpacing: '0.12em',
+                                    textTransform: 'uppercase',
+                                    fontWeight: 700,
+                                    textDecoration: 'none',
+                                    background: tier.highlight ? '#fff' : 'transparent',
+                                    color: tier.highlight ? '#000' : '#888',
+                                    border: tier.highlight ? 'none' : '1px solid #2a2a2a',
+                                    transition: 'all 0.15s ease',
+                                }}
+                                onMouseEnter={(e) => {
+                                    const el = e.currentTarget as HTMLAnchorElement;
+                                    if (tier.highlight) {
+                                        el.style.background = '#cc0000';
+                                        el.style.color = '#fff';
+                                    } else {
+                                        el.style.borderColor = '#fff';
+                                        el.style.color = '#fff';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    const el = e.currentTarget as HTMLAnchorElement;
+                                    if (tier.highlight) {
+                                        el.style.background = '#fff';
+                                        el.style.color = '#000';
+                                    } else {
+                                        el.style.borderColor = '#2a2a2a';
+                                        el.style.color = '#888';
+                                    }
+                                }}
                             >
                                 {tier.cta}
                             </a>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

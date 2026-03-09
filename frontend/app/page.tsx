@@ -2,7 +2,6 @@
 
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import TrustLogos from '../components/TrustLogos';
 import Benefits from '../components/Benefits';
 import ProcessSteps from '../components/ProcessSteps';
 import TruthSlider from '../components/TruthSlider';
@@ -12,134 +11,398 @@ import FAQ from '../components/FAQ';
 import Founder from '../components/Founder';
 import Waitlist from '../components/Waitlist';
 import Features from '../components/Features';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-aeris-black selection:bg-radar-green selection:text-black">
+    <main style={{ background: '#000', minHeight: '100vh' }}>
       <Navbar />
 
-      {/* 1. HERO SECTION */}
+      {/* HERO */}
       <Hero />
 
-      {/* 1.5. PUBLIC DEMO ACCESS */}
-      <section id="demos" className="py-24 bg-black relative border-y border-white/10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              ACCESS <span className="text-radar-green">INTELLIGENCE LAYER</span>
+      {/* LIVE DEMOS */}
+      <section
+        id="demos"
+        style={{
+          padding: '120px 0',
+          background: '#060606',
+          borderTop: '1px solid #1a1a1a',
+        }}
+      >
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+          <div className="section-label">Live Demonstrations</div>
+
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              marginBottom: '80px',
+              gap: '40px',
+              flexWrap: 'wrap',
+            }}
+          >
+            <h2
+              style={{
+                fontSize: 'clamp(2rem, 4vw, 4rem)',
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: '-0.02em',
+                textTransform: 'uppercase',
+                color: '#fff',
+                margin: 0,
+              }}
+            >
+              See it in action.
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Explore real-time radar analysis of critical infrastructure. No login required for public demonstrations.
+            <p
+              style={{
+                fontFamily: 'var(--font-space-mono)',
+                fontSize: '11px',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: '#444',
+                margin: 0,
+                lineHeight: 1.8,
+              }}
+            >
+              No login required.<br />Public access.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* AGRICULTURE DEMO */}
-            <a href="/mission/alpha" className="group relative overflow-hidden rounded-xl border border-white/10 hover:border-radar-green/50 transition-all bg-white/5 aspect-video flex flex-col justify-end p-8">
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
-              {/* Placeholder for map image if available */}
-              <div className="absolute inset-0 bg-[url('/vysocina_radar.png')] bg-cover bg-center opacity-50 group-hover:opacity-75 transition-opacity duration-500 mix-blend-luminosity" />
-
-              <div className="relative z-20">
-                <div className="flex items-center gap-2 mb-2 text-radar-green">
-                  <span className="w-2 h-2 rounded-full bg-radar-green animate-pulse" />
-                  <span className="font-mono text-xs uppercase tracking-widest">Live Feed</span>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '0',
+              border: '1px solid #1a1a1a',
+            }}
+          >
+            {/* Live Demo */}
+            <motion.a
+              href="/mission/alpha"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              style={{
+                display: 'block',
+                position: 'relative',
+                aspectRatio: '16/9',
+                overflow: 'hidden',
+                borderRight: '1px solid #1a1a1a',
+                textDecoration: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: "url('/vysocina_radar.png')",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  filter: 'grayscale(70%) contrast(1.3)',
+                  transition: 'transform 0.6s ease, filter 0.4s ease',
+                }}
+                className="group-hover:scale-105"
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)',
+                }}
+              />
+              <div style={{ position: 'absolute', inset: 0, padding: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-space-mono)',
+                      fontSize: '10px',
+                      letterSpacing: '0.15em',
+                      textTransform: 'uppercase',
+                      color: '#cc0000',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '50%',
+                        background: '#cc0000',
+                        animation: 'pulse 2s infinite',
+                      }}
+                    />
+                    Live
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-space-mono)',
+                      fontSize: '10px',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      color: '#555',
+                      background: 'rgba(0,0,0,0.6)',
+                      padding: '3px 10px',
+                    }}
+                  >
+                    DEMO-001
+                  </span>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-radar-green transition-colors">AGRICULTURE INTELLIGENCE</h3>
-                <p className="text-gray-400 text-sm mb-4">
-                  Monitor crop health, soil moisture, and harvest readiness with Sentinel-1 SAR analysis.
-                </p>
-                <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest px-4 py-2 rounded transition-all bg-radar-green text-black border border-radar-green md:bg-transparent md:text-white md:border-white/20 md:group-hover:bg-radar-green md:group-hover:text-black md:group-hover:border-radar-green">
-                  Launch Mission Alpha
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                </span>
-              </div>
-            </a>
-
-            {/* DEFENSE / FINANCE DEMO (PENDING) */}
-            <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 aspect-video flex flex-col justify-end p-8 opacity-75 grayscale hover:grayscale-0 transition-all cursor-not-allowed">
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
-              <div className="absolute inset-0 bg-[url('/vysocina_optical.png')] bg-cover bg-center opacity-30 mix-blend-luminosity" />
-
-              <div className="relative z-20">
-                <div className="flex items-center gap-2 mb-2 text-yellow-500">
-                  <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
-                  <span className="font-mono text-xs uppercase tracking-widest">PENDING AUTHORIZATION</span>
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '26px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '-0.01em',
+                      color: '#fff',
+                      margin: '0 0 8px 0',
+                    }}
+                  >
+                    Agriculture Intelligence
+                  </h3>
+                  <p
+                    style={{
+                      color: '#888',
+                      fontSize: '13px',
+                      margin: '0 0 20px 0',
+                      fontWeight: 300,
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Crop health, soil moisture, and harvest readiness via Sentinel-1 SAR.
+                  </p>
+                  <span className="btn-primary" style={{ display: 'inline-flex' }}>
+                    Open Demo ↗
+                  </span>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">FINANCE & DEFENSE</h3>
-                <p className="text-gray-400 text-sm mb-4">
-                  Infrastructure stability, flood detection, and strategic asset monitoring (Defense, Space, Finance).
-                </p>
-                <span className="inline-flex items-center gap-2 font-mono text-xs text-gray-500 uppercase tracking-widest border border-white/10 px-4 py-2 rounded">
-                  Status: Classified / In Development
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                </span>
               </div>
-            </div>
+            </motion.a>
+
+            {/* Coming Soon */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              viewport={{ once: true }}
+              style={{
+                position: 'relative',
+                aspectRatio: '16/9',
+                overflow: 'hidden',
+                opacity: 0.4,
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: "url('/vysocina_optical.png')",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  filter: 'grayscale(100%) contrast(0.8)',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 100%)',
+                }}
+              />
+              <div style={{ position: 'absolute', inset: 0, padding: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-space-mono)',
+                    fontSize: '10px',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    color: '#555',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                  }}
+                >
+                  — Restricted
+                </span>
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '26px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '-0.01em',
+                      color: '#fff',
+                      margin: '0 0 8px 0',
+                    }}
+                  >
+                    Finance &amp; Defense
+                  </h3>
+                  <p style={{ color: '#555', fontSize: '13px', margin: '0 0 20px 0', fontWeight: 300 }}>
+                    In development — contact for early access.
+                  </p>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-space-mono)',
+                      fontSize: '11px',
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      color: '#444',
+                      border: '1px solid #333',
+                      padding: '10px 20px',
+                      display: 'inline-flex',
+                    }}
+                  >
+                    Coming Q3 2026
+                  </span>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* 2. TRUST / LOGOS - Hidden for now
-      <TrustLogos /> 
-      */}
-
-      {/* 3. BENEFITS (PROBLEM/SOLUTION) */}
+      {/* BENEFITS */}
       <Benefits />
 
-      {/* 4. PROCESS (HOW IT WORKS) */}
+      {/* PROCESS */}
       <ProcessSteps />
 
-      {/* 5. INTERACTIVE DEMO (TRUTH SLIDER) */}
+      {/* TRUTH SLIDER */}
       <TruthSlider
         beforeImage="/vysocina_optical.png"
         afterImage="/vysocina_radar.png"
         beforeLabel="Optical (Sentinel-2)"
-        afterLabel="AerisQ Radar (Sentinel-1)"
+        afterLabel="AerisQ SAR (Sentinel-1)"
       />
 
-      {/* 6. FEATURES (SECTOR INTELLIGENCE) */}
+      {/* FEATURES */}
       <Features />
 
-      {/* 7. SOCIAL PROOF (CASE STUDIES) */}
+      {/* CASE STUDIES */}
       <MissionReports />
 
-      {/* 8. PRICING */}
+      {/* PRICING */}
       <Pricing />
 
-      {/* 9. FAQ */}
+      {/* FAQ */}
       <FAQ />
 
-      {/* 10. ABOUT / FOUNDER */}
+      {/* TEAM */}
       <Founder />
 
-      {/* 11. FINAL CTA (WAITLIST) */}
+      {/* WAITLIST */}
       <Waitlist />
 
       {/* FOOTER */}
-      <footer className="py-12 border-t border-white/5 bg-black text-center text-gray-600 font-mono text-sm">
-        <div className="flex justify-center gap-6 mb-8">
-          <a href="https://linkedin.com" className="p-2 border border-white/10 rounded-full hover:bg-white/10 hover:text-white transition-all text-gray-500">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg>
-          </a>
-          <a href="https://x.com" className="p-2 border border-white/10 rounded-full hover:bg-white/10 hover:text-white transition-all text-gray-500">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
-          </a>
-          <a href="mailto:info@aerisq.com" className="p-2 border border-white/10 rounded-full hover:bg-white/10 hover:text-white transition-all text-gray-500">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-          </a>
-        </div>
+      <footer
+        style={{
+          padding: '40px',
+          borderTop: '1px solid #1a1a1a',
+          background: '#000',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1400px',
+            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '20px',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-space-mono)',
+              fontSize: '10px',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: '#444',
+            }}
+          >
+            © {new Date().getFullYear()} AerisQ — SAR Intelligence
+          </span>
 
-        <div className="flex justify-center gap-8 mb-8 text-xs uppercase tracking-widest text-gray-500">
-          <a href="#" className="hover:text-white transition-colors">Legal</a>
-          <a href="#" className="hover:text-white transition-colors">Privacy</a>
-          <a href="#" className="hover:text-white transition-colors">Data Rights</a>
+          <div style={{ display: 'flex', gap: '32px' }}>
+            {['Legal', 'Privacy', 'Data Rights'].map((item) => (
+              <a
+                key={item}
+                href="#"
+                style={{
+                  fontFamily: 'var(--font-space-mono)',
+                  fontSize: '10px',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#444',
+                  textDecoration: 'none',
+                  transition: 'color 0.15s ease',
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = '#fff')}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = '#444')}
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: '20px' }}>
+            {[
+              { href: 'https://linkedin.com', label: 'LI' },
+              { href: 'https://x.com', label: 'X' },
+              { href: 'mailto:info@aerisq.com', label: '✉' },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                style={{
+                  fontFamily: 'var(--font-space-mono)',
+                  fontSize: '11px',
+                  letterSpacing: '0.1em',
+                  color: '#444',
+                  textDecoration: 'none',
+                  border: '1px solid #1a1a1a',
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.borderColor = '#fff';
+                  el.style.color = '#fff';
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.borderColor = '#1a1a1a';
+                  el.style.color = '#444';
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <span
+            style={{
+              fontFamily: 'var(--font-space-mono)',
+              fontSize: '10px',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: '#333',
+            }}
+          >
+            Sentinel-1 data: ESA/Copernicus
+          </span>
         </div>
-        <p>&copy; {new Date().getFullYear()} AERISQ INTELLIGENCE. ALL RIGHTS RESERVED.</p>
-        <p className="mt-2 text-[10px] opacity-50">SENTINEL-1 DATA PROVIDED BY ESA/COPERNICUS</p>
       </footer>
     </main>
   );
 }
-
-

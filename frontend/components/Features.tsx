@@ -1,65 +1,159 @@
 'use client';
 
-import { Shield, Sprout, Satellite, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const SECTORS = [
+    {
+        id: 'AGR',
+        title: 'Agriculture',
+        desc: 'Detect root-zone drought stress 14 days before optical visibility. Drive variable-rate irrigation and harvest decisions with physics — not guesswork.',
+        metrics: ['Root-zone moisture mapping', 'Harvest timing models', 'Yield loss prediction'],
+    },
+    {
+        id: 'DEF',
+        title: 'Defense',
+        desc: 'All-weather persistent surveillance. Detect vehicle displacement, infrastructure changes, and subsurface anomalies through cloud cover and concealment.',
+        metrics: ['Change detection (24h)', 'Sub-meter displacement', 'Through-cover detection'],
+    },
+    {
+        id: 'SPC',
+        title: 'Space',
+        desc: 'Ground station calibration, orbital debris tracking, and ionospheric monitoring for space operations and scientific research programs.',
+        metrics: ['Calibration support', 'Atm. path delay', 'Surface deformation'],
+    },
+    {
+        id: 'FIN',
+        title: 'Finance',
+        desc: 'Independent verification of commodity yields for insurance underwriting, agricultural futures, and infrastructure asset valuation.',
+        metrics: ['Yield verification', 'Crop insurance data', 'Asset tracking'],
+    },
+];
 
 export default function Features() {
     return (
-        <section id="technology" className="py-24 px-6 bg-aeris-black relative border-t border-white/5">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex items-center gap-4 mb-12">
-                    <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse shadow-[0_0_10px_rgba(81,138,22,0.8)]" />
-                    <h2 className="text-xl font-display font-bold text-gray-500 tracking-widest">SECTOR APPLICATIONS</h2>
+        <section
+            id="technology"
+            style={{
+                padding: '120px 0',
+                background: '#000',
+                borderTop: '1px solid #1a1a1a',
+            }}
+        >
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+                <div className="section-label">Applications</div>
+
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '80px',
+                        alignItems: 'end',
+                        marginBottom: '80px',
+                    }}
+                >
+                    <h2
+                        style={{
+                            fontSize: 'clamp(2rem, 4vw, 4rem)',
+                            fontWeight: 800,
+                            lineHeight: 1.05,
+                            letterSpacing: '-0.02em',
+                            textTransform: 'uppercase',
+                            color: '#fff',
+                            margin: 0,
+                        }}
+                    >
+                        One platform.<br />
+                        Every industry.
+                    </h2>
+                    <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+                        A single, physics-based radar intelligence engine — adapted to the data requirements and operational tempo of each sector.
+                    </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <BentoCard
-                        title="AGRICULTURE"
-                        icon={<Sprout className="w-6 h-6 text-radar-green" />}
-                        desc="Pre-visualize drought stress 2 weeks before optical signs."
-                        className="border-white/5 hover:border-radar-green/30"
-                        iconColor="text-radar-green"
-                    />
-                    <BentoCard
-                        title="DEFENSE"
-                        icon={<Shield className="w-6 h-6 text-alert-red" />}
-                        desc="Detect convoy movement and subterranean bunkers."
-                        className="border-red-900/10 hover:border-alert-red/30"
-                        iconColor="text-alert-red"
-                    />
-                    <BentoCard
-                        title="SPACE"
-                        icon={<Satellite className="w-6 h-6 text-blue-400" />}
-                        desc="Ground station calibration and debris tracking."
-                        className="border-blue-900/10 hover:border-blue-500/30"
-                        iconColor="text-blue-400"
-                    />
-                    <BentoCard
-                        title="FINANCE"
-                        icon={<TrendingUp className="w-6 h-6 text-purple-400" />}
-                        desc="Verify commodity yields for insurance and futures."
-                        className="border-purple-900/10 hover:border-purple-500/30"
-                        iconColor="text-purple-400"
-                    />
+                {/* Table-style grid */}
+                <div style={{ borderTop: '1px solid #1a1a1a' }}>
+                    {SECTORS.map((s, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: i * 0.08, duration: 0.5 }}
+                            viewport={{ once: true }}
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: '100px 1fr 1fr',
+                                gap: '40px',
+                                padding: '48px 0',
+                                borderBottom: '1px solid #1a1a1a',
+                                alignItems: 'start',
+                                cursor: 'default',
+                                transition: 'background 0.2s ease',
+                            }}
+                            onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.background = '#080808')}
+                            onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.background = 'transparent')}
+                        >
+                            {/* ID */}
+                            <div
+                                style={{
+                                    fontFamily: 'var(--font-space-mono)',
+                                    fontSize: '11px',
+                                    letterSpacing: '0.15em',
+                                    color: '#cc0000',
+                                    paddingTop: '4px',
+                                }}
+                            >
+                                [{s.id}]
+                            </div>
+
+                            {/* Title + desc */}
+                            <div>
+                                <h3
+                                    style={{
+                                        fontSize: '20px',
+                                        fontWeight: 700,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '-0.01em',
+                                        color: '#fff',
+                                        margin: '0 0 12px 0',
+                                    }}
+                                >
+                                    {s.title}
+                                </h3>
+                                <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+                                    {s.desc}
+                                </p>
+                            </div>
+
+                            {/* Metrics */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingTop: '4px' }}>
+                                {s.metrics.map((m, mi) => (
+                                    <div
+                                        key={mi}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                        }}
+                                    >
+                                        <span style={{ width: '3px', height: '3px', background: '#444', flexShrink: 0, display: 'inline-block' }} />
+                                        <span
+                                            style={{
+                                                fontFamily: 'var(--font-space-mono)',
+                                                fontSize: '11px',
+                                                letterSpacing: '0.08em',
+                                                color: '#555',
+                                                textTransform: 'uppercase',
+                                            }}
+                                        >
+                                            {m}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>
     );
-}
-
-function BentoCard({ title, icon, desc, className = "", iconColor = "text-radar-green" }: any) {
-    return (
-        <div className={`p-8 bg-[#0A0A0A] rounded-2xl border border-white/10 hover:bg-white/5 transition-all duration-300 group relative overflow-hidden ${className}`}>
-            {/* Hover Highlight */}
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
-
-            {/* Glow Effect */}
-            <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-            <div className={`mb-6 ${iconColor} opacity-80 group-hover:scale-110 transition-transform duration-500`}>
-                {icon}
-            </div>
-            <h3 className="text-2xl font-bold font-display text-white mb-3 tracking-tight">{title}</h3>
-            <p className="text-gray-400 text-sm leading-relaxed font-sans">{desc}</p>
-        </div>
-    )
 }

@@ -1,70 +1,217 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function Hero() {
-    return (
-        <section className="relative h-screen w-full flex flex-col items-center justify-start pt-32 md:justify-center md:pt-0 overflow-hidden bg-aeris-black border-b border-white/10">
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
 
-            {/* Radar Background Effect */}
-            <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(57,255,20,0.1)_0%,transparent_70%)]" />
-                {/* Grid grid */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]" />
-            </div>
+    return (
+        <section
+            style={{
+                position: 'relative',
+                minHeight: '100vh',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                padding: '0 0 80px 0',
+                background: '#000',
+                overflow: 'hidden',
+            }}
+        >
+            {/* Full-bleed background image with grain overlay */}
+            <div
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'url(/vysocina_radar.png) center / cover no-repeat',
+                    opacity: 0.2,
+                    filter: 'grayscale(100%) contrast(1.4)',
+                }}
+            />
+
+            {/* Dark gradient overlay */}
+            <div
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.95) 100%)',
+                }}
+            />
+
+            {/* Thin horizontal scan line */}
+            <div
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    height: '1px',
+                    top: '40%',
+                    background: 'linear-gradient(90deg, transparent 0%, #cc000033 30%, #cc000066 50%, #cc000033 70%, transparent 100%)',
+                    pointerEvents: 'none',
+                }}
+            />
+
+            {/* Corner marks — SpaceX style */}
+            <div style={{ position: 'absolute', top: 80, left: 40, width: 16, height: 16, borderTop: '1px solid #444', borderLeft: '1px solid #444' }} />
+            <div style={{ position: 'absolute', top: 80, right: 40, width: 16, height: 16, borderTop: '1px solid #444', borderRight: '1px solid #444' }} />
+            <div style={{ position: 'absolute', bottom: 80, left: 40, width: 16, height: 16, borderBottom: '1px solid #444', borderLeft: '1px solid #444' }} />
+            <div style={{ position: 'absolute', bottom: 80, right: 40, width: 16, height: 16, borderBottom: '1px solid #444', borderRight: '1px solid #444' }} />
 
             {/* Content */}
-            <div className="relative z-10 flex flex-col items-center text-center max-w-5xl px-4">
+            <div
+                style={{
+                    position: 'relative',
+                    zIndex: 10,
+                    maxWidth: '1400px',
+                    margin: '0 auto',
+                    padding: '0 40px',
+                    width: '100%',
+                }}
+            >
+                {/* Top label */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
+                    style={{ marginBottom: '24px' }}
                 >
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
-                        <span className="w-1.5 h-1.5 rounded-full bg-radar-green animate-pulse" />
-                        <span className="text-xs font-mono text-gray-300 tracking-widest uppercase">Global Surveillance System</span>
-                    </div>
-
-                    <h1 className="text-4xl sm:text-6xl md:text-9xl font-extrabold font-display tracking-tighter text-white mb-6 leading-none">
-                        PHYSICS, <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-400 to-gray-600">NOT ART.</span>
-                    </h1>
+                    <span
+                        style={{
+                            fontFamily: 'var(--font-space-mono)',
+                            fontSize: '10px',
+                            letterSpacing: '0.2em',
+                            textTransform: 'uppercase',
+                            color: '#cc0000',
+                        }}
+                    >
+                        ● Sentinel-1 SAR Intelligence
+                    </span>
                 </motion.div>
 
-                <motion.p
+                {/* Main heading */}
+                <motion.h1
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, delay: 0.15 }}
+                    style={{
+                        fontSize: 'clamp(3.5rem, 9vw, 10rem)',
+                        fontWeight: 900,
+                        lineHeight: 0.95,
+                        letterSpacing: '-0.03em',
+                        textTransform: 'uppercase',
+                        color: '#fff',
+                        margin: '0 0 32px 0',
+                    }}
+                >
+                    See{' '}
+                    <span style={{ color: '#cc0000' }}>through</span>
+                    <br />
+                    any condition.
+                </motion.h1>
+
+                {/* Sub-text and CTAs row */}
+                <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4, duration: 0.8 }}
-                    className="text-base md:text-xl text-gray-400 max-w-2xl text-center font-sans font-light leading-relaxed mb-10 px-4"
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'flex-end',
+                        justifyContent: 'space-between',
+                        gap: '40px',
+                        flexWrap: 'wrap',
+                    }}
                 >
-                    We analyze raw Sentinel-1 radar backscatter and phase history. <br className="hidden md:block" />
-                    <span className="text-gray-200">Zero optical hallucinations. All-weather intelligence.</span>
-                </motion.p>
+                    <p
+                        style={{
+                            color: '#888',
+                            fontSize: '16px',
+                            lineHeight: 1.7,
+                            maxWidth: '480px',
+                            margin: 0,
+                            fontWeight: 300,
+                        }}
+                    >
+                        Physics-based Synthetic Aperture Radar analysis.
+                        All-weather, all-hour intelligence — where optical satellites go blind.
+                    </p>
 
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="flex flex-col w-full sm:w-auto sm:flex-row gap-4 sm:gap-6 items-center px-6"
-                >
-                    <a href="#demos" className="relative group w-full sm:w-auto px-8 py-4 bg-white text-black font-sans font-bold tracking-widest hover:bg-gray-200 transition-all uppercase overflow-hidden text-center text-sm sm:text-base">
-                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                        <span className="relative z-10">Start Mission</span>
-                    </a>
-
-                    <a href="#process" className="w-full sm:w-auto px-8 py-4 border border-white/20 text-white font-sans tracking-widest hover:bg-white/5 hover:border-white/40 transition-all uppercase backdrop-blur-sm text-center text-sm sm:text-base">
-                        How it works
-                    </a>
+                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', flexShrink: 0 }}>
+                        <a
+                            href="#demos"
+                            className="btn-primary"
+                        >
+                            Explore Demo ↗
+                        </a>
+                        <a
+                            href="#process"
+                            className="btn-outline"
+                        >
+                            How It Works
+                        </a>
+                    </div>
                 </motion.div>
-            </div>
 
-            {/* Decorative Radar Sweep Line */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-30">
+                {/* Stats row */}
                 <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                    className="absolute top-[50%] left-[50%] w-[150vw] h-[150vw] -translate-x-1/2 -translate-y-1/2 bg-[conic-gradient(from_0deg,transparent_0deg,transparent_340deg,rgba(57,255,20,0.15)_360deg)] rounded-full"
-                />
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.7 }}
+                    style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0',
+                        marginTop: '80px',
+                        borderTop: '1px solid #1a1a1a',
+                        paddingTop: '32px',
+                    }}
+                >
+                    {[
+                        { value: '6-DAY', label: 'Revisit Cycle' },
+                        { value: '+14 DAYS', label: 'Early Detection' },
+                        { value: '100%', label: 'Cloud Penetration' },
+                        { value: 'C-BAND', label: 'SAR Frequency' },
+                    ].map((stat, i) => (
+                        <div
+                            key={i}
+                            style={{
+                                flex: '1 1 150px',
+                                paddingRight: '32px',
+                                borderRight: i < 3 ? '1px solid #1a1a1a' : 'none',
+                                paddingLeft: i > 0 ? '32px' : '0',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    fontFamily: 'var(--font-space-mono)',
+                                    fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
+                                    fontWeight: 700,
+                                    color: '#fff',
+                                    letterSpacing: '-0.02em',
+                                    display: 'block',
+                                    marginBottom: '4px',
+                                }}
+                            >
+                                {stat.value}
+                            </div>
+                            <div
+                                style={{
+                                    fontFamily: 'var(--font-space-mono)',
+                                    fontSize: '10px',
+                                    letterSpacing: '0.15em',
+                                    textTransform: 'uppercase',
+                                    color: '#555',
+                                }}
+                            >
+                                {stat.label}
+                            </div>
+                        </div>
+                    ))}
+                </motion.div>
             </div>
         </section>
     );

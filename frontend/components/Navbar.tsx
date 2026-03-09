@@ -1,60 +1,137 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { PopupModal } from 'react-calendly';
-
 
 export default function Navbar() {
     const [openCalendly, setOpenCalendly] = useState(false);
-    // Solves hydration mismatch for accessing document
     const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const handleScroll = () => setScrolled(window.scrollY > 40);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     if (!mounted) return null;
 
     return (
         <>
-            <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-aeris-black/80 backdrop-blur-md">
-                <div className="flex items-center gap-4">
-                    <Link href="/" className="relative w-48 h-12">
-                        <Image
-                            src="/logo.png"
-                            alt="AerisQ Logo"
-                            fill
-                            className="object-contain object-left"
-                            priority
-                        />
-                    </Link>
+            <nav
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 100,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '20px 40px',
+                    background: scrolled ? 'rgba(0,0,0,0.92)' : 'transparent',
+                    backdropFilter: scrolled ? 'blur(20px)' : 'none',
+                    borderBottom: scrolled ? '1px solid #1a1a1a' : '1px solid transparent',
+                    transition: 'all 0.3s ease',
+                }}
+            >
+                {/* Logo */}
+                <Link href="/" style={{ position: 'relative', width: '120px', height: '36px', display: 'block', flexShrink: 0 }}>
+                    <Image
+                        src="/logo.png"
+                        alt="AerisQ"
+                        fill
+                        style={{ objectFit: 'contain', objectPosition: 'left', filter: 'brightness(0) invert(1)' }}
+                        priority
+                    />
+                </Link>
+
+                {/* Nav Links */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }} className="hidden md:flex">
+                    {['Technology', 'Use Cases', 'About', 'Pricing'].map((item) => (
+                        <Link
+                            key={item}
+                            href={`#${item.toLowerCase().replace(' ', '')}`}
+                            style={{
+                                fontFamily: 'var(--font-space-mono)',
+                                fontSize: '11px',
+                                letterSpacing: '0.12em',
+                                textTransform: 'uppercase',
+                                color: '#888',
+                                textDecoration: 'none',
+                                transition: 'color 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
+                            onMouseLeave={(e) => (e.currentTarget.style.color = '#888')}
+                        >
+                            {item}
+                        </Link>
+                    ))}
                 </div>
 
-                <div className="hidden md:flex items-center gap-8 font-mono text-sm tracking-wide text-gray-400">
-                    <Link href="#technology" className="hover:text-radar-green transition-colors">TECHNOLOGY</Link>
-                    <Link href="#missions" className="hover:text-radar-green transition-colors">MISSIONS</Link>
-                    <Link href="#company" className="hover:text-radar-green transition-colors">COMPANY</Link>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    {/* Book Demo CTA */}
+                {/* CTAs */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <button
                         onClick={() => setOpenCalendly(true)}
-                        className="hidden sm:flex items-center gap-2 px-4 py-2 font-mono text-xs font-bold text-white border border-white/20 hover:bg-white/10 transition-all uppercase tracking-widest"
+                        className="hidden sm:block"
+                        style={{
+                            fontFamily: 'var(--font-space-mono)',
+                            fontSize: '11px',
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#888',
+                            background: 'transparent',
+                            border: '1px solid #2a2a2a',
+                            padding: '10px 20px',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLButtonElement).style.borderColor = '#fff';
+                            (e.currentTarget as HTMLButtonElement).style.color = '#fff';
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLButtonElement).style.borderColor = '#2a2a2a';
+                            (e.currentTarget as HTMLButtonElement).style.color = '#888';
+                        }}
                     >
-                        <span>BOOK DEMO</span>
+                        Book Demo
                     </button>
 
-                    {/* Primary CTA */}
                     <Link
                         href="#waitlist"
-                        className="flex items-center gap-2 px-6 py-2 font-mono text-xs font-bold text-black uppercase bg-radar-green hover:bg-white transition-all hover:scale-105"
+                        style={{
+                            fontFamily: 'var(--font-space-mono)',
+                            fontSize: '11px',
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#000',
+                            background: '#fff',
+                            border: 'none',
+                            padding: '10px 20px',
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            fontWeight: 700,
+                            transition: 'background 0.15s ease, color 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLAnchorElement).style.background = '#cc0000';
+                            (e.currentTarget as HTMLAnchorElement).style.color = '#fff';
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLAnchorElement).style.background = '#fff';
+                            (e.currentTarget as HTMLAnchorElement).style.color = '#000';
+                        }}
                     >
-                        <span>REQUEST ACCESS</span>
+                        Get Access ↗
                     </Link>
                 </div>
             </nav>
-
-
-            {/* Login Modal */}
 
             <PopupModal
                 url="https://calendly.com/petrrmarketing/aerisq"

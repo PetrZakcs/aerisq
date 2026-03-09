@@ -1,96 +1,195 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Linkedin, Twitter } from 'lucide-react';
 
 const TEAM = [
     {
-        name: "PETR ŽÁK",
-        role: "FOUNDER & CEO",
-        bio: "As a GIS specialist and high-agency builder, I solo re-engineered AerisQ’s core physics engine in just 14 days to replace unreliable AI hallucinations with raw signal truth, detecting subsurface drought and hidden assets where others only see pixels.",
-        image: "/team/petr-zak.jpg",
-        linkedin: "https://www.linkedin.com/in/petrzak01/",
-        id: "CMD-01"
+        id: 'PZ-01',
+        name: 'Petr Žák',
+        role: 'Founder & CEO',
+        bio: 'GIS specialist and high-agency builder who re-engineered AerisQ\'s core physics engine in 14 days — replacing AI hallucinations with raw SAR signal analysis. Detects subsurface drought and hidden assets where optical systems see nothing.',
+        image: '/team/petr-zak.jpg',
+        linkedin: 'https://www.linkedin.com/in/petrzak01/',
     },
     {
-        name: "JAN RUDOLF",
-        role: "CTO",
-        bio: "From engineering VW/Audi autopilots and US-based GenAI to architecting AerisQ’s signal intelligence based on radar physics and CTU research.",
-        image: "/team/jan-rudolf.jpg",
-        id: "SCI-01"
-    }
+        id: 'JR-01',
+        name: 'Jan Rudolf',
+        role: 'CTO',
+        bio: 'From engineering autonomous systems at VW/Audi and US generative AI labs to architecting AerisQ\'s radar signal intelligence stack — grounded in physics research from CTU Prague.',
+        image: '/team/jan-rudolf.jpg',
+    },
 ];
 
 export default function Founder() {
     return (
-        <section id="company" className="py-32 bg-[#050505] border-t border-white/5 relative overflow-hidden">
-            {/* Background Grid */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+        <section
+            id="company"
+            style={{
+                padding: '120px 0',
+                background: '#000',
+                borderTop: '1px solid #1a1a1a',
+            }}
+        >
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+                <div className="section-label">Team</div>
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
-                <div className="text-center mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        className="inline-block border border-white/10 px-4 py-1 rounded-full bg-white/5 backdrop-blur-md mb-6"
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '80px',
+                        alignItems: 'end',
+                        marginBottom: '80px',
+                    }}
+                >
+                    <h2
+                        style={{
+                            fontSize: 'clamp(2rem, 4vw, 4rem)',
+                            fontWeight: 800,
+                            lineHeight: 1.05,
+                            letterSpacing: '-0.02em',
+                            textTransform: 'uppercase',
+                            color: '#fff',
+                            margin: 0,
+                        }}
                     >
-                        <span className="font-mono text-xs text-radar-green tracking-widest uppercase">Command Structure</span>
-                    </motion.div>
-
-                    <h2 className="text-5xl md:text-7xl font-bold font-display text-white mb-6 tracking-tight uppercase">
-                        Built By <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Scientists</span>
+                        Built by<br />
+                        scientists.
                     </h2>
-                    <p className="text-gray-400 max-w-2xl mx-auto font-sans text-lg leading-relaxed">
-                        We bridge the gap between raw Synthetic Aperture Radar physics and actionable business intelligence.
+                    <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+                        We bridge the gap between academic radar physics and real-world operational intelligence. Not a team of designers making visualizations — engineers solving the radar equation.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {TEAM.map((member, index) => (
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        borderTop: '1px solid #1a1a1a',
+                        borderLeft: '1px solid #1a1a1a',
+                    }}
+                >
+                    {TEAM.map((member, i) => (
                         <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 30 }}
+                            key={i}
+                            initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="group relative bg-[#0A0A0A] border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-500"
+                            transition={{ delay: i * 0.1, duration: 0.6 }}
+                            viewport={{ once: true }}
+                            style={{
+                                borderRight: '1px solid #1a1a1a',
+                                borderBottom: '1px solid #1a1a1a',
+                                overflow: 'hidden',
+                            }}
                         >
-                            {/* Image Placeholder */}
-                            <div className="aspect-[4/5] bg-white/5 relative flex items-center justify-center overflow-hidden group-hover:bg-white/10 transition-colors">
-                                {member.image.startsWith('/') ? (
-                                    <img
-                                        src={member.image}
-                                        alt={member.name}
-                                        className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110 transform"
-                                    />
-                                ) : (
-                                    <div className="text-6xl filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110 transform">
-                                        {member.image}
-                                    </div>
-                                )}
-
-                                {/* Overlay Stats */}
-                                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent flex justify-between items-end">
-                                    <div className="font-mono text-[10px] text-gray-500">
-                                        ID: {member.id}<br />
-                                        STATUS: ACTIVE
-                                    </div>
-                                    <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse shadow-[0_0_10px_rgba(81,138,22,0.8)]" />
+                            {/* Photo */}
+                            <div
+                                style={{
+                                    position: 'relative',
+                                    aspectRatio: '4/3',
+                                    overflow: 'hidden',
+                                    background: '#0a0a0a',
+                                }}
+                            >
+                                <img
+                                    src={member.image}
+                                    alt={member.name}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        objectPosition: 'top',
+                                        filter: 'grayscale(100%) contrast(1.1)',
+                                        display: 'block',
+                                        transition: 'filter 0.4s ease',
+                                    }}
+                                    onMouseEnter={(e) => ((e.currentTarget as HTMLImageElement).style.filter = 'grayscale(0%) contrast(1)')}
+                                    onMouseLeave={(e) => ((e.currentTarget as HTMLImageElement).style.filter = 'grayscale(100%) contrast(1.1)')}
+                                />
+                                {/* ID overlay */}
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 16,
+                                        left: 16,
+                                        fontFamily: 'var(--font-space-mono)',
+                                        fontSize: '10px',
+                                        letterSpacing: '0.15em',
+                                        textTransform: 'uppercase',
+                                        color: '#888',
+                                        background: 'rgba(0,0,0,0.8)',
+                                        padding: '4px 10px',
+                                    }}
+                                >
+                                    {member.id}
                                 </div>
                             </div>
 
-                            <div className="p-8">
-                                <h3 className="text-2xl font-bold font-display text-white mb-1 uppercase tracking-wide">{member.name}</h3>
-                                <div className="text-radar-green font-mono text-xs font-bold uppercase tracking-widest mb-4">{member.role}</div>
-                                <p className="text-gray-400 text-sm leading-relaxed mb-8 font-sans border-l border-white/10 pl-4">
+                            {/* Info */}
+                            <div style={{ padding: '40px' }}>
+                                <div
+                                    style={{
+                                        fontFamily: 'var(--font-space-mono)',
+                                        fontSize: '10px',
+                                        letterSpacing: '0.15em',
+                                        textTransform: 'uppercase',
+                                        color: '#cc0000',
+                                        marginBottom: '8px',
+                                    }}
+                                >
+                                    {member.role}
+                                </div>
+                                <h3
+                                    style={{
+                                        fontSize: '22px',
+                                        fontWeight: 700,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '-0.01em',
+                                        color: '#fff',
+                                        margin: '0 0 20px 0',
+                                    }}
+                                >
+                                    {member.name}
+                                </h3>
+                                <p
+                                    style={{
+                                        color: '#666',
+                                        fontSize: '13px',
+                                        lineHeight: 1.9,
+                                        margin: '0 0 24px 0',
+                                        fontWeight: 300,
+                                    }}
+                                >
                                     {member.bio}
                                 </p>
-
                                 {member.linkedin && (
-                                    <div className="flex gap-4 opacity-50 group-hover:opacity-100 transition-opacity">
-                                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 border border-white/10 rounded-full hover:bg-white text-white hover:text-black transition-all">
-                                            <Linkedin className="w-4 h-4" />
-                                        </a>
-                                    </div>
+                                    <a
+                                        href={member.linkedin}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            fontFamily: 'var(--font-space-mono)',
+                                            fontSize: '10px',
+                                            letterSpacing: '0.12em',
+                                            textTransform: 'uppercase',
+                                            color: '#555',
+                                            textDecoration: 'none',
+                                            border: '1px solid #222',
+                                            padding: '6px 14px',
+                                            display: 'inline-block',
+                                            transition: 'all 0.15s ease',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            (e.currentTarget as HTMLAnchorElement).style.color = '#fff';
+                                            (e.currentTarget as HTMLAnchorElement).style.borderColor = '#fff';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            (e.currentTarget as HTMLAnchorElement).style.color = '#555';
+                                            (e.currentTarget as HTMLAnchorElement).style.borderColor = '#222';
+                                        }}
+                                    >
+                                        LinkedIn ↗
+                                    </a>
                                 )}
                             </div>
                         </motion.div>

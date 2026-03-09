@@ -1,27 +1,23 @@
-import { Rajdhani, JetBrains_Mono, Inter } from "next/font/google";
+import { Space_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
-const rajdhani = Rajdhani({
-  variable: "--font-rajdhani",
-  weight: ["300", "400", "500", "600", "700"],
-  subsets: ["latin"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  weight: ["400", "700"],
   subsets: ["latin"],
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AerisQ | Physics-Based Radar Intelligence",
-  description: "Physics, not Art. Deep learning analysis of Sentinel-1 SAR data without hallucinations.",
+  title: "AerisQ — Radar Intelligence Platform",
+  description: "Physics-based Synthetic Aperture Radar analysis. All-weather satellite intelligence for agriculture, defense, and infrastructure.",
 };
 
 import HUDLayout from "@/components/HUDLayout";
@@ -33,9 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${rajdhani.variable} ${jetbrainsMono.variable} ${inter.variable} antialiased bg-aeris-black text-gray-100 font-sans`}
+        className={`${spaceMono.variable} ${inter.variable} antialiased`}
+        style={{ background: '#000', color: '#fff' }}
       >
         <Providers>
           <HUDLayout>
