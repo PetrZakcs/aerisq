@@ -114,7 +114,6 @@ export default function FAQ() {
                                         style={{
                                             fontFamily: 'var(--font-space-mono)',
                                             fontSize: '18px',
-                                            color: '#444',
                                             flexShrink: 0,
                                             transition: 'transform 0.3s ease, color 0.15s ease',
                                             transform: openIndex === i ? 'rotate(45deg)' : 'rotate(0deg)',
