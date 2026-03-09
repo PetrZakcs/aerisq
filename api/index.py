@@ -28,9 +28,11 @@ _ee = None
 
 def _init_gee():
     """Initialize Google Earth Engine (lazy, once)."""
-    global GEE_AVAILABLE, _ee
-    if _ee is not None:
+    global GEE_AVAILABLE, GEE_INIT_ERROR, _ee
+    if GEE_AVAILABLE:
         return
+    if GEE_INIT_ERROR:
+        return  # Already failed, don't retry
     try:
         import ee as ee_module
         _ee = ee_module
@@ -50,7 +52,10 @@ def _init_gee():
                 creds_path
             )
             _ee.Initialize(credentials=credentials, project=project_id)
-            os.unlink(creds_path)
+            try:
+                os.unlink(creds_path)
+            except Exception:
+                pass
         else:
             _ee.Initialize(project=project_id)
         
@@ -60,9 +65,10 @@ def _init_gee():
         GEE_INIT_ERROR = ""
         print(f"✅ GEE initialized (project: {project_id})")
     except Exception as e:
-        GEE_INIT_ERROR = str(e)
-        print(f"⚠️ GEE not available: {e}")
+        GEE_INIT_ERROR = f"{type(e).__name__}: {str(e)}"
+        print(f"⚠️ GEE not available: {GEE_INIT_ERROR}")
         GEE_AVAILABLE = False
+        _ee = None  # Reset so we don't block debug calls
 
 
 # ===== CONFIGURATION =====
