@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 # ===== GEE INITIALIZATION =====
 GEE_AVAILABLE = False
+GEE_INIT_ERROR = ""
 _ee = None
 
 def _init_gee():
@@ -56,8 +57,10 @@ def _init_gee():
         # Quick smoke test
         _ee.Number(1).getInfo()
         GEE_AVAILABLE = True
+        GEE_INIT_ERROR = ""
         print(f"✅ GEE initialized (project: {project_id})")
     except Exception as e:
+        GEE_INIT_ERROR = str(e)
         print(f"⚠️ GEE not available: {e}")
         GEE_AVAILABLE = False
 
@@ -680,6 +683,22 @@ def root():
 @app.get("/api/health")
 def health():
     return {"status": "healthy", "environment": "vercel", "gee": GEE_AVAILABLE}
+
+
+@app.get("/api/debug")
+def debug():
+    """Debug endpoint to diagnose GEE setup issues."""
+    _init_gee()
+    sa_json = os.environ.get("GEE_SERVICE_ACCOUNT_JSON", "")
+    project_id = os.environ.get("GEE_PROJECT_ID", "")
+    return {
+        "gee_available": GEE_AVAILABLE,
+        "gee_init_error": GEE_INIT_ERROR,
+        "env_GEE_SERVICE_ACCOUNT_JSON_set": bool(sa_json),
+        "env_GEE_SERVICE_ACCOUNT_JSON_length": len(sa_json),
+        "env_GEE_PROJECT_ID": project_id or "(not set)",
+        "earthengine_import": _ee is not None,
+    }
 
 
 # ===== AUTH =====
