@@ -693,7 +693,9 @@ def health():
 
 @app.get("/api/debug")
 def debug():
-    """Debug endpoint to diagnose GEE setup issues."""
+    """Debug endpoint to diagnose GEE setup issues. Forces fresh retry."""
+    global GEE_INIT_ERROR
+    GEE_INIT_ERROR = ""  # Reset to force retry
     _init_gee()
     sa_json = os.environ.get("GEE_SERVICE_ACCOUNT_JSON", "")
     project_id = os.environ.get("GEE_PROJECT_ID", "")
