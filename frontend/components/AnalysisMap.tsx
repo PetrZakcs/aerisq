@@ -9,13 +9,15 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 interface AnalysisMapProps {
     onPolygonDrawn?: (geojson: { type: string; coordinates: number[][][] }) => void;
     resultGeoJSON?: any;
+    tileUrl?: string | null;
 }
 
-export default function AnalysisMap({ onPolygonDrawn, resultGeoJSON }: AnalysisMapProps) {
+export default function AnalysisMap({ onPolygonDrawn, resultGeoJSON, tileUrl }: AnalysisMapProps) {
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<L.Map | null>(null);
     const drawnItems = useRef<L.FeatureGroup | null>(null);
     const resultLayer = useRef<L.GeoJSON | null>(null);
+    const satelliteLayer = useRef<L.TileLayer | null>(null);
     const [isMapReady, setIsMapReady] = useState(false);
 
     // Initialize map
@@ -191,6 +193,30 @@ export default function AnalysisMap({ onPolygonDrawn, resultGeoJSON }: AnalysisM
             }
         }
     }, [resultGeoJSON, isMapReady]);
+
+    // Handle Satellite Tile Layer
+    useEffect(() => {
+        if (!mapInstance.current || !isMapReady) return;
+
+        const map = mapInstance.current;
+
+        // Remove existing satellite layer
+        if (satelliteLayer.current) {
+            map.removeLayer(satelliteLayer.current);
+            satelliteLayer.current = null;
+        }
+
+        // Add new satellite tile layer if available
+        if (tileUrl) {
+            const layer = L.tileLayer(tileUrl, {
+                attribution: 'Google Earth Engine',
+                opacity: 0.8,
+                zIndex: 100
+            });
+            layer.addTo(map);
+            satelliteLayer.current = layer;
+        }
+    }, [tileUrl, isMapReady]);
 
     return (
         <div className="relative w-full h-full">

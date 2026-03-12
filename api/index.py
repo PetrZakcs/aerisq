@@ -290,6 +290,16 @@ def _gee_ndvi(polygon_geojson: Dict, date_start: str, date_end: str) -> Optional
 
         area = geometry.area().getInfo() / 1_000_000
 
+        # Generate Map Tile URL
+        vis_params = {
+            'min': 0, 'max': 0.8,
+            'palette': ['#ff0000', '#ffff00', '#00ff00'] # Red to Green
+        }
+        map_id_dict = _ee.data.getMapId({
+            'image': composite.visualize(**vis_params),
+        })
+        map_url = map_id_dict['tile_fetcher'].url_format
+
         return {
             "index_type": "NDVI", "satellite": "Sentinel-2",
             "mean_value": round(mean_v, 4),
@@ -301,6 +311,7 @@ def _gee_ndvi(polygon_geojson: Dict, date_start: str, date_end: str) -> Optional
             "scene_count": scene_count, "area_km2": round(area, 2),
             "date_range": {"start": date_start, "end": date_end},
             "quality_flag": "GEE_REALTIME", "scale_meters": 10,
+            "map_url": map_url
         }
     except Exception as e:
         print(f"GEE NDVI error: {e}")
@@ -354,6 +365,16 @@ def _gee_ndwi(polygon_geojson: Dict, date_start: str, date_end: str) -> Optional
 
         area = geometry.area().getInfo() / 1_000_000
 
+        # Generate Map Tile URL
+        vis_params = {
+            'min': -0.2, 'max': 0.5,
+            'palette': ['#ffffff', '#0000ff'] # White to Blue
+        }
+        map_id_dict = _ee.data.getMapId({
+            'image': composite.visualize(**vis_params),
+        })
+        map_url = map_id_dict['tile_fetcher'].url_format
+
         return {
             "index_type": "NDWI", "satellite": "Sentinel-2",
             "mean_value": round(mean_v, 4),
@@ -366,6 +387,7 @@ def _gee_ndwi(polygon_geojson: Dict, date_start: str, date_end: str) -> Optional
             "scene_count": scene_count, "area_km2": round(area, 2),
             "date_range": {"start": date_start, "end": date_end},
             "quality_flag": "GEE_REALTIME", "scale_meters": 10,
+            "map_url": map_url
         }
     except Exception as e:
         print(f"GEE NDWI error: {e}")
@@ -429,6 +451,16 @@ def _gee_sar(polygon_geojson: Dict, date_start: str, date_end: str) -> Optional[
                      7: -12.5, 8: -13.0, 9: -12.0, 10: -11.0, 11: -10.0, 12: -9.5}
         baseline = baselines.get(month, -10.0)
 
+        # Generate Map Tile URL (SAR)
+        vis_params = {
+            'min': -20, 'max': -5,
+            'palette': ['#000000', '#444444', '#888888', '#ffffff'] # B/W for radar
+        }
+        map_id_dict = _ee.data.getMapId({
+            'image': composite.visualize(**vis_params),
+        })
+        map_url = map_id_dict['tile_fetcher'].url_format
+
         return {
             "index_type": "SAR", "satellite": "Sentinel-1",
             "mean_value": round(mean_db, 2),
@@ -445,6 +477,7 @@ def _gee_sar(polygon_geojson: Dict, date_start: str, date_end: str) -> Optional[
             "date_range": {"start": date_start, "end": date_end},
             "quality_flag": "GEE_REALTIME", "scale_meters": 10,
             "confidence": min(0.95, 0.5 + scene_count * 0.05),
+            "map_url": map_url
         }
     except Exception as e:
         print(f"GEE SAR error: {e}")

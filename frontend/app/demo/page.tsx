@@ -130,6 +130,7 @@ interface AnalysisResult {
         water_percentage?: number;
         anomaly_db?: number;
         confidence?: number;
+        map_url?: string;
     };
     created_at: string;
 }
@@ -438,6 +439,7 @@ export default function InvestorDemoPage() {
                             <AnalysisMap
                                 onPolygonDrawn={() => { }}
                                 resultGeoJSON={null}
+                                tileUrl={result?.results?.map_url}
                             />
                         </div>
                     </div>
