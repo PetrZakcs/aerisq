@@ -23,65 +23,26 @@ const BENEFITS = [
 export default function Benefits() {
     return (
         <section
-            style={{
-                padding: '120px 0',
-                background: '#000',
-                borderTop: '1px solid #1a1a1a',
-            }}
+            className="py-24 md:py-32 bg-black border-t border-white/10"
         >
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 {/* Section label */}
                 <div className="section-label">Advantage</div>
 
                 {/* Heading */}
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: '80px',
-                        alignItems: 'start',
-                        marginBottom: '80px',
-                    }}
-                    className="md:grid"
-                >
-                    <h2
-                        style={{
-                            fontSize: 'clamp(2rem, 4vw, 4rem)',
-                            fontWeight: 800,
-                            lineHeight: 1.05,
-                            letterSpacing: '-0.02em',
-                            textTransform: 'uppercase',
-                            color: '#fff',
-                            margin: 0,
-                        }}
-                    >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-start mb-20">
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tighter uppercase text-white m-0">
                         The physics<br />
-                        <span style={{ color: '#cc0000' }}>advantage</span>
+                        <span className="text-[#cc0000]">advantage</span>
                     </h2>
-                    <p
-                        style={{
-                            color: '#666',
-                            fontSize: '15px',
-                            lineHeight: 1.8,
-                            margin: 0,
-                            paddingTop: '8px',
-                            fontWeight: 300,
-                        }}
-                    >
+                    <p className="text-[#666] text-base md:text-lg leading-relaxed font-light m-0 pt-2">
                         Optical NDVI indices are lagging indicators — they only show stress after visible damage occurs.
                         SAR radar detects subsurface moisture changes 2 weeks earlier. The difference between reacting and preventing.
                     </p>
                 </div>
 
-                {/* Three columns */}
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        borderTop: '1px solid #1a1a1a',
-                    }}
-                    className="grid-cols-1 md:grid-cols-3"
-                >
+                {/* Benefits Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 border-t border-white/10">
                     {BENEFITS.map((b, i) => (
                         <motion.div
                             key={i}
@@ -89,36 +50,19 @@ export default function Benefits() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.12, duration: 0.6 }}
                             viewport={{ once: true }}
-                            style={{
-                                padding: '48px 40px 48px 0',
-                                borderRight: i < 2 ? '1px solid #1a1a1a' : 'none',
-                                paddingLeft: i > 0 ? '40px' : '0',
-                            }}
+                            className={`py-12 md:py-16 ${
+                                i < 2 ? 'md:border-r md:border-white/10 md:pr-10' : ''
+                            } ${
+                                i > 0 ? 'md:pl-10' : ''
+                            } border-b md:border-b-0 border-white/10 last:border-b-0`}
                         >
-                            <div
-                                style={{
-                                    fontFamily: 'var(--font-space-mono)',
-                                    fontSize: '11px',
-                                    letterSpacing: '0.15em',
-                                    color: '#cc0000',
-                                    marginBottom: '24px',
-                                }}
-                            >
+                            <div className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#cc0000] mb-6">
                                 {b.num}
                             </div>
-                            <h3
-                                style={{
-                                    fontSize: '20px',
-                                    fontWeight: 700,
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '-0.01em',
-                                    color: '#fff',
-                                    margin: '0 0 16px 0',
-                                }}
-                            >
+                            <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-white mb-4">
                                 {b.title}
                             </h3>
-                            <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+                            <p className="text-[#666] text-sm md:text-base leading-relaxed font-light m-0">
                                 {b.desc}
                             </p>
                         </motion.div>

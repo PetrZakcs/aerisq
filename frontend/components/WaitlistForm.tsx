@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, ChevronDown } from 'lucide-react';
 
-// Initialize Supabase client
-// Note: We use process.env here. If keys are missing, it will log a warning but the UI will still render.
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -26,17 +24,13 @@ export default function WaitlistForm() {
 
         if (!supabase) {
             setStatus('error');
-            setMessage('Database connection not configured. Please contact admin.');
-            console.error('Missing Supabase Environment Variables');
+            setMessage('DATABASE CONNECTION NOT CONFIGURED.');
             return;
         }
 
         setStatus('loading');
 
         try {
-            // Attempt blind insert. 
-            // If email exists, Supabase will return an error (23505 unique_violation)
-            // We shouldn't check beforehand because that requires SELECT permissions which leaks privacy.
             const { error } = await supabase
                 .from('waitlist')
                 .insert([
@@ -44,7 +38,6 @@ export default function WaitlistForm() {
                 ]);
 
             if (error) {
-                // Check for duplicate key error (Postgres code 23505)
                 if (error.code === '23505' || error.message.includes('duplicate')) {
                     setStatus('success');
                     setMessage('YOU ARE ALREADY IN THE QUEUE.');
@@ -59,35 +52,35 @@ export default function WaitlistForm() {
         } catch (error) {
             console.error('Error submitting to waitlist:', error);
             setStatus('error');
-            setMessage('TRANSMISSION FAILED. PLEASE RETRY OR CONTACT COMMS.');
+            setMessage('TRANSMISSION FAILED. PLEASE RETRY.');
         }
     };
 
     return (
-        <div className="w-full max-w-md mx-auto relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-radar-green/20 to-blue-500/20 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-            <div className="relative bg-black/50 backdrop-blur-xl border border-white/10 p-4 md:p-6 rounded-lg">
+        <div className="w-full max-w-lg relative group">
+            {/* Ambient Background Glow */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-[#cc0000]/10 to-transparent rounded-2xl blur-2xl opacity-40 group-hover:opacity-70 transition duration-1000"></div>
+            
+            <div className="relative bg-black/40 backdrop-blur-2xl border border-white/10 p-6 md:p-10">
                 <AnimatePresence mode="wait">
                     {status === 'success' ? (
                         <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="text-center py-8"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="text-center py-10"
                         >
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-radar-green/10 text-radar-green mb-4">
-                                <CheckCircle className="w-8 h-8" />
+                            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#cc0000]/10 text-[#cc0000] mb-6">
+                                <CheckCircle className="w-10 h-10" />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2 tracking-tight">ACCESS REQUESTED</h3>
-                            <p className="text-radar-green font-mono text-sm">{message}</p>
+                            <h3 className="text-2xl font-black text-white mb-3 tracking-tighter uppercase">ACCESS REQUESTED</h3>
+                            <p className="text-[#cc0000] font-mono text-[11px] tracking-widest uppercase">{message}</p>
                         </motion.div>
                     ) : (
                         <motion.form
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
                             onSubmit={handleSubmit}
-                            className="space-y-4"
+                            className="space-y-6"
                         >
                             <div>
                                 <label htmlFor="email" className="sr-only">Email Frequency</label>
@@ -99,26 +92,24 @@ export default function WaitlistForm() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     disabled={status === 'loading'}
-                                    className="w-full bg-black/50 border border-white/20 px-4 py-3 text-white font-mono placeholder:text-gray-600 focus:outline-none focus:border-radar-green focus:ring-1 focus:ring-radar-green transition-all rounded-md"
+                                    className="w-full bg-black/50 border border-white/20 px-5 py-4 text-white font-mono placeholder:text-[#333] focus:outline-none focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] transition-all text-sm"
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="relative">
                                     <select
                                         value={interest}
                                         onChange={(e) => setInterest(e.target.value)}
                                         disabled={status === 'loading'}
-                                        className="w-full bg-black/50 border border-white/20 px-4 py-3 text-white font-mono appearance-none focus:outline-none focus:border-radar-green focus:ring-1 focus:ring-radar-green transition-all rounded-md cursor-pointer text-xs"
+                                        className="w-full bg-black/50 border border-white/20 px-5 py-4 text-white font-mono appearance-none focus:outline-none focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] transition-all cursor-pointer text-[11px] tracking-widest"
                                     >
                                         <option value="agriculture">AGRI-INTEL</option>
                                         <option value="defense">DEFENSE/GOV</option>
                                         <option value="investor">INVESTOR</option>
                                         <option value="other">OTHER</option>
                                     </select>
-                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
-                                        <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </div>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#444] pointer-events-none" />
                                 </div>
 
                                 <div className="relative">
@@ -126,7 +117,7 @@ export default function WaitlistForm() {
                                         value={country}
                                         onChange={(e) => setCountry(e.target.value)}
                                         disabled={status === 'loading'}
-                                        className="w-full bg-black/50 border border-white/20 px-4 py-3 text-white font-mono appearance-none focus:outline-none focus:border-radar-green focus:ring-1 focus:ring-radar-green transition-all rounded-md cursor-pointer text-xs"
+                                        className="w-full bg-black/50 border border-white/20 px-5 py-4 text-white font-mono appearance-none focus:outline-none focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] transition-all cursor-pointer text-[11px] tracking-widest"
                                     >
                                         <option value="other">SELECT REGION</option>
                                         <option value="us">NORTH AMERICA</option>
@@ -135,20 +126,18 @@ export default function WaitlistForm() {
                                         <option value="latam">LATAM</option>
                                         <option value="mea">MIDDLE EAST/AFRICA</option>
                                     </select>
-                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
-                                        <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </div>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#444] pointer-events-none" />
                                 </div>
                             </div>
 
                             <button
                                 type="submit"
                                 disabled={status === 'loading'}
-                                className="w-full bg-radar-green text-black font-bold font-mono py-3 hover:bg-white hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-widest rounded-md flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(34,197,94,0.3)]"
+                                className="w-full bg-[#cc0000] text-white font-black font-mono py-5 hover:bg-white hover:text-black transition-all uppercase tracking-[0.2em] flex items-center justify-center gap-3 relative overflow-hidden"
                             >
                                 {status === 'loading' ? (
                                     <>
-                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        <Loader2 className="w-5 h-5 animate-spin" />
                                         ENCRYPTING...
                                     </>
                                 ) : (
@@ -160,7 +149,7 @@ export default function WaitlistForm() {
                                 <motion.p
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="text-red-400 text-xs font-mono text-center mt-2 flex items-center justify-center gap-2"
+                                    className="text-[#cc0000] text-[10px] font-mono text-center flex items-center justify-center gap-2 tracking-widest"
                                 >
                                     <AlertCircle className="w-3 h-3" />
                                     {message}
@@ -171,8 +160,8 @@ export default function WaitlistForm() {
                 </AnimatePresence>
             </div>
 
-            <div className="mt-4 text-center">
-                <p className="text-[10px] text-gray-600 font-mono uppercase tracking-widest">
+            <div className="mt-8 text-center">
+                <p className="text-[10px] text-[#333] font-mono uppercase tracking-[0.3em]">
                     SECURE TRANSMISSION // 256-BIT ENCRYPTION
                 </p>
             </div>

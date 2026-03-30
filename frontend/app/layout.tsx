@@ -1,5 +1,6 @@
 import { Space_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
@@ -39,6 +40,7 @@ export default function RootLayout({
             {children}
           </HUDLayout>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

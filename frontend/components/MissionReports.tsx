@@ -21,213 +21,81 @@ export default function MissionReports() {
     return (
         <section
             id="missions"
-            style={{
-                padding: '120px 0',
-                background: '#060606',
-                borderTop: '1px solid #1a1a1a',
-            }}
+            className="py-24 md:py-32 bg-[#060606] border-t border-white/10"
         >
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 <div className="section-label">Case study</div>
 
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'flex-end',
-                        marginBottom: '80px',
-                        gap: '40px',
-                        flexWrap: 'wrap',
-                    }}
-                >
-                    <h2
-                        style={{
-                            fontSize: 'clamp(2rem, 4vw, 4rem)',
-                            fontWeight: 800,
-                            lineHeight: 1.05,
-                            letterSpacing: '-0.02em',
-                            textTransform: 'uppercase',
-                            color: '#fff',
-                            margin: 0,
-                        }}
-                    >
+                <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-10 mb-20">
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tighter uppercase text-white m-0">
                         Real-world<br />
                         results.
                     </h2>
-                    <p
-                        style={{
-                            fontFamily: 'var(--font-space-mono)',
-                            fontSize: '11px',
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#444',
-                            margin: 0,
-                            maxWidth: '300px',
-                            lineHeight: 1.8,
-                        }}
-                    >
+                    <p className="font-mono text-[11px] tracking-widest uppercase text-[#444] max-w-[300px] leading-relaxed m-0">
                         Physics-based detection applied to real scenarios — with documented, measurable outcomes.
                     </p>
                 </div>
 
-                <div>
+                <div className="space-y-10">
                     {CASES.map((item, i) => (
                         <motion.div
                             key={item.id}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: '1fr 1fr',
-                                gap: '0',
-                                background: '#0a0a0a',
-                                border: '1px solid #1a1a1a',
-                                overflow: 'hidden',
-                                opacity: 0.7,
-                            }}
+                            className="grid grid-cols-1 md:grid-cols-2 bg-[#0a0a0a] border border-white/10 overflow-hidden opacity-70"
                         >
-                            {/* Image */}
-                            <div style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden' }}>
+                            {/* Image Container */}
+                            <div className="relative aspect-video md:aspect-[4/3] overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
                                 <Image
                                     src={item.image}
                                     alt={item.title}
                                     fill
-                                    style={{ objectFit: 'cover', filter: 'grayscale(100%) contrast(1.2)' }}
+                                    className="object-cover grayscale contrast-[1.2]"
                                 />
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        inset: 0,
-                                        background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, transparent 60%)',
-                                    }}
-                                />
-                                {/* Overlay label */}
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 20,
-                                        left: 20,
-                                        fontFamily: 'var(--font-space-mono)',
-                                        fontSize: '10px',
-                                        letterSpacing: '0.15em',
-                                        textTransform: 'uppercase',
-                                        color: '#666',
-                                        background: 'rgba(0,0,0,0.8)',
-                                        padding: '4px 10px',
-                                        backdropFilter: 'blur(4px)',
-                                    }}
-                                >
+                                <div className="absolute inset-0 bg-gradient-to-br from-black/80 to-transparent pointer-events-none" />
+                                
+                                <div className="absolute top-5 left-5 font-mono text-[10px] tracking-widest uppercase text-[#666] bg-black/80 px-3 py-1 backdrop-blur-sm">
                                     {item.id} — RESTRICTED
                                 </div>
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: 20,
-                                        left: 20,
-                                        fontFamily: 'var(--font-space-mono)',
-                                        fontSize: '10px',
-                                        color: '#444',
-                                        letterSpacing: '0.1em',
-                                        textTransform: 'uppercase',
-                                    }}
-                                >
+                                <div className="absolute bottom-5 left-5 font-mono text-[10px] text-[#444] tracking-widest uppercase">
                                     {item.sensor}
                                 </div>
                             </div>
 
                             {/* Content */}
-                            <div style={{ padding: '48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <div>
-                                    <div
-                                        style={{
-                                            fontFamily: 'var(--font-space-mono)',
-                                            fontSize: '10px',
-                                            letterSpacing: '0.15em',
-                                            textTransform: 'uppercase',
-                                            color: '#444',
-                                            marginBottom: '16px',
-                                        }}
-                                    >
+                            <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-between">
+                                <div className="mb-10">
+                                    <div className="font-mono text-[10px] tracking-widest uppercase text-[#444] mb-4">
                                         {item.location} — {item.date}
                                     </div>
-                                    <h3
-                                        style={{
-                                            fontSize: '28px',
-                                            fontWeight: 700,
-                                            textTransform: 'uppercase',
-                                            letterSpacing: '-0.01em',
-                                            color: '#888',
-                                            margin: '0 0 40px 0',
-                                            lineHeight: 1.1,
-                                        }}
-                                    >
+                                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-tighter text-[#888] leading-[1.1]">
                                         {item.title}
                                     </h3>
                                 </div>
 
-                                {/* Data table */}
-                                <div>
-                                    <div
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '1fr 1fr',
-                                            gap: '0',
-                                            borderTop: '1px solid #1a1a1a',
-                                            marginBottom: '32px',
-                                        }}
-                                    >
+                                <div className="space-y-10">
+                                    {/* Data Grid */}
+                                    <div className="grid grid-cols-2 border-t border-white/10">
                                         {[
                                             { label: 'Detection', value: 'Restricted', highlight: false },
                                             { label: 'Outcome', value: 'Restricted', highlight: true },
                                         ].map((row, ri) => (
                                             <div
                                                 key={ri}
-                                                style={{
-                                                    padding: '20px',
-                                                    borderRight: ri === 0 ? '1px solid #1a1a1a' : 'none',
-                                                }}
+                                                className={`p-5 md:p-6 lg:p-8 ${ri === 0 ? 'border-r border-white/10' : ''}`}
                                             >
-                                                <div
-                                                    style={{
-                                                        fontFamily: 'var(--font-space-mono)',
-                                                        fontSize: '10px',
-                                                        letterSpacing: '0.15em',
-                                                        textTransform: 'uppercase',
-                                                        color: '#333',
-                                                        marginBottom: '8px',
-                                                    }}
-                                                >
+                                                <div className="font-mono text-[10px] tracking-widest uppercase text-[#333] mb-2">
                                                     {row.label}
                                                 </div>
-                                                <div
-                                                    style={{
-                                                        fontFamily: 'var(--font-space-mono)',
-                                                        fontSize: '15px',
-                                                        color: row.highlight ? '#cc0000' : '#444',
-                                                        letterSpacing: '0.02em',
-                                                    }}
-                                                >
+                                                <div className={`font-mono text-base md:text-lg tracking-wide ${row.highlight ? 'text-[#cc0000]' : 'text-[#444]'}`}>
                                                     {row.value}
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
 
-                                    <span
-                                        style={{
-                                            fontFamily: 'var(--font-space-mono)',
-                                            fontSize: '11px',
-                                            letterSpacing: '0.12em',
-                                            textTransform: 'uppercase',
-                                            color: '#cc0000',
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                            gap: '8px',
-                                            border: '1px solid rgba(204,0,0,0.3)',
-                                            padding: '8px 16px'
-                                        }}
-                                    >
+                                    <span className="inline-flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-[#cc0000] border border-[#cc0000]/30 px-6 py-3 hover:bg-[#cc0000]/5 transition-colors cursor-pointer">
                                         Access Required ↗
                                     </span>
                                 </div>

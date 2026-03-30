@@ -33,45 +33,23 @@ export default function Features() {
     return (
         <section
             id="technology"
-            style={{
-                padding: '120px 0',
-                background: '#000',
-                borderTop: '1px solid #1a1a1a',
-            }}
+            className="py-24 md:py-32 bg-black border-t border-white/10"
         >
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 <div className="section-label">Applications</div>
 
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: '80px',
-                        alignItems: 'end',
-                        marginBottom: '80px',
-                    }}
-                >
-                    <h2
-                        style={{
-                            fontSize: 'clamp(2rem, 4vw, 4rem)',
-                            fontWeight: 800,
-                            lineHeight: 1.05,
-                            letterSpacing: '-0.02em',
-                            textTransform: 'uppercase',
-                            color: '#fff',
-                            margin: 0,
-                        }}
-                    >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-end mb-20">
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tighter uppercase text-white m-0">
                         One platform.<br />
                         Every industry.
                     </h2>
-                    <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+                    <p className="text-[#666] text-base md:text-lg leading-relaxed font-light m-0">
                         A single, physics-based radar intelligence engine — adapted to the data requirements and operational tempo of each sector.
                     </p>
                 </div>
 
                 {/* Table-style grid */}
-                <div style={{ borderTop: '1px solid #1a1a1a' }}>
+                <div className="border-t border-white/10">
                     {SECTORS.map((s, i) => (
                         <motion.div
                             key={i}
@@ -79,72 +57,29 @@ export default function Features() {
                             whileInView={{ opacity: 1 }}
                             transition={{ delay: i * 0.08, duration: 0.5 }}
                             viewport={{ once: true }}
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: '100px 1fr 1fr',
-                                gap: '40px',
-                                padding: '48px 0',
-                                borderBottom: '1px solid #1a1a1a',
-                                alignItems: 'start',
-                                cursor: 'default',
-                                transition: 'background 0.2s ease',
-                            }}
-                            onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.background = '#080808')}
-                            onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.background = 'transparent')}
+                            className="flex flex-col md:grid md:grid-cols-[100px_1fr_1fr] gap-8 md:gap-12 lg:gap-20 py-12 md:py-16 border-b border-white/10 hover:bg-white/[0.02] transition-colors duration-300"
                         >
                             {/* ID */}
-                            <div
-                                style={{
-                                    fontFamily: 'var(--font-space-mono)',
-                                    fontSize: '11px',
-                                    letterSpacing: '0.15em',
-                                    color: '#cc0000',
-                                    paddingTop: '4px',
-                                }}
-                            >
+                            <div className="font-mono text-[11px] tracking-widest uppercase text-[#cc0000] shrink-0 m-0">
                                 [{s.id}]
                             </div>
 
                             {/* Title + desc */}
                             <div>
-                                <h3
-                                    style={{
-                                        fontSize: '20px',
-                                        fontWeight: 700,
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '-0.01em',
-                                        color: '#fff',
-                                        margin: '0 0 12px 0',
-                                    }}
-                                >
+                                <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-white mb-4 m-0">
                                     {s.title}
                                 </h3>
-                                <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+                                <p className="text-[#666] text-sm md:text-base leading-relaxed font-light m-0">
                                     {s.desc}
                                 </p>
                             </div>
 
                             {/* Metrics */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingTop: '4px' }}>
+                            <div className="flex flex-col gap-3 py-2">
                                 {s.metrics.map((m, mi) => (
-                                    <div
-                                        key={mi}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '10px',
-                                        }}
-                                    >
-                                        <span style={{ width: '3px', height: '3px', background: '#444', flexShrink: 0, display: 'inline-block' }} />
-                                        <span
-                                            style={{
-                                                fontFamily: 'var(--font-space-mono)',
-                                                fontSize: '11px',
-                                                letterSpacing: '0.08em',
-                                                color: '#555',
-                                                textTransform: 'uppercase',
-                                            }}
-                                        >
+                                    <div key={mi} className="flex items-center gap-3">
+                                        <div className="w-1 h-1 bg-[#444] rounded-full shrink-0" />
+                                        <span className="font-mono text-[10px] md:text-[11px] tracking-wider uppercase text-[#555]">
                                             {m}
                                         </span>
                                     </div>

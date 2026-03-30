@@ -6,43 +6,22 @@ export default function Waitlist() {
     return (
         <section
             id="waitlist"
-            style={{
-                padding: '120px 0',
-                background: '#060606',
-                borderTop: '1px solid #1a1a1a',
-            }}
+            className="py-24 md:py-32 bg-[#060606] border-t border-white/10"
         >
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: '80px',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div>
-                        <div className="section-label" style={{ marginBottom: '32px' }}>Early Access — Q2 2026</div>
-                        <h2
-                            style={{
-                                fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-                                fontWeight: 800,
-                                lineHeight: 1.0,
-                                letterSpacing: '-0.03em',
-                                textTransform: 'uppercase',
-                                color: '#fff',
-                                margin: '0 0 24px 0',
-                            }}
-                        >
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-center">
+                    <div className="flex flex-col">
+                        <div className="section-label mb-8">Early Access — Q2 2026</div>
+                        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black leading-none tracking-tighter uppercase text-white mb-6">
                             Get early<br />
-                            <span style={{ color: '#cc0000' }}>access.</span>
+                            <span className="text-[#cc0000]">access.</span>
                         </h2>
-                        <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300, maxWidth: '400px' }}>
+                        <p className="text-[#666] text-base md:text-lg leading-relaxed font-light m-0 max-w-[480px]">
                             Limited spots for the pilot program. Priority access for agriculture, infrastructure, and defense operators.
                         </p>
                     </div>
 
-                    <div>
+                    <div className="w-full">
                         <WaitlistForm />
                     </div>
                 </div>

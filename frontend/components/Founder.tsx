@@ -50,51 +50,22 @@ export default function Founder() {
     return (
         <section
             id="company"
-            style={{
-                padding: '120px 0',
-                background: '#000',
-                borderTop: '1px solid #1a1a1a',
-            }}
+            className="py-24 md:py-32 bg-black border-t border-white/10"
         >
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 <div className="section-label">Organization</div>
 
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: '80px',
-                        alignItems: 'end',
-                        marginBottom: '80px',
-                    }}
-                >
-                    <h2
-                        style={{
-                            fontSize: 'clamp(2rem, 4vw, 4rem)',
-                            fontWeight: 800,
-                            lineHeight: 1.05,
-                            letterSpacing: '-0.02em',
-                            textTransform: 'uppercase',
-                            color: '#fff',
-                            margin: 0,
-                        }}
-                    >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-end mb-20">
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tighter uppercase text-white m-0">
                         Built by<br />
                         scientists.
                     </h2>
-                    <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+                    <p className="text-[#666] text-base md:text-lg leading-relaxed font-light m-0">
                         We bridge the gap between academic radar physics and real-world operational intelligence. From core physics to enterprise-scale deployment.
                     </p>
                 </div>
 
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
-                        borderTop: '1px solid #1a1a1a',
-                        borderLeft: '1px solid #1a1a1a',
-                    }}
-                >
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-white/10">
                     {TEAM.map((member, i) => (
                         <motion.div
                             key={i}
@@ -102,128 +73,44 @@ export default function Founder() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1, duration: 0.6 }}
                             viewport={{ once: true }}
-                            style={{
-                                borderRight: '1px solid #1a1a1a',
-                                borderBottom: '1px solid #1a1a1a',
-                                overflow: 'hidden',
-                                gridColumn: member.isLead ? 'span 1' : 'auto',
-                                opacity: member.type === 'incoming' ? 0.8 : 1,
-                            }}
+                            className={`border-r border-b border-white/10 overflow-hidden ${
+                                member.type === 'incoming' ? 'opacity-80' : 'opacity-100'
+                            }`}
                         >
                             {/* Visual Header */}
-                            <div
-                                style={{
-                                    position: 'relative',
-                                    aspectRatio: member.isCollab ? '16/7' : '4/3',
-                                    overflow: 'hidden',
-                                    background: '#0a0a0a',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                            >
+                            <div className={`relative ${member.isCollab ? 'aspect-[16/7]' : 'aspect-square'} overflow-hidden bg-[#0a0a0a] flex items-center justify-center`}>
                                 {member.image ? (
                                     <img
                                         src={member.image}
                                         alt={member.name}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover',
-                                            objectPosition: 'top',
-                                            filter: member.type === 'incoming' ? 'grayscale(100%) contrast(1.1) brightness(0.7)' : 'grayscale(100%) contrast(1.1)',
-                                            display: 'block',
-                                            transition: 'filter 0.4s ease',
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            if (member.type !== 'incoming') {
-                                                (e.currentTarget as HTMLImageElement).style.filter = 'grayscale(0%) contrast(1)';
-                                            }
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            if (member.type !== 'incoming') {
-                                                (e.currentTarget as HTMLImageElement).style.filter = 'grayscale(100%) contrast(1.1)';
-                                            }
-                                        }}
+                                        className={`w-full h-full object-cover object-top grayscale contrast-[1.1] hover:grayscale-0 transition-all duration-500 ${
+                                            member.type === 'incoming' ? 'brightness-50' : ''
+                                        }`}
                                     />
                                 ) : (
-                                    <div style={{ fontSize: '48px', opacity: 0.2 }}>{member.icon || '👤'}</div>
+                                    <div className="text-5xl opacity-20">{member.icon || '👤'}</div>
                                 )}
                                 
-                                {/* ID overlay */}
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 16,
-                                        left: 16,
-                                        fontFamily: 'var(--font-space-mono)',
-                                        fontSize: '10px',
-                                        letterSpacing: '0.15em',
-                                        textTransform: 'uppercase',
-                                        color: member.isCollab ? '#444' : '#888',
-                                        background: 'rgba(0,0,0,0.8)',
-                                        padding: '4px 10px',
-                                    }}
-                                >
+                                <div className="absolute top-4 left-4 font-mono text-[10px] tracking-widest uppercase text-[#888] bg-black/80 px-3 py-1 backdrop-blur-sm">
                                     {member.id}
                                 </div>
 
                                 {member.type === 'incoming' && (
-                                    <div
-                                        style={{
-                                            position: 'absolute',
-                                            bottom: 16,
-                                            right: 16,
-                                            fontFamily: 'var(--font-space-mono)',
-                                            fontSize: '10px',
-                                            letterSpacing: '0.15em',
-                                            textTransform: 'uppercase',
-                                            color: '#cc0000',
-                                            border: '1px solid #cc0000',
-                                            padding: '4px 10px',
-                                            background: 'rgba(0,0,0,0.9)',
-                                        }}
-                                    >
+                                    <div className="absolute bottom-4 right-4 font-mono text-[10px] tracking-widest uppercase text-[#cc0000] border border-[#cc0000] px-3 py-1 bg-black/90">
                                         Incoming
                                     </div>
                                 )}
                             </div>
 
                             {/* Info */}
-                            <div style={{ padding: '40px' }}>
-                                <div
-                                    style={{
-                                        fontFamily: 'var(--font-space-mono)',
-                                        fontSize: '11px',
-                                        letterSpacing: '0.15em',
-                                        color: member.isCollab ? '#444' : '#cc0000',
-                                        marginBottom: '4px',
-                                        textTransform: 'uppercase'
-                                    }}
-                                >
+                            <div className="p-8 lg:p-10">
+                                <div className="font-mono text-[11px] tracking-widest uppercase text-[#cc0000] mb-2">
                                     / {member.role}
                                 </div>
-                                <h3
-                                    style={{
-                                        fontSize: '22px',
-                                        fontWeight: 700,
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '-0.01em',
-                                        color: member.isCollab ? '#888' : '#fff',
-                                        margin: '0 0 20px 0',
-                                    }}
-                                >
+                                <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-white mb-5">
                                     {member.name}
                                 </h3>
-                                <p
-                                    style={{
-                                        color: '#666',
-                                        fontSize: '13px',
-                                        lineHeight: 1.9,
-                                        margin: '0 0 24px 0',
-                                        fontWeight: 300,
-                                    }}
-                                >
+                                <p className="text-[#666] text-sm md:text-base leading-relaxed font-light mb-8">
                                     {member.bio}
                                 </p>
                                 {member.linkedin && (
@@ -231,26 +118,7 @@ export default function Founder() {
                                         href={member.linkedin}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{
-                                            fontFamily: 'var(--font-space-mono)',
-                                            fontSize: '10px',
-                                            letterSpacing: '0.12em',
-                                            textTransform: 'uppercase',
-                                            color: '#555',
-                                            textDecoration: 'none',
-                                            border: '1px solid #222',
-                                            padding: '6px 14px',
-                                            display: 'inline-block',
-                                            transition: 'all 0.15s ease',
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            (e.currentTarget as HTMLAnchorElement).style.color = '#fff';
-                                            (e.currentTarget as HTMLAnchorElement).style.borderColor = '#fff';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            (e.currentTarget as HTMLAnchorElement).style.color = '#555';
-                                            (e.currentTarget as HTMLAnchorElement).style.borderColor = '#222';
-                                        }}
+                                        className="inline-block font-mono text-[10px] tracking-widest uppercase text-[#555] border border-white/10 px-5 py-2.5 hover:text-white hover:border-white transition-all"
                                     >
                                         LinkedIn ↗
                                     </a>

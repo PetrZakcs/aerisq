@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,96 +31,38 @@ export default function FAQ() {
 
     return (
         <section
-            style={{
-                padding: '120px 0',
-                background: '#060606',
-                borderTop: '1px solid #1a1a1a',
-            }}
+            className="py-24 md:py-32 bg-[#060606] border-t border-white/10"
         >
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 <div className="section-label">FAQ</div>
 
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 2fr',
-                        gap: '80px',
-                        alignItems: 'start',
-                    }}
-                >
-                    <h2
-                        style={{
-                            fontSize: 'clamp(2rem, 3vw, 3.5rem)',
-                            fontWeight: 800,
-                            lineHeight: 1.05,
-                            letterSpacing: '-0.02em',
-                            textTransform: 'uppercase',
-                            color: '#fff',
-                            margin: 0,
-                            position: 'sticky',
-                            top: '120px',
-                        }}
-                    >
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-12 md:gap-20 items-start">
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none tracking-tighter uppercase text-white m-0 md:sticky md:top-32">
                         Questions<br />
                         &amp; answers.
                     </h2>
 
-                    <div style={{ borderTop: '1px solid #1a1a1a' }}>
+                    <div className="border-t border-white/10">
                         {FAQS.map((faq, i) => (
                             <div
                                 key={i}
-                                style={{
-                                    borderBottom: '1px solid #1a1a1a',
-                                    cursor: 'pointer',
-                                }}
+                                className="border-b border-white/10 cursor-pointer"
                                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                             >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        gap: '20px',
-                                        padding: '28px 0',
-                                    }}
-                                >
-                                    <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-                                        <span
-                                            style={{
-                                                fontFamily: 'var(--font-space-mono)',
-                                                fontSize: '10px',
-                                                color: '#cc0000',
-                                                letterSpacing: '0.1em',
-                                                paddingTop: '4px',
-                                                flexShrink: 0,
-                                            }}
-                                        >
+                                <div className="flex justify-between items-start gap-5 py-8">
+                                    <div className="flex gap-5 md:gap-8 items-start">
+                                        <span className="font-mono text-[10px] text-[#cc0000] tracking-widest pt-1.5 shrink-0">
                                             {String(i + 1).padStart(2, '0')}
                                         </span>
-                                        <h3
-                                            style={{
-                                                fontSize: '16px',
-                                                fontWeight: 600,
-                                                color: openIndex === i ? '#fff' : '#ccc',
-                                                margin: 0,
-                                                lineHeight: 1.4,
-                                                transition: 'color 0.15s ease',
-                                            }}
-                                        >
+                                        <h3 className={`text-base md:text-lg lg:text-xl font-bold transition-colors duration-200 ${
+                                            openIndex === i ? 'text-white' : 'text-[#888]'
+                                        }`}>
                                             {faq.q}
                                         </h3>
                                     </div>
-                                    <span
-                                        style={{
-                                            fontFamily: 'var(--font-space-mono)',
-                                            fontSize: '18px',
-                                            flexShrink: 0,
-                                            transition: 'transform 0.3s ease, color 0.15s ease',
-                                            transform: openIndex === i ? 'rotate(45deg)' : 'rotate(0deg)',
-                                            color: openIndex === i ? '#cc0000' : '#444',
-                                            display: 'inline-block',
-                                        }}
-                                    >
+                                    <span className={`font-mono text-xl md:text-2xl shrink-0 transition-all duration-300 ${
+                                        openIndex === i ? 'rotate-45 text-[#cc0000]' : 'text-[#333]'
+                                    }`}>
                                         +
                                     </span>
                                 </div>
@@ -131,18 +73,10 @@ export default function FAQ() {
                                             initial={{ height: 0, opacity: 0 }}
                                             animate={{ height: 'auto', opacity: 1 }}
                                             exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                            style={{ overflow: 'hidden' }}
+                                            transition={{ duration: 0.3 }}
+                                            className="overflow-hidden"
                                         >
-                                            <p
-                                                style={{
-                                                    color: '#666',
-                                                    fontSize: '14px',
-                                                    lineHeight: 1.9,
-                                                    margin: '0 0 28px 42px',
-                                                    fontWeight: 300,
-                                                }}
-                                            >
+                                            <p className="text-[#666] text-sm md:text-base leading-relaxed font-light mb-8 ml-10 md:ml-20 max-w-[600px]">
                                                 {faq.a}
                                             </p>
                                         </motion.div>

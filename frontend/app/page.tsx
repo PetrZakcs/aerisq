@@ -1,409 +1,165 @@
 'use client';
 
-import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import Benefits from '../components/Benefits';
-import ProcessSteps from '../components/ProcessSteps';
-import TruthSlider from '../components/TruthSlider';
-import MissionReports from '../components/MissionReports';
-import Pricing from '../components/Pricing';
-import FAQ from '../components/FAQ';
-import Waitlist from '../components/Waitlist';
-import FeatureSection from '../components/Features';
-import { motion } from 'framer-motion';
-import Founder from '../components/Founder';
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import Features from "@/components/Features";
+import MissionReports from "@/components/MissionReports";
+import ProcessSteps from "@/components/ProcessSteps";
+import Benefits from "@/components/Benefits";
+import Pricing from "@/components/Pricing";
+import Waitlist from "@/components/Waitlist";
+import FAQ from "@/components/FAQ";
+import Founder from "@/components/Founder";
+import TruthSlider from "@/components/TruthSlider";
+import { Mail, Linkedin, Instagram } from 'lucide-react';
 
 export default function Home() {
-  return (
-    <main style={{ background: '#000', minHeight: '100vh' }}>
-      <Navbar />
+  const INSTAGRAM_URL = "https://www.instagram.com/phasq1/";
+  const LINKEDIN_URL = "https://www.linkedin.com/company/phasq1";
+  const CALENDLY_URL = "https://calendly.com/petr-phasq/30min";
 
-      {/* HERO */}
+  return (
+    <main className="bg-black text-white selection:bg-[#cc0000]/30 overflow-x-hidden">
+      <Navbar />
       <Hero />
 
-      {/* LIVE DEMOS */}
-      <section
-        id="demos"
-        style={{
-          padding: '120px 0',
-          background: '#060606',
-          borderTop: '1px solid #1a1a1a',
-        }}
-      >
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+      {/* Comparison Section */}
+      <section id="demo" className="py-24 md:py-32 bg-black border-t border-white/10 overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 mb-20">
           <div className="section-label">Live demonstration</div>
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              marginBottom: '80px',
-              gap: '40px',
-              flexWrap: 'wrap',
-            }}
-          >
-            <h2
-              style={{
-                fontSize: 'clamp(2rem, 4vw, 4rem)',
-                fontWeight: 800,
-                lineHeight: 1.05,
-                letterSpacing: '-0.02em',
-                textTransform: 'uppercase',
-                color: '#fff',
-                margin: 0,
-              }}
-            >
-              See it in action.
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-10">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none tracking-tighter uppercase text-white m-0">
+              The shift from<br />
+              optical to <span className="text-[#cc0000]">radar.</span>
             </h2>
-            <p
-              style={{
-                fontFamily: 'var(--font-space-mono)',
-                fontSize: '11px',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: '#444',
-                margin: 0,
-                lineHeight: 1.8,
-              }}
-            >
-              No login required.<br />Public access.
+            <p className="text-[#666] text-base md:text-lg leading-relaxed font-light m-0 max-w-[400px]">
+              Drag the slider to compare standard optical imagery with PhasQ's phase-intelligent radar analysis.
             </p>
           </div>
+        </div>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '0',
-              border: '1px solid #1a1a1a',
-            }}
-          >
-            {/* Agriculture Intelligence - Locked Q2 */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              style={{
-                position: 'relative',
-                aspectRatio: '16/9',
-                overflow: 'hidden',
-                borderRight: '1px solid #1a1a1a',
-                opacity: 0.6,
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  backgroundImage: "url('/vysocina_radar.png')",
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  filter: 'grayscale(100%) contrast(1.1)',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 100%)',
-                }}
-              />
-              <div style={{ position: 'absolute', inset: 0, padding: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-space-mono)',
-                      fontSize: '10px',
-                      letterSpacing: '0.15em',
-                      textTransform: 'uppercase',
-                      color: '#444',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                    }}
-                  >
-                    — Restricted Area
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-space-mono)',
-                      fontSize: '10px',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: '#333',
-                      background: 'rgba(0,0,0,0.6)',
-                      padding: '3px 10px',
-                    }}
-                  >
-                    DEMO-001
-                  </span>
-                </div>
-                <div>
-                  <h3
-                    style={{
-                      fontSize: '26px',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: '-0.01em',
-                      color: '#fff',
-                      margin: '0 0 8px 0',
-                    }}
-                  >
-                    Agriculture Intelligence
-                  </h3>
-                  <p
-                    style={{
-                      color: '#555',
-                      fontSize: '13px',
-                      margin: '0 0 20px 0',
-                      fontWeight: 300,
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Coming soon: Crop health, soil moisture, and harvest readiness via Sentinel-1 SAR.
-                  </p>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-space-mono)',
-                      fontSize: '11px',
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      color: '#cc0000',
-                      border: '1px solid rgba(204,0,0,0.2)',
-                      padding: '10px 20px',
-                      display: 'inline-flex',
-                    }}
-                  >
-                    Opening Q2 2026
-                  </span>
-                </div>
-              </div>
-            </motion.div>
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-[400px] md:h-[600px] lg:h-[700px]">
+          <TruthSlider 
+            beforeImage="/vysocina_optical.png" 
+            afterImage="/vysocina_radar.png"
+            beforeLabel="Optical (Sentinel-2)"
+            afterLabel="PhasQ Radar (Sentinel-1)"
+          />
+        </div>
+      </section>
 
-            {/* Coming Soon */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-              style={{
-                position: 'relative',
-                aspectRatio: '16/9',
-                overflow: 'hidden',
-                opacity: 0.4,
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  backgroundImage: "url('/vysocina_optical.png')",
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  filter: 'grayscale(100%) contrast(0.8)',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 100%)',
-                }}
-              />
-              <div style={{ position: 'absolute', inset: 0, padding: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-space-mono)',
-                    fontSize: '10px',
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    color: '#555',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                  }}
-                >
-                  — Restricted
+      <Features />
+      <MissionReports />
+      <Benefits />
+      <ProcessSteps />
+
+      {/* Agriculture Restricted Area */}
+      <section className="py-24 md:py-32 bg-[#060606] border-t border-white/10">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+          <div className="flex flex-col gap-6 items-start mb-16">
+            <div className="section-label">Early access — Q2 2026</div>
+            <div className="flex items-center gap-2 font-mono text-[11px] tracking-widest text-[#cc0000] uppercase">
+                🔴 Restricted Area
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
+            <div className="flex flex-col">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none tracking-tighter uppercase text-white mb-6">
+                Agriculture<br />
+                Intelligence.
+              </h2>
+              <p className="text-[#666] text-base md:text-lg leading-relaxed font-light mb-10 max-w-[480px]">
+                Coming soon: Crop health, soil moisture, and harvest readiness via Sentinel-1 SAR. 
+                Full orbital throughput for precision farming.
+              </p>
+              <div>
+                <span className="inline-block font-mono text-[11px] tracking-widest uppercase text-white border border-white/10 px-8 py-3 bg-white/5 backdrop-blur-sm">
+                  Opening Q2 2026
                 </span>
-                <div>
-                  <h3
-                    style={{
-                      fontSize: '26px',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: '-0.01em',
-                      color: '#fff',
-                      margin: '0 0 8px 0',
-                    }}
-                  >
-                    Finance &amp; Defense
-                  </h3>
-                  <p style={{ color: '#555', fontSize: '13px', margin: '0 0 20px 0', fontWeight: 300 }}>
-                    In development — contact for early access.
-                  </p>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-space-mono)',
-                      fontSize: '11px',
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      color: '#444',
-                      border: '1px solid #333',
-                      padding: '10px 20px',
-                      display: 'inline-flex',
-                    }}
-                  >
-                    Coming Q3 2026
-                  </span>
-                </div>
               </div>
-            </motion.div>
+            </div>
+
+            <div className="relative aspect-video rounded-xl border border-white/10 overflow-hidden bg-black flex items-center justify-center group">
+              <img 
+                src="/agri_restricted.png" 
+                alt="Agri Intel" 
+                className="w-full h-full object-cover grayscale opacity-20 group-hover:opacity-30 transition-opacity"
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-black/40 backdrop-blur-md">
+                <div className="w-12 h-12 rounded-full border border-[#cc0000]/30 flex items-center justify-center mb-4">
+                    <span className="text-[#cc0000] text-xl">🔒</span>
+                </div>
+                <h3 className="text-lg font-bold uppercase tracking-widest text-[#cc0000] mb-2">Access Required</h3>
+                <p className="text-[10px] font-mono text-[#555] uppercase tracking-widest">
+                  Authentication protocol v2.1 // Q2 Release
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* BENEFITS */}
-      <div id="technology">
-        <Benefits />
-      </div>
-
-      {/* PROCESS */}
-      <ProcessSteps />
-
-      {/* TRUTH SLIDER */}
-      <TruthSlider
-        beforeImage="/vysocina_optical.png"
-        afterImage="/vysocina_radar.png"
-        beforeLabel="Optical (Sentinel-2)"
-        afterLabel="PhasQ SAR (Sentinel-1)"
-      />
-
-      {/* FEATURES */}
-      <FeatureSection />
-
-      {/* CASE STUDIES */}
-      <div id="usecases">
-        <MissionReports />
-      </div>
-
-      {/* PRICING */}
-      <Pricing />
-
-      {/* FOUNDERS / TEAM */}
       <Founder />
-
-      {/* FAQ */}
-      <div id="about">
-        <FAQ />
-      </div>
-
-      {/* WAITLIST */}
+      <Pricing />
+      <FAQ />
       <Waitlist />
 
-      {/* FOOTER */}
-      <footer
-        style={{
-          padding: '40px',
-          borderTop: '1px solid #1a1a1a',
-          background: '#000',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1400px',
-            margin: '0 auto',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '20px',
-          }}
-        >
-          <span
-            style={{
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '10px',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: '#444',
-            }}
-          >
-            © {new Date().getFullYear()} PhasQ — SAR Intelligence
-          </span>
+      {/* Footer */}
+      <footer className="py-20 md:py-24 bg-black border-t border-white/10">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-10 mb-20">
+            {/* Branding */}
+            <div className="flex flex-col col-span-2">
+              <div className="text-2xl font-black tracking-tighter uppercase mb-6">
+                PHASQ<span className="text-[#cc0000]">.tech</span>
+              </div>
+              <p className="text-[#666] text-sm md:text-base leading-relaxed font-light max-w-[320px] mb-8">
+                Physics-based radar intelligence. Shifting the perspective from optical to radar surveillance.
+              </p>
+              <div className="flex gap-6">
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition-colors">
+                    <Instagram className="w-5 h-5" />
+                </a>
+                <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition-colors">
+                    <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
 
-          <div style={{ display: 'flex', gap: '32px' }}>
-            {['Legal', 'Privacy', 'Data Rights'].map((item) => (
-              <a
-                key={item}
-                href="#"
-                style={{
-                  fontFamily: 'var(--font-space-mono)',
-                  fontSize: '10px',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: '#444',
-                  textDecoration: 'none',
-                  transition: 'color 0.15s ease',
-                }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = '#fff')}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = '#444')}
-              >
-                {item}
+            {/* Links */}
+            <div className="flex flex-col gap-5">
+              <h4 className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-2">Comms</h4>
+              <a href="mailto:petr@phasq.com" className="group flex items-center gap-3 text-[#666] hover:text-white transition-colors text-sm">
+                <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center group-hover:border-[#cc0000] group-hover:bg-[#cc0000]/5 transition-all">
+                    <Mail className="w-3.5 h-3.5" />
+                </div>
+                petr@phasq.com
               </a>
-            ))}
+              <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 text-[#666] hover:text-white transition-colors text-sm">
+                <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center group-hover:border-[#cc0000] group-hover:bg-[#cc0000]/5 transition-all font-mono text-[10px] font-bold">
+                    CAL
+                </div>
+                Book a demo
+              </a>
+            </div>
+
+            {/* Legal / System */}
+            <div className="flex flex-col gap-4">
+              <h4 className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-2">System</h4>
+              <span className="text-[#333] text-[10px] font-mono tracking-[0.2em] whitespace-nowrap">v1.2.5 — OPERATIONAL</span>
+              <span className="text-[#333] text-[10px] font-mono tracking-[0.2em] whitespace-nowrap">© 2026 PHASQ INTELLIGENCE</span>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '20px' }}>
-            {[
-              { href: 'https://linkedin.com/company/phasq1', label: 'LI' },
-              { href: '#', label: 'X' },
-              { href: 'mailto:petr@phasq.com', label: '✉' },
-            ].map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                style={{
-                  fontFamily: 'var(--font-space-mono)',
-                  fontSize: '11px',
-                  letterSpacing: '0.1em',
-                  color: '#444',
-                  textDecoration: 'none',
-                  border: '1px solid #1a1a1a',
-                  width: '32px',
-                  height: '32px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.15s ease',
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLAnchorElement;
-                  el.style.borderColor = '#fff';
-                  el.style.color = '#fff';
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLAnchorElement;
-                  el.style.borderColor = '#1a1a1a';
-                  el.style.color = '#444';
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
+          <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="text-[10px] font-mono text-[#222] tracking-[0.4em] uppercase">
+                SENTINEL-1 // SENTINEL-2 // GEE // PHASE-02
+            </div>
+            <div className="flex gap-4">
+                <div className="w-12 h-[1px] bg-white/5" />
+            </div>
           </div>
-
-          <span
-            style={{
-              fontFamily: 'var(--font-space-mono)',
-              fontSize: '10px',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: '#333',
-            }}
-          >
-            Sentinel-1 data: ESA/Copernicus
-          </span>
         </div>
       </footer>
     </main>

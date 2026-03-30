@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 
+const CALENDLY_URL = "https://calendly.com/petr-phasq/30min";
+
 const TIERS = [
     {
         id: 'AGR',
@@ -34,8 +36,8 @@ const TIERS = [
             'On-premise deployment',
             'Dedicated analyst support',
         ],
-        cta: 'Contact Us ↗',
-        ctaLink: '#waitlist',
+        cta: 'Book a demo ↗',
+        ctaLink: CALENDLY_URL,
         highlight: false,
     },
     {
@@ -51,8 +53,8 @@ const TIERS = [
             'Landslide early warning',
             'Raw phase data access',
         ],
-        cta: 'Request Demo ↗',
-        ctaLink: 'https://calendly.com/petrrmarketing/phasq',
+        cta: 'Book a demo ↗',
+        ctaLink: CALENDLY_URL,
         highlight: false,
     },
 ];
@@ -61,54 +63,23 @@ export default function Pricing() {
     return (
         <section
             id="pricing"
-            style={{
-                padding: '120px 0',
-                background: '#000',
-                borderTop: '1px solid #1a1a1a',
-            }}
+            className="py-24 md:py-32 bg-black border-t border-white/10"
         >
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 <div className="section-label">Pricing</div>
 
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'flex-end',
-                        marginBottom: '80px',
-                        gap: '40px',
-                        flexWrap: 'wrap',
-                    }}
-                >
-                    <h2
-                        style={{
-                            fontSize: 'clamp(2rem, 4vw, 4rem)',
-                            fontWeight: 800,
-                            lineHeight: 1.05,
-                            letterSpacing: '-0.02em',
-                            textTransform: 'uppercase',
-                            color: '#fff',
-                            margin: 0,
-                        }}
-                    >
+                <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-10 mb-20">
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tighter uppercase text-white m-0">
                         Transparent<br />
                         pricing.
                     </h2>
-                    <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, maxWidth: '400px', fontWeight: 300 }}>
+                    <p className="text-[#666] text-base md:text-lg leading-relaxed font-light m-0 max-w-[400px]">
                         Scalable intelligence from single fields to national-scale monitoring.
                         One platform, any operational scope.
                     </p>
                 </div>
 
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        borderTop: '1px solid #1a1a1a',
-                        borderLeft: '1px solid #1a1a1a',
-                    }}
-                    className="grid-cols-1 md:grid-cols-3"
-                >
+                <div className="grid grid-cols-1 md:grid-cols-3 border-t border-white/10 overflow-hidden">
                     {TIERS.map((tier, i) => (
                         <motion.div
                             key={i}
@@ -116,123 +87,46 @@ export default function Pricing() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
                             viewport={{ once: true }}
-                            style={{
-                                padding: '48px 40px',
-                                borderRight: '1px solid #1a1a1a',
-                                borderBottom: '1px solid #1a1a1a',
-                                background: tier.highlight ? '#0a0a0a' : 'transparent',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                position: 'relative',
-                            }}
+                            className={`p-8 md:p-12 relative flex flex-col border-b md:border-b-0 md:border-r border-white/10 last:border-b-0 last:border-r-0 ${
+                                tier.highlight ? 'bg-[#0a0a0a]' : 'bg-transparent'
+                            }`}
                         >
                             {tier.highlight && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        height: '2px',
-                                        background: '#cc0000',
-                                    }}
-                                />
+                                <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#cc0000]" />
                             )}
 
                             {/* Tier ID */}
-                            <div
-                                style={{
-                                    fontFamily: 'var(--font-space-mono)',
-                                    fontSize: '10px',
-                                    letterSpacing: '0.2em',
-                                    textTransform: 'uppercase',
-                                    color: '#cc0000',
-                                    marginBottom: '20px',
-                                }}
-                            >
+                            <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#cc0000] mb-6">
                                 [{tier.id}]
                             </div>
 
-                            <div
-                                style={{
-                                    fontFamily: 'var(--font-space-mono)',
-                                    fontSize: '11px',
-                                    letterSpacing: '0.15em',
-                                    textTransform: 'uppercase',
-                                    color: '#666',
-                                    marginBottom: '12px',
-                                }}
-                            >
+                            <div className="font-mono text-[11px] tracking-widest uppercase text-[#666] mb-4">
                                 {tier.name}
                             </div>
 
-                            <div style={{ marginBottom: '8px' }}>
-                                <span
-                                    style={{
-                                        fontFamily: 'var(--font-space-mono)',
-                                        fontSize: tier.price === 'Custom' ? '28px' : '42px',
-                                        fontWeight: 700,
-                                        color: '#fff',
-                                        letterSpacing: '-0.02em',
-                                    }}
-                                >
+                            <div className="mb-4">
+                                <span className={`font-mono text-white tracking-tight ${tier.price === 'Custom' ? 'text-3xl' : 'text-5xl font-bold'}`}>
                                     {tier.price}
                                 </span>
                                 {tier.period && (
-                                    <span
-                                        style={{
-                                            fontFamily: 'var(--font-space-mono)',
-                                            fontSize: '11px',
-                                            color: '#555',
-                                            marginLeft: '8px',
-                                            letterSpacing: '0.05em',
-                                        }}
-                                    >
+                                    <span className="font-mono text-[11px] text-[#555] ml-2 tracking-widest">
                                         {tier.period}
                                     </span>
                                 )}
                             </div>
 
-                            <p style={{ color: '#555', fontSize: '13px', lineHeight: 1.7, margin: '0 0 32px 0', fontWeight: 300 }}>
+                            <p className="text-[#555] text-sm leading-relaxed font-light mb-10">
                                 {tier.desc}
                             </p>
 
-                            <div
-                                style={{
-                                    width: '100%',
-                                    height: '1px',
-                                    background: '#1a1a1a',
-                                    marginBottom: '28px',
-                                }}
-                            />
+                            <div className="w-full h-px bg-white/5 mb-8" />
 
-                            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 40px 0', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <ul className="list-none p-0 m-0 mb-12 flex-1 space-y-4">
                                 {tier.features.map((f, fi) => (
-                                    <li
-                                        key={fi}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'flex-start',
-                                            gap: '12px',
-                                            fontSize: '13px',
-                                            color: '#888',
-                                            fontWeight: 300,
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                width: '14px',
-                                                height: '14px',
-                                                background: tier.highlight ? '#cc0000' : '#1a1a1a',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                flexShrink: 0,
-                                                marginTop: '2px',
-                                            }}
-                                        >
-                                            <Check style={{ width: '8px', height: '8px', color: tier.highlight ? '#000' : '#666' }} />
-                                        </span>
+                                    <li key={fi} className="flex items-start gap-4 text-sm text-[#888] font-light">
+                                        <div className={`w-3.5 h-3.5 flex items-center justify-center shrink-0 mt-0.5 ${tier.highlight ? 'bg-[#cc0000]' : 'bg-white/10'}`}>
+                                            <Check className={`w-2 h-2 ${tier.highlight ? 'text-black' : 'text-[#666]'}`} />
+                                        </div>
                                         {f}
                                     </li>
                                 ))}
@@ -240,41 +134,12 @@ export default function Pricing() {
 
                             <a
                                 href={tier.ctaLink}
-                                style={{
-                                    display: 'block',
-                                    padding: '14px 24px',
-                                    textAlign: 'center',
-                                    fontFamily: 'var(--font-space-mono)',
-                                    fontSize: '11px',
-                                    letterSpacing: '0.12em',
-                                    textTransform: 'uppercase',
-                                    fontWeight: 700,
-                                    textDecoration: 'none',
-                                    background: tier.highlight ? '#fff' : 'transparent',
-                                    color: tier.highlight ? '#000' : '#888',
-                                    border: tier.highlight ? 'none' : '1px solid #2a2a2a',
-                                    transition: 'all 0.15s ease',
-                                }}
-                                onMouseEnter={(e) => {
-                                    const el = e.currentTarget as HTMLAnchorElement;
-                                    if (tier.highlight) {
-                                        el.style.background = '#cc0000';
-                                        el.style.color = '#fff';
-                                    } else {
-                                        el.style.borderColor = '#fff';
-                                        el.style.color = '#fff';
-                                    }
-                                }}
-                                onMouseLeave={(e) => {
-                                    const el = e.currentTarget as HTMLAnchorElement;
-                                    if (tier.highlight) {
-                                        el.style.background = '#fff';
-                                        el.style.color = '#000';
-                                    } else {
-                                        el.style.borderColor = '#2a2a2a';
-                                        el.style.color = '#888';
-                                    }
-                                }}
+                                target={tier.ctaLink.startsWith('http') ? "_blank" : "_self"}
+                                className={`block w-full py-4 text-center font-mono text-[11px] font-bold tracking-widest uppercase transition-all duration-300 border ${
+                                    tier.highlight 
+                                    ? 'bg-white text-black border-transparent hover:bg-[#cc0000] hover:text-white' 
+                                    : 'text-[#888] border-white/10 hover:text-white hover:border-white'
+                                }`}
                             >
                                 {tier.cta}
                             </a>

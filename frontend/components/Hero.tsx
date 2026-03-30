@@ -9,89 +9,44 @@ export default function Hero() {
 
     return (
         <section
-            style={{
-                position: 'relative',
-                minHeight: '100vh',
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-end',
-                padding: '120px 0 80px 0',
-                background: '#000',
-                overflow: 'hidden',
-            }}
+            className="relative min-h-[100svh] w-full flex flex-col justify-end bg-black overflow-hidden py-24 md:py-32 lg:py-48"
         >
             {/* Full-bleed background image with grain overlay */}
             <div
-                style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'url(/vysocina_radar.png) center / cover no-repeat',
-                    opacity: 0.2,
-                    filter: 'grayscale(100%) contrast(1.4)',
-                }}
+                className="absolute inset-0 bg-[url('/vysocina_radar.png')] bg-center bg-cover bg-no-no-repeat opacity-20 grayscale grayscale-[100] contrast-[1.4]"
             />
 
             {/* Dark gradient overlay */}
             <div
-                style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.95) 100%)',
-                }}
+                className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black/95"
             />
 
             {/* Thin horizontal scan line */}
             <div
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    height: '1px',
-                    top: '40%',
-                    background: 'linear-gradient(90deg, transparent 0%, rgba(204,0,0,0.1) 30%, rgba(204,0,0,0.3) 50%, rgba(204,0,0,0.1) 70%, transparent 100%)',
-                    pointerEvents: 'none',
-                    boxShadow: '0 0 15px rgba(204,0,0,0.15)'
-                }}
+                className="absolute left-0 right-0 h-px top-[40%] bg-gradient-to-r from-transparent via-red-600/30 to-transparent pointer-events-none shadow-[0_0_15px_rgba(204,0,0,0.15)]"
             />
 
-            {/* Corner marks — SpaceX style */}
-            <div style={{ position: 'absolute', top: 80, left: 40, width: 16, height: 16, borderTop: '1px solid #444', borderLeft: '1px solid #444' }} />
-            <div style={{ position: 'absolute', top: 80, right: 40, width: 16, height: 16, borderTop: '1px solid #444', borderRight: '1px solid #444' }} />
-            <div style={{ position: 'absolute', bottom: 80, left: 40, width: 16, height: 16, borderBottom: '1px solid #444', borderLeft: '1px solid #444' }} />
-            <div style={{ position: 'absolute', bottom: 80, right: 40, width: 16, height: 16, borderBottom: '1px solid #444', borderRight: '1px solid #444' }} />
+            {/* Corner marks — SpaceX style (Hidden on mobile) */}
+            <div className="hidden sm:block absolute top-[100px] left-10 w-4 h-4 border-t border-l border-white/20" />
+            <div className="hidden sm:block absolute top-[100px] right-10 w-4 h-4 border-t border-r border-white/20" />
+            <div className="hidden sm:block absolute bottom-10 left-10 w-4 h-4 border-b border-l border-white/20" />
+            <div className="hidden sm:block absolute bottom-10 right-10 w-4 h-4 border-b border-r border-white/20" />
 
-            {/* Content */}
+            {/* Content Container */}
             <div
-                style={{
-                    position: 'relative',
-                    zIndex: 10,
-                    maxWidth: '1400px',
-                    margin: '0 auto',
-                    padding: '0 40px',
-                    width: '100%',
-                }}
+                className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-10 lg:px-20"
             >
                 {/* Top label */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
-                    style={{ marginBottom: '24px' }}
+                    className="mb-6"
                 >
                     <span
-                        style={{
-                            fontFamily: 'var(--font-space-mono)',
-                            fontSize: '10px',
-                            letterSpacing: '0.25em',
-                            textTransform: 'uppercase',
-                            color: '#fff',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px'
-                        }}
+                        className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/80 flex items-center gap-2"
                     >
-                        <span style={{ color: '#cc0000' }}>📡</span> Radar Phase Intelligence
+                        <span className="text-[#cc0000]">📡</span> Radar Phase Intelligence
                     </span>
                 </motion.div>
 
@@ -100,18 +55,10 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.9, delay: 0.15 }}
-                    style={{
-                        fontSize: 'clamp(3.5rem, 9vw, 10rem)',
-                        fontWeight: 900,
-                        lineHeight: 0.9,
-                        letterSpacing: '-0.04em',
-                        textTransform: 'uppercase',
-                        color: '#fff',
-                        margin: '0 0 32px 0',
-                    }}
+                    className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black leading-[0.9] tracking-tighter uppercase text-white mb-8"
                 >
                     Shift the{' '}
-                    <span style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)', color: 'transparent' }}>Perspective</span>
+                    <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}>Perspective</span>
                     <br />
                     PhasQ Analysis.
                 </motion.h1>
@@ -121,58 +68,37 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'flex-end',
-                        justifyContent: 'space-between',
-                        gap: '40px',
-                        flexWrap: 'wrap',
-                    }}
+                    className="flex flex-col md:flex-row md:items-end justify-between gap-10"
                 >
                     <p
-                        style={{
-                            color: '#888',
-                            fontSize: '16px',
-                            lineHeight: 1.7,
-                            maxWidth: '480px',
-                            margin: 0,
-                            fontWeight: 300,
-                        }}
+                        className="text-[#888] text-base md:text-lg lg:text-xl leading-relaxed max-w-[480px] font-light"
                     >
                         Physics-based Synthetic Aperture Radar analysis.
                         All-weather, all-hour intelligence — where optical satellites go blind.
                     </p>
 
-                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', flexShrink: 0 }}>
+                    <div className="flex flex-wrap gap-3 shrink-0">
                         <a
-                            href="#demos"
-                            className="btn-primary"
+                            href="#demo"
+                            className="btn-primary w-full sm:w-auto text-center"
                         >
                             Explore Demo ↗
                         </a>
                         <a
                             href="#process"
-                            className="btn-outline"
+                            className="btn-outline w-full sm:w-auto text-center border-white/10 text-white/50"
                         >
                             How It Works
                         </a>
                     </div>
                 </motion.div>
 
-                {/* Stats row */}
+                {/* Stats Grid */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.7 }}
-                    style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '0',
-                        marginTop: '80px',
-                        borderTop: '1px solid #1a1a1a',
-                        paddingTop: '32px',
-                    }}
+                    className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 mt-20 pt-10 border-t border-white/10"
                 >
                     {[
                         { value: '6-DAY', label: 'Revisit Cycle' },
@@ -182,34 +108,17 @@ export default function Hero() {
                     ].map((stat, i) => (
                         <div
                             key={i}
-                            style={{
-                                flex: '1 1 150px',
-                                paddingRight: '32px',
-                                borderRight: i < 3 ? '1px solid #1a1a1a' : 'none',
-                                paddingLeft: i > 0 ? '32px' : '0',
-                            }}
+                            className={`flex flex-col gap-1 ${
+                                i % 2 === 0 ? 'pr-4 md:border-r md:border-white/10' : 'pl-0 md:pl-4 md:border-r md:border-white/10 last:border-0'
+                            }`}
                         >
                             <div
-                                style={{
-                                    fontFamily: 'var(--font-space-mono)',
-                                    fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
-                                    fontWeight: 700,
-                                    color: '#fff',
-                                    letterSpacing: '-0.02em',
-                                    display: 'block',
-                                    marginBottom: '4px',
-                                }}
+                                className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight"
                             >
                                 {stat.value}
                             </div>
                             <div
-                                style={{
-                                    fontFamily: 'var(--font-space-mono)',
-                                    fontSize: '10px',
-                                    letterSpacing: '0.15em',
-                                    textTransform: 'uppercase',
-                                    color: '#555',
-                                }}
+                                className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#555]"
                             >
                                 {stat.label}
                             </div>
