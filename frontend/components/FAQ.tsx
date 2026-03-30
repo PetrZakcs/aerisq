@@ -1,12 +1,12 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FAQS = [
     {
-        q: 'How does AerisQ differ from NDVI optical imagery?',
-        a: 'NDVI is a lagging indicator — it only reveals stress after chlorophyll loss occurs visibly. AerisQ uses C-band SAR to measure dielectric constant changes in the root zone, detecting water stress 14 days before any visual signals appear. The difference is prevention vs. reaction.',
+        q: 'How does PhasQ differ from NDVI optical imagery?',
+        a: 'NDVI is a lagging indicator — it only reveals stress after chlorophyll loss occurs visibly. PhasQ uses C-band SAR to measure dielectric constant changes in the root zone, detecting water stress 14 days before any visual signals appear. The difference is prevention vs. reaction.',
     },
     {
         q: 'What makes the physics-based approach unique?',

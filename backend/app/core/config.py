@@ -1,5 +1,5 @@
-"""
-AerisQ Configuration Settings
+﻿"""
+PhasQ Configuration Settings
 Environment-based configuration using Pydantic Settings
 """
 from functools import lru_cache
@@ -11,12 +11,12 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables"""
     
     # Application
-    APP_NAME: str = "AerisQ API"
+    APP_NAME: str = "PhasQ API"
     APP_VERSION: str = "3.0.0"
     DEBUG: bool = False
     
     # Security
-    SECRET_KEY: str = "aerisq-super-secret-key-change-in-production-2024"
+    SECRET_KEY: str = "phasq-super-secret-key-change-in-production-2024"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
     
@@ -24,12 +24,12 @@ class Settings(BaseSettings):
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "https://aerisq-frontend.vercel.app",
-        "https://aerisq.vercel.app",
+        "https://phasq-frontend.vercel.app",
+        "https://phasq.vercel.app",
     ]
     
     # Database
-    DATABASE_URL: str = "postgresql://aeris:password@db:5432/aerisq"
+    DATABASE_URL: str = "postgresql://aeris:password@db:5432/phasq"
     
     # Redis / Celery
     CELERY_BROKER_URL: str = "redis://redis:6379/0"
@@ -53,7 +53,7 @@ class Settings(BaseSettings):
     DROUGHT_THRESHOLD_DB: float = -3.0  # Sigma0 below this = drought indicator
     
     # God Mode Test User (for development/testing)
-    GOD_MODE_EMAIL: str = "admin@aerisq.tech"
+    GOD_MODE_EMAIL: str = "admin@phasq.tech"
     GOD_MODE_PASSWORD: str = "password123"
     
     class Config:

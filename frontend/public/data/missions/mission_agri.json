@@ -1,4 +1,4 @@
-{
+﻿{
     "job_id": "mission-agri-001",
     "status": "completed",
     "stats": {
@@ -16,5 +16,5 @@
         "confidence": 0.94,
         "polarization": "VV"
     },
-    "summary": "CRITICAL ALERT: Root-zone moisture deficit detected in Sector 4 (South Moravia). Optical indices (NDVI) show healthy vegetation, but AerisQ SAR analysis reveals -4.8dB backscatter anomaly consistent with severe subterranean drought stress. Immediate irrigation intervention recommended."
+    "summary": "CRITICAL ALERT: Root-zone moisture deficit detected in Sector 4 (South Moravia). Optical indices (NDVI) show healthy vegetation, but PhasQ SAR analysis reveals -4.8dB backscatter anomaly consistent with severe subterranean drought stress. Immediate irrigation intervention recommended."
 }

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Agent 3: The Analyst
 Generates natural language summaries using GPT-4o
 """
@@ -47,7 +47,7 @@ class AnalystAgent:
         location_str = location_name or "the analyzed region"
         date_str = date_range or "the selected time period"
         
-        prompt = f"""You are AerisQ, an expert agricultural drought analyst. 
+        prompt = f"""You are PhasQ, an expert agricultural drought analyst. 
 Based on Sentinel-1 SAR radar analysis, provide a concise, professional summary.
 
 ANALYSIS RESULTS:
@@ -84,7 +84,7 @@ Do not use markdown formatting."""
                     json={
                         "model": self.model,
                         "messages": [
-                            {"role": "system", "content": "You are AerisQ, a professional agricultural drought analyst."},
+                            {"role": "system", "content": "You are PhasQ, a professional agricultural drought analyst."},
                             {"role": "user", "content": prompt}
                         ],
                         "max_tokens": 200,

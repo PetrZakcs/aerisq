@@ -1,4 +1,4 @@
-"""
+﻿"""
 Celery Application Configuration
 Async task queue for processing Sentinel-1 analysis jobs
 """
@@ -8,7 +8,7 @@ from app.core.config import settings
 
 # Create Celery app
 celery_app = Celery(
-    "aerisq",
+    "phasq",
     broker=settings.CELERY_BROKER_URL,
     backend=settings.CELERY_RESULT_BACKEND,
     include=["app.workers.tasks"]

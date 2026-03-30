@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # Convert GEE Service Account JSON to single-line for Vercel
 # Usage: .\convert_json_for_vercel.ps1 path\to\service-account.json
 
@@ -51,7 +51,7 @@ try {
     Write-Host "═══════════════════════════════════════════════════════════`n" -ForegroundColor Cyan
     
     Write-Host "1️⃣  Go to Vercel:" -ForegroundColor Yellow
-    Write-Host "   https://vercel.com/petr-zakcs-projects/aerisq/settings/environment-variables`n" -ForegroundColor White
+    Write-Host "   https://vercel.com/petr-zakcs-projects/phasq/settings/environment-variables`n" -ForegroundColor White
     
     Write-Host "2️⃣  Click 'Add Variable'" -ForegroundColor Yellow
     Write-Host "   Key: GEE_SERVICE_ACCOUNT_JSON" -ForegroundColor White

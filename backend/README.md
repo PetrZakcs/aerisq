@@ -1,4 +1,4 @@
-# AerisQ Backend
+﻿# PhasQ Backend
 
 Physics-Based Sentinel-1 Radar Analysis Platform - Backend API
 
@@ -33,14 +33,14 @@ Once running, access:
 ## Authentication
 
 ### Test Credentials (God Mode)
-- **Email**: `admin@aerisq.tech`
+- **Email**: `admin@phasq.tech`
 - **Password**: `password123`
 
 ### Get Token
 ```bash
 curl -X POST "http://localhost:8000/auth/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=admin@aerisq.tech&password=password123"
+  -d "username=admin@phasq.tech&password=password123"
 ```
 
 ### Use Token
@@ -108,4 +108,4 @@ See `.env.example` for all available configuration options.
 
 ## License
 
-Proprietary - AerisQ
+Proprietary - PhasQ

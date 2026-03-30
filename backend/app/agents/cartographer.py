@@ -1,4 +1,4 @@
-"""
+﻿"""
 Agent 4: The Cartographer
 Prepares GeoJSON responses for frontend map visualization
 """
@@ -101,7 +101,7 @@ class CartographerAgent:
             "type": "FeatureCollection",
             "features": [feature],
             "metadata": {
-                "generated_by": "AerisQ Physics Engine",
+                "generated_by": "PhasQ Physics Engine",
                 "version": "3.0.0",
                 "analysis_date": datetime.utcnow().isoformat(),
                 "data_source": "Sentinel-1 SAR"

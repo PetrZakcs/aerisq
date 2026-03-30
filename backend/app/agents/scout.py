@@ -1,4 +1,4 @@
-"""
+﻿"""
 Agent 1: The Scout - REAL CDSE DATA INTEGRATION
 Fetches Sentinel-1 GRD data from Copernicus Data Space Ecosystem (CDSE)
 
@@ -121,7 +121,7 @@ class ScoutAgent:
     
     def __init__(self):
         self.auth: Optional[CDSEAuth] = None
-        self.cache_dir = Path(tempfile.gettempdir()) / "aerisq_cache"
+        self.cache_dir = Path(tempfile.gettempdir()) / "phasq_cache"
         self.cache_dir.mkdir(exist_ok=True)
         
         # Initialize auth if credentials available

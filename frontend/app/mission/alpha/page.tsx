@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -149,7 +149,7 @@ export default function MissionAlphaPage() {
                             beforeImage={MISSION_CONFIG.assets.optical}
                             afterImage={MISSION_CONFIG.assets.radar}
                             beforeLabel="OPTICAL (SENTINEL-2)"
-                            afterLabel="AERISQ PHYSICS (SENTINEL-1)"
+                            afterLabel="PHASQ PHYSICS (SENTINEL-1)"
                         />
 
                         {/* Coverage Badge */}

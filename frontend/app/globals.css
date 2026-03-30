@@ -141,7 +141,7 @@
   --muted-foreground: #666666;
   --accent: #cc0000;
   --accent-foreground: #ffffff;
-  --destructive: #cc0000;
+  --destructive: #ff3333;
   --border: #1a1a1a;
   --input: #111111;
   --ring: #ffffff;
@@ -224,12 +224,14 @@
   text-transform: uppercase;
   border: none;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
   background: #cc0000;
   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(204, 0, 0, 0.2);
 }
 
 .btn-outline {
@@ -266,7 +268,7 @@
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #444;
+  color: #cc0000;
   border-left: 2px solid #cc0000;
   padding-left: 12px;
   margin-bottom: 32px;

@@ -31,7 +31,7 @@ export default function Benefits() {
         >
             <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
                 {/* Section label */}
-                <div className="section-label">Advantages</div>
+                <div className="section-label">Advantage</div>
 
                 {/* Heading */}
                 <div

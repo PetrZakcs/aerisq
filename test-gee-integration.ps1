@@ -1,5 +1,5 @@
-# Test GEE Integration on Vercel
-$DEPLOYMENT_URL = "https://aerisq.vercel.app"
+﻿# Test GEE Integration on Vercel
+$DEPLOYMENT_URL = "https://phasq.vercel.app"
 
 Write-Host "`n═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host "   GEE Integration Test - Real Satellite Data" -ForegroundColor Cyan
@@ -79,7 +79,7 @@ catch {
 
 Write-Host "`n═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host "🌐 Dashboard: $DEPLOYMENT_URL/dashboard" -ForegroundColor White
-Write-Host "🔍 Logs: https://vercel.com/petr-zakcs-projects/aerisq" -ForegroundColor White
+Write-Host "🔍 Logs: https://vercel.com/petr-zakcs-projects/phasq" -ForegroundColor White
 Write-Host "`n"
 
 Start-Process "$DEPLOYMENT_URL/dashboard"

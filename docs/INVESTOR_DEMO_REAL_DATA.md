@@ -1,4 +1,4 @@
-# 🛰️ Real Sentinel-1 Data Demonstration
+﻿# 🛰️ Real Sentinel-1 Data Demonstration
 
 **For Investors: Data Verification Guide**
 
@@ -103,7 +103,7 @@ response = requests.get(url, params=params)
 products = response.json()
 
 # Returns: 18 Sentinel-1 products
-# Same scenes AerisQ analyzed!
+# Same scenes PhasQ analyzed!
 ```
 
 ---
@@ -142,13 +142,13 @@ products = response.json()
 - ❌ **Field sensors:** Expensive, limited coverage
 - ❌ **Visual inspection:** Too late, subjective
 - ❌ **Weather stations:** Point measurements only
-- ✅ **AerisQ:** Wall-to-wall coverage, physics-based, instant
+- ✅ **PhasQ:** Wall-to-wall coverage, physics-based, instant
 
 ### **vs. Other Satellite Solutions:**
 - ❌ **Optical satellites:** Blocked by clouds
 - ❌ **Commercial SAR:** Expensive licensing
 - ❌ **Manual analysis:** Requires GIS experts
-- ✅ **AerisQ:** Cloud-penetrating, free data, automated
+- ✅ **PhasQ:** Cloud-penetrating, free data, automated
 
 ---
 
@@ -181,17 +181,17 @@ products = response.json()
 │  (Cloud processing platform)           │
 └──────────────┬──────────────────────────┘
                │
-               ↓ [AerisQ queries & analyzes]
+               ↓ [PhasQ queries & analyzes]
                │
 ┌──────────────┴──────────────────────────┐
-│  AerisQ Backend                         │
+│  PhasQ Backend                         │
 │  Python + earthengine-api              │
 └──────────────┬──────────────────────────┘
                │
                ↓ [Physics-based drought detection]
                │
 ┌──────────────┴──────────────────────────┐
-│  AerisQ Frontend                        │
+│  PhasQ Frontend                        │
 │  Beautiful visualization for users     │
 └─────────────────────────────────────────┘
 ```
@@ -221,7 +221,7 @@ products = response.json()
 - **API:** Python, JavaScript clients
 - **Cost:** FREE for research & non-commercial (paid tiers available)
 
-### **AerisQ Physics Model:**
+### **PhasQ Physics Model:**
 - **Input:** VV backscatter coefficient (σ₀) in dB
 - **Drought Threshold:** < -12 dB
 - **Seasonality:** Monthly baselines for correction
@@ -239,7 +239,7 @@ products = response.json()
    - Display 18 Sentinel-1 scenes
    - "This is the raw data from space"
 
-2. **Run AerisQ Analysis:**
+2. **Run PhasQ Analysis:**
    - Input same coordinates
    - Execute analysis
    - Results in 15 seconds
@@ -316,8 +316,8 @@ products = response.json()
 - **Google Earth Engine:** https://earthengine.google.com/
 - **Sentinel-1 Info:** https://sentinel.esa.int/web/sentinel/missions/sentinel-1
 - **ESA Open Data:** https://dataspace.copernicus.eu/
-- **AerisQ GitHub:** https://github.com/PetrZakcs/aerisq
-- **Live Demo:** https://aerisq.vercel.app
+- **PhasQ GitHub:** https://github.com/PetrZakcs/phasq
+- **Live Demo:** https://phasq.vercel.app
 
 ---
 
@@ -327,7 +327,7 @@ products = response.json()
 **Processing Platform:** Google Earth Engine  
 **Data Source:** ESA Sentinel-1  
 
-**Contact:** admin@aerisq.tech
+**Contact:** admin@phasq.tech
 
 ---
 
@@ -335,4 +335,4 @@ products = response.json()
 > We show you the physics of soil moisture from space.  
 > And we can prove every number came from a real satellite."**
 
-**That's AerisQ.**
+**That's PhasQ.**

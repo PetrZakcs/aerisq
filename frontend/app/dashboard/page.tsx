@@ -123,7 +123,7 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-3">
                         <Satellite className="w-6 h-6 text-radar-green" />
-                        <span className="font-mono text-lg font-bold text-white tracking-widest">AERISQ</span>
+                        <span className="font-mono text-lg font-bold text-white tracking-widest">PHASQ</span>
                     </div>
 
                     {/* Mission Active Badge */}
@@ -271,7 +271,7 @@ export default function DashboardPage() {
                                 beforeImage={activeMission.assets.optical}
                                 afterImage={activeMission.assets.radar}
                                 beforeLabel="OPTICAL (SENTINEL-2)"
-                                afterLabel="AERISQ PHYSICS (SENTINEL-1)"
+                                afterLabel="PHASQ PHYSICS (SENTINEL-1)"
                             />
 
                             <div className="absolute bottom-6 left-6 flex items-center gap-2 pointer-events-none z-30">

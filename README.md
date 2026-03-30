@@ -1,9 +1,9 @@
-# AerisQ - Advanced Drought Detection Platform
+# PhasQ - Advanced Drought Detection Platform
 
 **Physics-backed soil moisture analysis using Sentinel-1 SAR satellite interpretation.**
 
-[![Version](https://img.shields.io/badge/Version-3.1.0-518a16?style=for-the-badge)](https://github.com/yourusername/aerisq)
-[![Status](https://img.shields.io/badge/Status-Production-518a16?style=for-the-badge)](https://aerisq.tech)
+[![Version](https://img.shields.io/badge/Version-3.1.0-518a16?style=for-the-badge)](https://github.com/yourusername/phasq)
+[![Status](https://img.shields.io/badge/Status-Production-518a16?style=for-the-badge)](https://phasq.tech)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 [![Physics Engine](https://img.shields.io/badge/Physics-Sentinel--1_SAR-blueviolet?style=for-the-badge)](backend/app/agents/physicist.py)
 
@@ -11,14 +11,14 @@
 
 ## 🌍 Executive Summary
 
-**AerisQ** is an advanced geospatial analysis platform designed to detect early signs of drought and soil moisture anomalies. By leveraging **Synthetic Aperture Radar (SAR)** technology from the Sentinel-1 constellation, AerisQ sees through clouds and weather conditions to provide reliable, day-and-night soil dielectric assessment.
+**PhasQ** is an advanced geospatial analysis platform designed to detect early signs of drought and soil moisture anomalies. By leveraging **Synthetic Aperture Radar (SAR)** technology from the Sentinel-1 constellation, PhasQ sees through clouds and weather conditions to provide reliable, day-and-night soil dielectric assessment.
 
-Unlike optical indices (NDVI) which only show vegetation stress *after* it occurs, AerisQ's **Physics Engine** analyzes the backscatter coefficient ($\sigma_0$) to estimate volumetric soil moisture directly, offering a leading indicator for water scarcity.
+Unlike optical indices (NDVI) which only show vegetation stress *after* it occurs, PhasQ's **Physics Engine** analyzes the backscatter coefficient ($\sigma_0$) to estimate volumetric soil moisture directly, offering a leading indicator for water scarcity.
 
-## � Key capabilities
+##  Key capabilities
 
-### �🔬 The "Physicist" Engine
-At the core of AerisQ is a proprietary analysis agent capable of processing raw satellite telemetry into actionable insights:
+## 🔬 The "Physicist" Engine
+At the core of PhasQ is a proprietary analysis agent capable of processing raw satellite telemetry into actionable insights:
 - **Radiometric Calibration**: Converts raw digital numbers into calibrated backscatter ($\sigma_0$ dB).
 - **Speckle Filtering**: Implements **Lee Filtering** and advanced noise reduction to ensure signal clarity.
 - **Incidence Angle Normalization**: Standardizes observations to a reference angle ($38^\circ$) for consistent temporal comparison.
@@ -34,7 +34,7 @@ At the core of AerisQ is a proprietary analysis agent capable of processing raw 
 
 ## 🏗️ System Architecture
 
-AerisQ follows a modern, decoupled service architecture:
+PhasQ follows a modern, decoupled service architecture:
 
 ```mermaid
 graph TD
@@ -75,8 +75,7 @@ graph TD
 
 1. **Clone the Repository**
 ```bash
-git clone https://github.com/aerisq-tech/core.git
-cd aerisq
+git clone https://github.com/phasq-tech/core.git
 ```
 
 2. **Backend Setup**
@@ -126,7 +125,7 @@ For **real Sentinel-1 SAR analysis**:
 
 ## 📊 Scientific Methodology
 
-AerisQ implements a multi-stage analysis pipeline compliant with ESA recommendations:
+PhasQ implements a multi-stage analysis pipeline compliant with ESA recommendations:
 
 1. **Ingestion**: Retrieval of Sentinel-1 Ground Range Detected (GRD) products.
 2. **Preprocessing**: Thermal noise removal and orbital correction.
@@ -150,5 +149,6 @@ We welcome contributions from the scientific and open-source community. Please r
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
-© 2024 AerisQ Technologies. *Advanced Earth Observation Systems.*
+© 2024 PhasQ Technologies. *Advanced Earth Observation Systems.*
+nologies. *Advanced Earth Observation Systems.*
 

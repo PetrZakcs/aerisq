@@ -1,11 +1,11 @@
-# AerisQ - Local Development Startup
+# PhasQ - Local Development Startup
 # Runs Backend (8000) + Frontend (3000)
 
 $ErrorActionPreference = "Stop"
 $projectRoot = $PSScriptRoot
 
 Write-Host "`n==============================================================" -ForegroundColor Cyan
-Write-Host "   AerisQ - Local Development Mode" -ForegroundColor Cyan
+Write-Host "   PhasQ - Local Development Mode" -ForegroundColor Cyan
 Write-Host "==============================================================`n" -ForegroundColor Cyan
 
 # Backend check
@@ -115,7 +115,7 @@ Write-Host "  Backend:  http://localhost:8000" -ForegroundColor White
 Write-Host "  API Docs: http://localhost:8000/docs" -ForegroundColor White
 Write-Host ""
 
-Write-Host "Login: admin@aerisq.tech / password123`n" -ForegroundColor Gray
+Write-Host "Login: admin@phasq.tech / password123`n" -ForegroundColor Gray
 
 Write-Host "Servers running in separate windows." -ForegroundColor Gray
 Write-Host "Close those windows to stop servers.`n" -ForegroundColor Gray

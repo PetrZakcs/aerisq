@@ -1,5 +1,5 @@
-"""
-AerisQ API - Standalone Mode with REAL PHYSICS + GEE
+﻿"""
+PhasQ API - Standalone Mode with REAL PHYSICS + GEE
 Run without Docker, Celery, Redis, or PostgreSQL for quick testing
 Uses physics-based drought analysis from Sentinel-1 SAR principles
 + Google Earth Engine for real satellite data
@@ -33,8 +33,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ===== CONFIGURATION =====
-SECRET_KEY = "aerisq-standalone-dev-key"
-GOD_MODE_EMAIL = "admin@aerisq.tech"
+SECRET_KEY = "phasq-standalone-dev-key"
+GOD_MODE_EMAIL = "admin@phasq.tech"
 GOD_MODE_PASSWORD = "password123"
 SCIENTIST_MODE = True  # Enable historical data testing
 
@@ -392,9 +392,9 @@ def generate_analysis_summary(stats: dict, date_range: dict) -> str:
 # ===== APPLICATION =====
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("🚀 AerisQ Standalone API Starting (Physics v2.0)...")
+    logger.info("🚀 PhasQ Standalone API Starting (Physics v2.0)...")
     logger.info("📝 Real physics-based drought analysis from Sentinel-1 SAR principles")
-    logger.info("🔑 Test credentials: admin@aerisq.tech / password123")
+    logger.info("🔑 Test credentials: admin@phasq.tech / password123")
     logger.info("🔬 Scientist mode enabled for historical data testing")
     logger.info("📄 API Docs: http://localhost:8000/docs")
     yield
@@ -402,10 +402,10 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="AerisQ API (Standalone Physics v2.0)",
+    title="PhasQ API (Standalone Physics v2.0)",
     version="3.1.0-physics",
     description="""
-## AerisQ Standalone Mode - Real Physics Engine
+## PhasQ Standalone Mode - Real Physics Engine
 
 This version uses **physics-based drought analysis** following Sentinel-1 SAR principles:
 
@@ -425,7 +425,7 @@ This version uses **physics-based drought analysis** following Sentinel-1 SAR pr
 - Soil Moisture Index (0-100)
 - Anomaly vs seasonal baseline
 
-**Test Credentials:** admin@aerisq.tech / password123
+**Test Credentials:** admin@phasq.tech / password123
 
 **Scientist Mode:** Enable historical baseline comparison for research
     """,
@@ -437,8 +437,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://aerisq.vercel.app",
-        "https://aerisq-frontend.vercel.app",
+        "https://phasq.vercel.app",
+        "https://phasq-frontend.vercel.app",
         "*"  # Fallback for debugging
     ],
     allow_credentials=True,
@@ -451,7 +451,7 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {
-        "service": "AerisQ API (Standalone Physics v2.0)",
+        "service": "PhasQ API (Standalone Physics v2.0)",
         "version": "3.1.0-physics",
         "status": "operational",
         "physics_engine": "v2.0 - Real SAR drought model",
@@ -560,7 +560,7 @@ def create_analysis(request: AnalyzeRequest, user: dict = Depends(get_current_us
                 }
             }],
             "metadata": {
-                "generated_by": "AerisQ Physics Engine v2.0",
+                "generated_by": "PhasQ Physics Engine v2.0",
                 "version": "3.1.0",
                 "data_source": "Sentinel-1 SAR (Simulated)",
                 "physics_model": "Radar Soil Moisture Index"

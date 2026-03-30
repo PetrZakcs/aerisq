@@ -1,5 +1,5 @@
-"""
-AerisQ Security Module
+﻿"""
+PhasQ Security Module
 JWT Token generation and password hashing
 """
 from datetime import datetime, timedelta, timezone

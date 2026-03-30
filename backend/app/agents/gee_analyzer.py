@@ -1,4 +1,4 @@
-"""
+﻿"""
 Google Earth Engine SAR Analysis Module
 Real-time drought detection using Sentinel-1 data (cloud-based)
 
@@ -83,7 +83,7 @@ class GEEAnalyzer:
                     # Initialize with service account
                     ee.Initialize(
                         credentials=credentials,
-                        project=self.project_id or credentials_dict.get('project_id', 'aerisq')
+                        project=self.project_id or credentials_dict.get('project_id', 'phasq')
                     )
                     
                     print(f"✅ GEE initialized with service account: {credentials_dict['client_email']}")

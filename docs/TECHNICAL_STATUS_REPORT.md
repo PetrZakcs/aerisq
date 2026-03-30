@@ -1,9 +1,9 @@
-# 📊 AerisQ - Technical Status Report
+﻿# 📊 PhasQ - Technical Status Report
 
 **Date:** 2026-02-03  
 **Version:** 3.0.0  
 **Status:** Production (Demo Mode)  
-**Deployment:** https://aerisq.vercel.app
+**Deployment:** https://phasq.vercel.app
 
 ---
 
@@ -196,7 +196,7 @@ python standalone.py
 ## 🚀 DEPLOYMENT STATUS
 
 ### **Production:**
-- **URL:** https://aerisq.vercel.app
+- **URL:** https://phasq.vercel.app
 - **Status:** ✅ Live
 - **Last Deploy:** 2026-02-03 20:40 CET
 - **Commit:** `f687953` - "Stable demo mode for investors"
@@ -205,11 +205,11 @@ python standalone.py
 ### **Environment Variables (Vercel):**
 ```
 SECRET_KEY=******* (JWT signing)
-GOD_MODE_EMAIL=admin@aerisq.tech
+GOD_MODE_EMAIL=admin@phasq.tech
 GOD_MODE_PASSWORD=*******
 SUPABASE_URL=https://*****.supabase.co
 SUPABASE_KEY=*******
-GEE_PROJECT_ID=aerisq (set but not used yet)
+GEE_PROJECT_ID=phasq (set but not used yet)
 GEE_SERVICE_ACCOUNT_JSON=******* (set but not used - size limit)
 ```
 
@@ -278,7 +278,7 @@ GEE_SERVICE_ACCOUNT_JSON=******* (set but not used - size limit)
 ```bash
 cd backend
 python scripts/test_gee_final.py
-# ✅ GEE initialized with project: aerisq
+# ✅ GEE initialized with project: phasq
 # ✅ Found 18 Sentinel-1 images
 # ✅ Mean VV: -11.80 dB (real data!)
 ```
@@ -391,7 +391,7 @@ earthengine-api>=0.1.390  # ❌ Causes 250MB limit exceeded
 ### **Current Users:**
 ```
 God Mode Account:
-  Email: admin@aerisq.tech
+  Email: admin@phasq.tech
   Password: password123 (demo only!)
 ```
 
@@ -407,7 +407,7 @@ God Mode Account:
 
 ### **Repository Structure:**
 ```
-aerisq/
+phasq/
 ├── frontend/                 # Next.js application
 │   ├── app/                  # Pages (App Router)
 │   ├── components/           # React components
@@ -549,7 +549,7 @@ Developer commits to GitHub
          ↓
    Production (on master)
          ↓
-   https://aerisq.vercel.app
+   https://phasq.vercel.app
 ```
 
 **Build Time:** ~2-3 minutes  
@@ -561,15 +561,15 @@ Developer commits to GitHub
 ## 📞 CONTACTS & ACCESS
 
 ### **Deployment:**
-- Vercel Dashboard: https://vercel.com/petr-zakcs-projects/aerisq
-- GitHub Repo: https://github.com/PetrZakcs/aerisq
-- Live App: https://aerisq.vercel.app
+- Vercel Dashboard: https://vercel.com/petr-zakcs-projects/phasq
+- GitHub Repo: https://github.com/PetrZakcs/phasq
+- Live App: https://phasq.vercel.app
 
 ### **Credentials:**
-- Demo Account: admin@aerisq.tech / password123
+- Demo Account: admin@phasq.tech / password123
 - Vercel: (owner has access)
 - Supabase: (owner has access)
-- GCP/GEE: Project ID `aerisq`
+- GCP/GEE: Project ID `phasq`
 
 ---
 
@@ -665,7 +665,7 @@ Developer commits to GitHub
 2. PDF export (3h)
 3. Record demo video (1h)
 
-**Questions?** Review code at: https://github.com/PetrZakcs/aerisq
+**Questions?** Review code at: https://github.com/PetrZakcs/phasq
 
 ---
 

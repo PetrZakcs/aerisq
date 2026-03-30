@@ -1,12 +1,12 @@
-#!/usr/bin/env pwsh
-# AerisQ - Quick Deployment Test
+﻿#!/usr/bin/env pwsh
+# PhasQ - Quick Deployment Test
 # Run this after Vercel deployment completes
 
-$DEPLOYMENT_URL = "https://aerisq.vercel.app"
+$DEPLOYMENT_URL = "https://phasq.vercel.app"
 
 Write-Host "`n" -NoNewline
 Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "   AerisQ - Deployment Test Suite" -ForegroundColor Cyan
+Write-Host "   PhasQ - Deployment Test Suite" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host "`n"
 
@@ -85,7 +85,7 @@ Write-Host "══════════════════════�
 Write-Host "`n"
 Write-Host "📋 Next Steps:" -ForegroundColor Yellow
 Write-Host "   1. Open browser: $DEPLOYMENT_URL" -ForegroundColor White
-Write-Host "   2. Login with: admin@aerisq.tech / password123" -ForegroundColor White
+Write-Host "   2. Login with: admin@phasq.tech / password123" -ForegroundColor White
 Write-Host "   3. Create analysis via UI" -ForegroundColor White
 Write-Host "   4. Verify results display on map" -ForegroundColor White
 Write-Host "`n"

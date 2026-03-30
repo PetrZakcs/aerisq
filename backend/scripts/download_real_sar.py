@@ -1,5 +1,5 @@
-"""
-AerisQ - FREE Sentinel-1 Data Downloader
+﻿"""
+PhasQ - FREE Sentinel-1 Data Downloader
 Downloads and preprocesses real SAR data using CDSE (100% free)
 
 Usage:
@@ -36,7 +36,7 @@ async def download_sentinel_data(
         output_dir: Where to save downloaded files
         max_products: Number of products to download
     """
-    print(f"🛰️  AerisQ - Real SAR Data Downloader")
+    print(f"🛰️  PhasQ - Real SAR Data Downloader")
     print(f"=" * 60)
     
     # Check CDSE credentials

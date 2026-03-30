@@ -1,4 +1,4 @@
-# GEE Integration Module for Standalone API
+﻿# GEE Integration Module for Standalone API
 # Import this at top of standalone.py
 
 import os
@@ -13,7 +13,7 @@ try:
     from app.agents.gee_analyzer import GEEAnalyzer
     
     # Initialize with project ID from env
-    gee_project_id = os.environ.get("GEE_PROJECT_ID", "aerisq")
+    gee_project_id = os.environ.get("GEE_PROJECT_ID", "phasq")
     gee_analyzer = GEEAnalyzer(project_id=gee_project_id)
     GEE_AVAILABLE = gee_analyzer.ready
     

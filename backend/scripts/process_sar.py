@@ -1,5 +1,5 @@
-"""
-AerisQ - Simple SAR Preprocessor
+﻿"""
+PhasQ - Simple SAR Preprocessor
 Extracts and processes Sentinel-1 GRD data for drought analysis
 
 Simplified approach - no SNAP needed!

@@ -4,13 +4,13 @@ services:
   # ===== FastAPI Backend =====
   backend:
     build: ./backend
-    container_name: aerisq-backend
+    container_name: phasq-backend
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
     environment:
-      - DATABASE_URL=postgresql://aeris:password@db:5432/aerisq
+      - DATABASE_URL=postgresql://phas:password@db:5432/phasq
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - DEBUG=true
@@ -19,16 +19,16 @@ services:
       - redis
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
-      - aerisq-network
+      - phasq-network
 
   # ===== Celery Worker =====
   celery-worker:
     build: ./backend
-    container_name: aerisq-celery-worker
+    container_name: phasq-celery-worker
     volumes:
       - ./backend:/app
     environment:
-      - DATABASE_URL=postgresql://aeris:password@db:5432/aerisq
+      - DATABASE_URL=postgresql://phas:password@db:5432/phasq
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
@@ -36,24 +36,24 @@ services:
       - redis
     command: celery -A app.workers.celery_app worker --loglevel=info
     networks:
-      - aerisq-network
+      - phasq-network
 
   # ===== PostgreSQL + PostGIS Database =====
   db:
     image: postgis/postgis:15-3.3
-    container_name: aerisq-db
+    container_name: phasq-db
     environment:
-      - POSTGRES_USER=aeris
+      - POSTGRES_USER=phas
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=aerisq
+      - POSTGRES_DB=phasq
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - aerisq-network
+      - phasq-network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U aeris -d aerisq" ]
+      test: [ "CMD-SHELL", "pg_isready -U phas -d phasq" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -61,13 +61,13 @@ services:
   # ===== Redis =====
   redis:
     image: redis:7-alpine
-    container_name: aerisq-redis
+    container_name: phasq-redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
-      - aerisq-network
+      - phasq-network
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
@@ -80,5 +80,5 @@ volumes:
 
 
 networks:
-  aerisq-network:
+  phasq-network:
     driver: bridge

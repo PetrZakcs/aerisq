@@ -1,4 +1,4 @@
-# 🔑 Google Earth Engine Service Account Setup
+﻿# 🔑 Google Earth Engine Service Account Setup
 
 **For Vercel deployment with real SAR data**
 
@@ -18,12 +18,12 @@
 
 Browser should open to:
 ```
-https://console.cloud.google.com/iam-admin/serviceaccounts?project=aerisq
+https://console.cloud.google.com/iam-admin/serviceaccounts?project=phasq
 ```
 
 Or navigate:
 1. Go to: https://console.cloud.google.com/
-2. Select project: **aerisq**
+2. Select project: **phasq**
 3. Menu → IAM & Admin → Service Accounts
 
 ### Step 1.2: Create Service Account
@@ -34,8 +34,8 @@ Click **"+ CREATE SERVICE ACCOUNT"** (top of page)
 
 | Field | Value |
 |-------|-------|
-| **Service account name** | `aerisq-gee` |
-| **Service account ID** | `aerisq-gee` (auto-generated) |
+| **Service account name** | `phasq-gee` |
+| **Service account ID** | `phasq-gee` (auto-generated) |
 | **Description** | "GEE access for Vercel deployment" |
 
 Click **"CREATE AND CONTINUE"**
@@ -62,7 +62,7 @@ Click **"DONE"** (skip step 3 - optional)
 5. Click **"CREATE"**
 
 **JSON file downloads** → Save it!  
-(Example: `aerisq-gee-vercel-abc123.json`)
+(Example: `phasq-gee-vercel-abc123.json`)
 
 ⚠️ **IMPORTANT:** This file contains secrets! Don't commit to Git!
 
@@ -73,7 +73,7 @@ Click **"DONE"** (skip step 3 - optional)
 ### Step 2.1: Go to API Library
 
 ```
-https://console.cloud.google.com/apis/library/earthengine.googleapis.com?project=aerisq
+https://console.cloud.google.com/apis/library/earthengine.googleapis.com?project=phasq
 ```
 
 ### Step 2.2: Enable API
@@ -91,7 +91,7 @@ Wait ~30 seconds for activation.
 From downloaded JSON, find:
 ```json
 {
-  "client_email": "aerisq-gee-vercel@aerisq.iam.gserviceaccount.com"
+  "client_email": "phasq-gee-vercel@phasq.iam.gserviceaccount.com"
 }
 ```
 
@@ -107,7 +107,7 @@ https://code.earthengine.google.com/
 Or run Python locally:
 ```python
 import ee
-ee.data.setProject('aerisq')
+ee.data.setProject('phasq')
 ```
 
 **Note:** Service accounts are automatically registered when you use them with a project.
@@ -121,7 +121,7 @@ ee.data.setProject('aerisq')
 **Open PowerShell:**
 ```powershell
 # Read JSON file
-$json = Get-Content "path\to\aerisq-gee-vercel-abc123.json" | ConvertFrom-Json
+$json = Get-Content "path\to\phasq-gee-vercel-abc123.json" | ConvertFrom-Json
 
 # Convert to single-line string
 $jsonString = $json | ConvertTo-Json -Compress
@@ -140,7 +140,7 @@ Or manually:
 
 ### Step 4.2: Add to Vercel Environment Variables
 
-1. Go to: https://vercel.com/petr-zakcs-projects/aerisq
+1. Go to: https://vercel.com/petr-zakcs-projects/phasq
 2. Click **Settings** tab
 3. Click **Environment Variables**
 4. Click **"Add Variable"**
@@ -150,7 +150,7 @@ Or manually:
 | Key | Value | Environments |
 |-----|-------|--------------|
 | `GEE_SERVICE_ACCOUNT_JSON` | (paste single-line JSON) | Production, Preview, Development |
-| `GEE_PROJECT_ID` | `aerisq` | Production, Preview, Development |
+| `GEE_PROJECT_ID` | `phasq` | Production, Preview, Development |
 
 Click **"Save"**
 
@@ -210,7 +210,7 @@ def __init__(self, project_id: Optional[str] = None):
             # Initialize with service account
             ee.Initialize(
                 credentials=credentials,
-                project=self.project_id or 'aerisq'
+                project=self.project_id or 'phasq'
             )
             
             print(f"✅ GEE initialized with service account")
@@ -302,7 +302,7 @@ Vercel will auto-deploy (~2-3 minutes)
 ### Step 6.3: Test API
 
 ```bash
-curl -X POST https://aerisq.vercel.app/api/v1/analyze/demo \
+curl -X POST https://phasq.vercel.app/api/v1/analyze/demo \
   -H "Content-Type: application/json" \
   -d '{
     "polygon": {"type": "Polygon", "coordinates": [[[-6,37.5],[-5,37.5],[-5,38.5],[-6,38.5],[-6,37.5]]]},
@@ -353,7 +353,7 @@ You'll know it works when:
 
 ### "Project not found"
 → Set GEE_PROJECT_ID environment variable
-→ Use project ID (not name): `aerisq`
+→ Use project ID (not name): `phasq`
 
 ### Still shows "SIMULATED"
 → Check Vercel logs for GEE initialization errors

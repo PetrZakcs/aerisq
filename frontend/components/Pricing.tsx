@@ -52,7 +52,7 @@ const TIERS = [
             'Raw phase data access',
         ],
         cta: 'Request Demo ↗',
-        ctaLink: 'https://calendly.com/petrrmarketing/aerisq',
+        ctaLink: 'https://calendly.com/petrrmarketing/phasq',
         highlight: false,
     },
 ];
@@ -231,7 +231,7 @@ export default function Pricing() {
                                                 marginTop: '2px',
                                             }}
                                         >
-                                            <Check style={{ width: '8px', height: '8px', color: tier.highlight ? '#fff' : '#666' }} />
+                                            <Check style={{ width: '8px', height: '8px', color: tier.highlight ? '#000' : '#666' }} />
                                         </span>
                                         {f}
                                     </li>

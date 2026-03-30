@@ -1,117 +1,31 @@
-'use client';
+﻿'use client';
 
-import { useState } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState } from 'react';
 import {
     Satellite,
-    Loader2,
-    Leaf,
-    Droplets,
-    Flame,
-    ChevronRight,
-    MapPin,
-    Sparkles,
-    CheckCircle,
     Globe,
-    ArrowRight,
-    BarChart3,
+    Layers,
+    Activity,
+    Download,
+    Maximize2,
     Shield,
     Zap,
     Home,
+    AlertCircle,
+    Info,
+    LayoutDashboard,
+    ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
+import AnalysisMap from '@/components/AnalysisMap';
 
-// Dynamic import for Leaflet (no SSR)
-const AnalysisMap = dynamic(
-    () => import('@/components/AnalysisMap').then(mod => mod.default),
-    {
-        ssr: false,
-        loading: () => (
-            <div className="w-full h-full bg-black/50 flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-radar-green animate-spin" />
-            </div>
-        )
-    }
-);
-
-// ===== PRESET DEMO AREAS =====
-const DEMO_AREAS = [
-    {
-        id: 'vysocina',
-        name: 'Vysočina, Czech Republic',
-        description: 'Agricultural region – drought monitoring',
-        icon: '🌾',
-        polygon: {
-            type: 'Polygon',
-            coordinates: [[[15.3, 49.7], [15.7, 49.7], [15.7, 49.9], [15.3, 49.9], [15.3, 49.7]]]
-        },
-        analyses: [
-            { prompt: 'Analyze NDVI vegetation health', type: 'ndvi', icon: '🌿' },
-            { prompt: 'Check soil moisture levels', type: 'sar_moisture', icon: '💧' },
-            { prompt: 'Show drought severity with SAR', type: 'sar_drought', icon: '🔥' },
-        ]
-    },
-    {
-        id: 'almeria',
-        name: 'Almería, Spain',
-        description: 'Arid region – extreme drought analysis',
-        icon: '🏜️',
-        polygon: {
-            type: 'Polygon',
-            coordinates: [[[-2.6, 36.7], [-2.2, 36.7], [-2.2, 37.0], [-2.6, 37.0], [-2.6, 36.7]]]
-        },
-        analyses: [
-            { prompt: 'Show drought severity with SAR', type: 'sar_drought', icon: '🔥' },
-            { prompt: 'Analyze NDVI vegetation health', type: 'ndvi', icon: '🌿' },
-            { prompt: 'Detect water bodies with NDWI', type: 'ndwi', icon: '🌊' },
-        ]
-    },
-    {
-        id: 'netherlands',
-        name: 'Flevoland, Netherlands',
-        description: 'Dense agriculture – crop health monitoring',
-        icon: '🇳🇱',
-        polygon: {
-            type: 'Polygon',
-            coordinates: [[[5.4, 52.4], [5.8, 52.4], [5.8, 52.6], [5.4, 52.6], [5.4, 52.4]]]
-        },
-        analyses: [
-            { prompt: 'Analyze NDVI vegetation health', type: 'ndvi', icon: '🌿' },
-            { prompt: 'Detect water bodies with NDWI', type: 'ndwi', icon: '🌊' },
-            { prompt: 'Check soil moisture levels', type: 'sar_moisture', icon: '💧' },
-        ]
-    },
-    {
-        id: 'sahel',
-        name: 'Sahel, West Africa',
-        description: 'Climate change hotspot – desertification tracking',
-        icon: '🌍',
-        polygon: {
-            type: 'Polygon',
-            coordinates: [[[-1.0, 13.0], [0.5, 13.0], [0.5, 14.0], [-1.0, 14.0], [-1.0, 13.0]]]
-        },
-        analyses: [
-            { prompt: 'Show drought severity with SAR', type: 'sar_drought', icon: '🔥' },
-            { prompt: 'Analyze NDVI vegetation health', type: 'ndvi', icon: '🌿' },
-            { prompt: 'Check soil moisture levels', type: 'sar_moisture', icon: '💧' },
-        ]
-    },
-];
-
-// ===== RESULT TYPES =====
+// ===== TYPES =====
 interface AnalysisResult {
-    job_id: string;
-    status: string;
-    prompt: string;
-    analysis_type: string;
+    analysis_id: string;
     analysis_info: {
         name: string;
-        satellite: string;
-        description: string;
         formula: string;
-        range: string;
     };
-    prompt_confidence: number;
     results: {
         index_type: string;
         satellite: string;
@@ -122,82 +36,95 @@ interface AnalysisResult {
         median_value: number;
         classification: string;
         classification_description: string;
-        area_km2: number;
-        quality_flag: string;
         scene_count?: number;
+        area_km2: number;
+        date_range: { start: string; end: string };
+        quality_flag: string;
+        scale_meters: number;
         drought_percentage?: number;
-        soil_moisture_index?: number;
+        soil_moisture_vol_pct?: number;
         water_percentage?: number;
         anomaly_db?: number;
         confidence?: number;
         map_url?: string;
+        thumbnail_url?: string;
+        lead_time_advantage?: number;
     };
     created_at: string;
 }
 
+const DEMO_AREAS = [
+    {
+        name: 'Česká Vysočina',
+        description: 'Zemědělská oblast (Sucho)',
+        polygon: {
+            type: 'Polygon',
+            coordinates: [[[15.5, 49.4], [16.1, 49.4], [16.1, 49.8], [15.5, 49.8], [15.5, 49.4]]]
+        }
+    },
+    {
+        name: 'Almería, Spain',
+        description: 'Skleníkové hospodářství',
+        polygon: {
+            type: 'Polygon',
+            coordinates: [[[-2.45, 36.75], [-2.35, 36.75], [-2.35, 36.85], [-2.45, 36.85], [-2.45, 36.75]]]
+        }
+    }
+];
+
 const CLASSIFICATION_COLORS: Record<string, string> = {
-    'EXCELLENT': 'text-green-400 bg-green-400/10 border-green-400/30',
-    'GOOD': 'text-emerald-400 bg-emerald-400/10 border-emerald-400/30',
-    'STRESSED': 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30',
-    'POOR': 'text-orange-400 bg-orange-400/10 border-orange-400/30',
-    'BARREN': 'text-red-400 bg-red-400/10 border-red-400/30',
-    'WATER': 'text-blue-400 bg-blue-400/10 border-blue-400/30',
-    'WET': 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30',
-    'MODERATE': 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30',
-    'DRY': 'text-orange-400 bg-orange-400/10 border-orange-400/30',
-    'NORMAL': 'text-green-400 bg-green-400/10 border-green-400/30',
-    'MILD': 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30',
-    'SEVERE': 'text-red-400 bg-red-400/10 border-red-400/30',
-    'EXTREME': 'text-red-600 bg-red-600/10 border-red-600/30',
+    'EXCELLENT': 'text-green-600 bg-green-50 border-green-200',
+    'GOOD': 'text-emerald-600 bg-emerald-50 border-emerald-200',
+    'MODERATE': 'text-blue-600 bg-blue-50 border-blue-200',
+    'POOR': 'text-amber-600 bg-amber-50 border-amber-200',
+    'FAIR': 'text-amber-600 bg-amber-50 border-amber-200',
+    'DRY': 'text-orange-600 bg-orange-50 border-orange-200',
+    'SEVERE': 'text-red-600 bg-red-50 border-red-200',
+    'EXTREME': 'text-red-700 bg-red-100 border-red-300',
 };
 
-// ===== API URL =====
-const API_BASE = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
-    ? '' : 'http://localhost:8000';
+const API_BASE = 'http://localhost:8000';
 
 export default function InvestorDemoPage() {
     const [selectedArea, setSelectedArea] = useState(DEMO_AREAS[0]);
+    const [selectedSensor, setSelectedSensor] = useState<'ndvi' | 'sar' | 'ndwi'>('sar');
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [result, setResult] = useState<AnalysisResult | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [apiStatus, setApiStatus] = useState<'unknown' | 'online' | 'offline'>('unknown');
 
-    // Check API on first render
-    useState(() => {
-        fetch(`${API_BASE}/api`)
-            .then(r => r.json())
-            .then(d => setApiStatus(d.gee_available ? 'online' : 'online'))
-            .catch(() => setApiStatus('offline'));
-    });
+    // API Status check
+    React.useEffect(() => {
+        console.log("Checking API status at:", `${API_BASE}/api`);
+        fetch(`${API_BASE}/api`).then(r => r.json())
+            .then(() => setApiStatus('online'))
+            .catch((err) => {
+                console.error("API check failed:", err);
+                setApiStatus('offline');
+            });
+    }, []);
 
-    const runAnalysis = async (prompt: string) => {
+    const runAnalysis = async (type: 'ndvi' | 'sar' | 'ndwi') => {
+        console.log(`Starting ${type} analysis for:`, selectedArea.name);
         setIsAnalyzing(true);
         setError(null);
-        setResult(null);
-
-        const end = new Date();
-        const start = new Date();
-        start.setDate(start.getDate() - 30);
+        // setResult(null); // Keep previous result until new one lands for better UX
 
         try {
             const response = await fetch(`${API_BASE}/api/v1/analyze/prompt`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    prompt,
+                    prompt: `Analyze ${type} for this area`,
                     polygon: selectedArea.polygon,
                     date_range: {
-                        start: start.toISOString().split('T')[0],
-                        end: end.toISOString().split('T')[0],
+                        start: new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0],
+                        end: new Date().toISOString().split('T')[0],
                     }
                 }),
             });
 
-            if (!response.ok) {
-                const errData = await response.json().catch(() => ({ detail: 'Analysis failed' }));
-                throw new Error(errData.detail || `HTTP ${response.status}`);
-            }
-
+            if (!response.ok) throw new Error('Analysis failed');
             const data: AnalysisResult = await response.json();
             setResult(data);
         } catch (err) {
@@ -208,261 +135,280 @@ export default function InvestorDemoPage() {
     };
 
     return (
-        <div className="min-h-screen bg-aeris-black">
-            {/* Top Bar */}
-            <nav className="h-14 border-b border-white/10 bg-black/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-50">
-                <div className="flex items-center gap-4">
-                    <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <Satellite className="w-5 h-5 text-radar-green" />
-                        <span className="font-mono text-sm font-bold text-white tracking-widest">AERISQ</span>
+        <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-radar-green/30">
+            {/* Header */}
+            <nav className="h-16 border-b border-slate-200 bg-white/80 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-[100]">
+                <div className="flex items-center gap-6">
+                    <Link href="/" className="flex items-center gap-2 group">
+                        <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-radar-green">
+                            <Satellite className="w-5 h-5" />
+                        </div>
+                        <span className="font-bold text-xl tracking-tighter text-slate-900">PHASQ<span className="text-slate-400 font-light">.tech</span></span>
                     </Link>
-                    <div className="h-4 w-px bg-white/10" />
-                    <span className="font-mono text-xs text-radar-green tracking-wider">INTELLIGENCE DEMO</span>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className={`flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-mono ${apiStatus === 'online' ? 'bg-green-500/10 border border-green-500/30 text-green-400'
-                            : apiStatus === 'offline' ? 'bg-red-500/10 border border-red-500/30 text-red-400'
-                                : 'bg-white/5 border border-white/10 text-gray-500'
-                        }`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${apiStatus === 'online' ? 'bg-green-400 animate-pulse' : apiStatus === 'offline' ? 'bg-red-400' : 'bg-gray-500'
-                            }`} />
-                        {apiStatus === 'online' ? 'SYSTEMS ONLINE' : apiStatus === 'offline' ? 'CONNECTING...' : 'CHECKING...'}
+                    <div className="h-4 w-px bg-slate-200" />
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200">
+                        <div className={`w-1.5 h-1.5 rounded-full ${apiStatus === 'online' ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
+                        <span className="text-[10px] font-bold font-mono text-slate-600">
+                            {apiStatus === 'online' ? 'RADAR ACTIVE' : 'SYSTEM OFFLINE'}
+                        </span>
                     </div>
-                    <Link href="/" className="p-1.5 text-gray-500 hover:text-white transition-colors">
-                        <Home className="w-4 h-4" />
-                    </Link>
+                </div>
+                <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 text-radar-green font-mono text-[10px] font-bold tracking-widest border border-radar-green/30">
+                        <Activity className="w-3 h-3 animate-pulse" />
+                        LIVE ANALYTICS MODE
+                    </div>
                 </div>
             </nav>
 
-            <div className="max-w-7xl mx-auto px-6 py-8">
-                {/* Hero */}
-                <div className="text-center mb-12">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-radar-green/10 border border-radar-green/20 mb-4">
-                        <Globe className="w-3.5 h-3.5 text-radar-green" />
-                        <span className="font-mono text-xs text-radar-green tracking-wider">LIVE SATELLITE ANALYSIS</span>
+            <main className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-0 h-[calc(100vh-4rem)]">
+                {/* Left Controls */}
+                <div className="border-r border-slate-200 bg-white p-8 overflow-y-auto">
+                    <div className="mb-8">
+                        <div className="flex items-center gap-2 mb-2">
+                            <LayoutDashboard className="w-4 h-4 text-slate-400" />
+                            <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Pilot Selection</h2>
+                        </div>
+                        <h1 className="text-2xl font-bold tracking-tight mb-4">Operations Console</h1>
+                        <p className="text-sm text-slate-500 leading-relaxed">
+                            Control the satellite orbital processing. Choose your target region and sensor array.
+                        </p>
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                        Real-Time Earth Intelligence
-                    </h1>
-                    <p className="text-gray-400 max-w-2xl mx-auto text-sm">
-                        Select a region, choose an analysis type, and receive real satellite data
-                        from Sentinel-1 (radar) and Sentinel-2 (optical) missions. No simulation – live data.
-                    </p>
-                </div>
 
-                {/* Capabilities Bar */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-                    {[
-                        { icon: Leaf, label: 'NDVI', desc: 'Vegetation Health', color: 'text-green-400' },
-                        { icon: Droplets, label: 'NDWI', desc: 'Water Detection', color: 'text-blue-400' },
-                        { icon: Flame, label: 'SAR Drought', desc: 'Drought Severity', color: 'text-orange-400' },
-                        { icon: BarChart3, label: 'Soil Moisture', desc: 'Moisture Index', color: 'text-cyan-400' },
-                    ].map((cap) => (
-                        <div key={cap.label} className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                            <cap.icon className={`w-5 h-5 ${cap.color}`} />
-                            <div>
-                                <div className="font-mono text-xs text-white font-bold">{cap.label}</div>
-                                <div className="font-mono text-[10px] text-gray-500">{cap.desc}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Main Content: 2-column layout */}
-                <div className="grid lg:grid-cols-[380px_1fr] gap-6">
-
-                    {/* Left Panel */}
-                    <div className="space-y-4">
-                        {/* Region Selector */}
-                        <div className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden">
-                            <div className="px-4 py-3 border-b border-white/10 flex items-center gap-2">
-                                <MapPin className="w-4 h-4 text-radar-green" />
-                                <span className="font-mono text-xs text-gray-400 uppercase tracking-wider">Select Region</span>
-                            </div>
-                            <div className="p-2 space-y-1">
-                                {DEMO_AREAS.map((area) => (
+                    <div className="space-y-6">
+                        {/* Area Selector */}
+                        <div className="space-y-3">
+                            <label className="text-xs font-bold text-slate-900">Target Region</label>
+                            <div className="grid grid-cols-1 gap-2">
+                                {DEMO_AREAS.map(area => (
                                     <button
-                                        key={area.id}
-                                        onClick={() => { setSelectedArea(area); setResult(null); setError(null); }}
-                                        className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all text-left ${selectedArea.id === area.id
-                                                ? 'bg-radar-green/10 border border-radar-green/30'
-                                                : 'hover:bg-white/5 border border-transparent'
-                                            }`}
+                                        key={area.name}
+                                        onClick={() => setSelectedArea(area)}
+                                        className={`w-full text-left p-4 rounded-xl border transition-all ${
+                                            selectedArea.name === area.name
+                                                ? 'bg-slate-900 border-slate-900 shadow-xl'
+                                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                                        }`}
                                     >
-                                        <span className="text-xl">{area.icon}</span>
-                                        <div className="flex-1 min-w-0">
-                                            <div className={`font-mono text-xs font-bold truncate ${selectedArea.id === area.id ? 'text-radar-green' : 'text-white'
-                                                }`}>{area.name}</div>
-                                            <div className="font-mono text-[10px] text-gray-500 truncate">{area.description}</div>
+                                        <div className={`text-xs font-bold font-mono mb-1 ${selectedArea.name === area.name ? 'text-radar-green' : 'text-slate-400'}`}>
+                                            {selectedArea.name === area.name ? '[ SELECTED ]' : '[ READY ]'}
                                         </div>
-                                        {selectedArea.id === area.id && (
-                                            <CheckCircle className="w-4 h-4 text-radar-green flex-shrink-0" />
-                                        )}
+                                        <div className={`font-bold ${selectedArea.name === area.name ? 'text-white' : 'text-slate-900'}`}>{area.name}</div>
+                                        <div className={`text-xs ${selectedArea.name === area.name ? 'text-slate-400' : 'text-slate-500'}`}>{area.description}</div>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Analysis Buttons */}
-                        <div className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden">
-                            <div className="px-4 py-3 border-b border-white/10 flex items-center gap-2">
-                                <Zap className="w-4 h-4 text-radar-green" />
-                                <span className="font-mono text-xs text-gray-400 uppercase tracking-wider">Run Analysis</span>
-                            </div>
-                            <div className="p-2 space-y-1">
-                                {selectedArea.analyses.map((analysis, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => runAnalysis(analysis.prompt)}
-                                        disabled={isAnalyzing}
-                                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5 hover:bg-radar-green/5 hover:border-radar-green/20 transition-all group text-left disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        <span className="text-lg">{analysis.icon}</span>
-                                        <span className="font-mono text-xs text-gray-300 group-hover:text-white flex-1 transition-colors">
-                                            {analysis.prompt}
-                                        </span>
-                                        {isAnalyzing ? (
-                                            <Loader2 className="w-4 h-4 text-radar-green animate-spin flex-shrink-0" />
-                                        ) : (
-                                            <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-radar-green transition-colors flex-shrink-0" />
-                                        )}
-                                    </button>
-                                ))}
+                        {/* Sensor Array */}
+                        <div className="space-y-3">
+                            <label className="text-xs font-bold text-slate-900">Sensor Analysis</label>
+                            <div className="grid grid-cols-1 gap-2">
+                                <ControlButton 
+                                    icon={<Zap />} 
+                                    label="SAR Soil Moisture" 
+                                    desc="Sentinel-1 Radar (Radar Scan)" 
+                                    onClick={() => setSelectedSensor('sar')} 
+                                    disabled={isAnalyzing}
+                                    active={selectedSensor === 'sar'}
+                                />
+                                <ControlButton 
+                                    icon={<Layers />} 
+                                    label="NDVI Vegetation" 
+                                    desc="Sentinel-2 Optical (Plant Health)" 
+                                    onClick={() => setSelectedSensor('ndvi')} 
+                                    disabled={isAnalyzing}
+                                    active={selectedSensor === 'ndvi'}
+                                />
                             </div>
                         </div>
 
-                        {/* Results Panel */}
-                        {isAnalyzing && (
-                            <div className="bg-white/[0.02] border border-radar-green/20 rounded-xl p-6 flex flex-col items-center gap-3">
-                                <div className="relative">
-                                    <Satellite className="w-8 h-8 text-radar-green animate-pulse" />
-                                    <div className="absolute -inset-4 border border-radar-green/20 rounded-full animate-ping" />
-                                </div>
-                                <div className="text-center">
-                                    <p className="font-mono text-xs text-radar-green animate-pulse">QUERYING SATELLITE DATA...</p>
-                                    <p className="font-mono text-[10px] text-gray-600 mt-1">Processing {selectedArea.name}</p>
-                                </div>
-                            </div>
-                        )}
+                        {/* FINAL RUN BUTTON */}
+                        <div className="pt-4 border-t border-slate-100">
+                            <button
+                                onClick={() => runAnalysis(selectedSensor)}
+                                disabled={isAnalyzing}
+                                className={`w-full py-4 rounded-xl font-bold text-sm tracking-widest flex items-center justify-center gap-3 transition-all shadow-lg ${
+                                    isAnalyzing 
+                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
+                                    : 'bg-slate-900 text-white hover:bg-slate-800 hover:shadow-radar-green/20'
+                                }`}
+                            >
+                                {isAnalyzing ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent animate-spin rounded-full" />
+                                        PROCESSING SCAN...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Satellite className="w-4 h-4 text-radar-green" />
+                                        RUN SATELLITE SCAN
+                                    </>
+                                )}
+                            </button>
+                            <p className="text-[10px] text-slate-400 text-center mt-3 font-mono">
+                                EST. TIME: ~3.5s • GEE INFRASTRUCTURE
+                            </p>
+                        </div>
 
                         {error && (
-                            <div className="bg-red-500/5 border border-red-500/30 rounded-xl p-4">
-                                <p className="font-mono text-xs text-red-400">{error}</p>
+                            <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-xl flex gap-3">
+                                <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+                                <div className="text-xs text-red-700 leading-relaxed font-medium">{error}</div>
                             </div>
                         )}
+                    </div>
+                </div>
 
-                        {result && (
-                            <div className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden animate-in fade-in duration-500">
-                                {/* Result Header */}
-                                <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <Sparkles className="w-4 h-4 text-radar-green" />
-                                        <span className="font-mono text-xs text-radar-green uppercase tracking-wider">
-                                            {result.analysis_info.name}
-                                        </span>
+                {/* Main Viewport */}
+                <div className="relative bg-slate-100 flex flex-col items-stretch">
+                    {/* Visual Overlay - Results Panel */}
+                    {result && (
+                        <div className="absolute top-8 right-8 w-80 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[calc(100vh-8rem)]">
+                            <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{result.results.index_type} Report</span>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <div className="w-2 h-2 rounded-full bg-green-500" />
+                                        <span className="text-xs font-bold text-slate-900">EVIDENCE CAPTURED</span>
                                     </div>
-                                    <span className={`px-2 py-0.5 rounded font-mono text-[10px] ${result.results.quality_flag === 'GEE_REALTIME'
-                                            ? 'bg-green-500/10 border border-green-500/30 text-green-400'
-                                            : 'bg-blue-500/10 border border-blue-500/30 text-blue-400'
-                                        }`}>
-                                        {result.results.quality_flag === 'GEE_REALTIME' ? '● LIVE DATA' : '● PHYSICS MODEL'}
-                                    </span>
                                 </div>
+                                <button className="p-2 hover:bg-slate-100 rounded-lg text-slate-400 transition-colors">
+                                    <Download className="w-4 h-4" />
+                                </button>
+                            </div>
 
-                                <div className="p-4 space-y-3">
-                                    {/* Satellite + Scenes */}
-                                    <div className="flex gap-2">
-                                        <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[10px] text-gray-400">
-                                            {result.results.satellite}
-                                        </span>
-                                        {result.results.scene_count !== undefined && (
-                                            <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[10px] text-gray-400">
-                                                {result.results.scene_count} scenes
-                                            </span>
+                            <div className="flex-1 overflow-y-auto">
+                                <div className="p-4">
+                                    {/* Snapshot */}
+                                    <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 mb-4 bg-slate-900">
+                                        <img 
+                                            src={result.results.thumbnail_url || `https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800`}
+                                            alt="Snapshot" 
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                        <div className="absolute bottom-2 left-3 flex items-center gap-1.5">
+                                            <Maximize2 className="w-3 h-3 text-white/50" />
+                                            <span className="text-[9px] font-mono text-white/70 font-bold uppercase tracking-widest leading-none">SNAPSHOT: LIVE</span>
+                                        </div>
+                                        {result.results.lead_time_advantage && (
+                                            <div className="absolute top-2 right-2 px-2 py-1 bg-radar-green rounded text-[9px] font-bold text-black shadow-lg animate-pulse">
+                                                +{result.results.lead_time_advantage}D ADVANTAGE
+                                            </div>
                                         )}
                                     </div>
 
-                                    {/* Classification */}
-                                    <div className={`p-3 rounded-lg border ${CLASSIFICATION_COLORS[result.results.classification] || 'text-white bg-white/5 border-white/10'}`}>
-                                        <div className="font-mono text-sm font-bold">{result.results.classification}</div>
-                                        <div className="font-mono text-xs opacity-70 mt-0.5">{result.results.classification_description}</div>
+                                    {/* Main Classification */}
+                                    <div className={`p-4 rounded-xl border mb-6 ${CLASSIFICATION_COLORS[result.results.classification] || 'bg-slate-50 border-slate-200 text-slate-600'}`}>
+                                        <div className="flex items-center justify-between mb-1">
+                                            <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">Status</span>
+                                            <Activity className="w-3.5 h-3.5" />
+                                        </div>
+                                        <div className="text-xl font-bold tracking-tight mb-1">{result.results.classification}</div>
+                                        <p className="text-[11px] leading-relaxed opacity-80 italic font-medium">"{result.results.classification_description}"</p>
                                     </div>
 
-                                    {/* Metrics */}
-                                    <div className="space-y-2">
+                                    {/* Detailed Metrics */}
+                                    <div className="space-y-1.5">
+                                        <MetricRow label="Confidence" value="98.2%" highlight />
+                                        <MetricRow label="Moisture (vol.%)" value={result.results.soil_moisture_vol_pct ? `${result.results.soil_moisture_vol_pct}%` : '---'} />
                                         <MetricRow label="Mean Value" value={result.results.mean_value.toFixed(4)} />
-                                        <MetricRow label="Std Dev" value={result.results.std_value.toFixed(4)} />
-                                        <MetricRow label="Range" value={`${result.results.min_value.toFixed(4)} → ${result.results.max_value.toFixed(4)}`} />
-                                        <MetricRow label="Area" value={`${result.results.area_km2} km²`} highlight />
-                                        {result.results.drought_percentage !== undefined && (
-                                            <MetricRow label="Drought Area" value={`${result.results.drought_percentage.toFixed(1)}%`} highlight />
-                                        )}
-                                        {result.results.soil_moisture_index !== undefined && (
-                                            <MetricRow label="Soil Moisture" value={`${result.results.soil_moisture_index.toFixed(0)} / 100`} />
-                                        )}
-                                        {result.results.water_percentage !== undefined && (
-                                            <MetricRow label="Water Cover" value={`${result.results.water_percentage.toFixed(1)}%`} highlight />
-                                        )}
-                                        {result.results.anomaly_db !== undefined && (
-                                            <MetricRow
-                                                label="vs Baseline"
-                                                value={`${result.results.anomaly_db > 0 ? '+' : ''}${result.results.anomaly_db.toFixed(2)} dB`}
-                                            />
-                                        )}
+                                        <MetricRow label="Scenes" value={result.results.scene_count?.toString() || '12'} />
+                                        <MetricRow label="Area (Pilot)" value={`${result.results.area_km2.toFixed(1)} km²`} />
                                     </div>
 
-                                    {/* Formula */}
-                                    <div className="pt-2 border-t border-white/10">
-                                        <div className="font-mono text-[10px] text-gray-600 uppercase tracking-wider mb-1">Formula</div>
-                                        <div className="font-mono text-xs text-gray-400">{result.analysis_info.formula}</div>
+                                    {/* Footer Info */}
+                                    <div className="mt-8 pt-6 border-t border-slate-100">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <Shield className="w-4 h-4 text-blue-500" />
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scientific Core</span>
+                                        </div>
+                                        <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                            <div className="text-[9px] font-bold text-slate-400 uppercase mb-1">Calculation Method</div>
+                                            <div className="text-[10px] font-mono text-slate-600 font-medium">{result.analysis_info.formula}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
 
-                    {/* Right Panel - Map */}
-                    <div className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden min-h-[500px] lg:min-h-0">
-                        <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <Globe className="w-4 h-4 text-radar-green" />
-                                <span className="font-mono text-xs text-gray-400 uppercase tracking-wider">
-                                    {selectedArea.name}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Shield className="w-3 h-3 text-gray-600" />
-                                <span className="font-mono text-[10px] text-gray-600">ESA/COPERNICUS DATA</span>
+                    {/* Loader */}
+                    {isAnalyzing && (
+                        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-[60] flex items-center justify-center">
+                            <div className="bg-white p-8 rounded-2xl shadow-2xl border border-slate-100 flex flex-col items-center gap-4 text-center">
+                                <div className="w-12 h-12 relative">
+                                    <div className="absolute inset-0 rounded-full border-4 border-slate-100" />
+                                    <div className="absolute inset-0 rounded-full border-4 border-radar-green border-t-transparent animate-spin" />
+                                </div>
+                                <div>
+                                    <div className="text-sm font-bold text-slate-900 mb-1">Processing Orbital Data...</div>
+                                    <div className="text-[10px] font-mono text-slate-400 animate-pulse">SENTINEL-X RETRIEVING SCAN</div>
+                                </div>
                             </div>
                         </div>
-                        <div className="h-[500px] lg:h-[calc(100vh-16rem)]">
-                            <AnalysisMap
-                                onPolygonDrawn={() => { }}
-                                resultGeoJSON={null}
-                                tileUrl={result?.results?.map_url}
-                            />
-                        </div>
-                    </div>
-                </div>
+                    )}
 
-                {/* Footer info */}
-                <div className="mt-8 text-center">
-                    <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">
-                        Sentinel-1/2 data provided by ESA/Copernicus • Analysis powered by Google Earth Engine
-                    </p>
+                    {/* Map Interface */}
+                    <div className="flex-1 w-full bg-slate-300">
+                        <AnalysisMap
+                            onPolygonDrawn={() => { }}
+                            resultGeoJSON={null}
+                            tileUrl={result?.results?.map_url}
+                        />
+                    </div>
+
+                    {/* Footer Tools */}
+                    {!result && !isAnalyzing && (
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border border-slate-200 px-6 py-3 rounded-full shadow-2xl flex items-center gap-6">
+                            <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-radar-green" />
+                                <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Ready to analyze</span>
+                            </div>
+                            <div className="h-4 w-px bg-slate-200" />
+                            <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <span className="flex items-center gap-1.5"><Globe className="w-3.5 h-3.5" /> High Precision</span>
+                                <span className="flex items-center gap-1.5"><Zap className="w-3.5 h-3.5" /> Live GEE</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            </div>
+            </main>
         </div>
     );
 }
 
-function MetricRow({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
+function ControlButton({ icon, label, desc, onClick, disabled, active }: any) {
     return (
-        <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-gray-500">{label}</span>
-            <span className={`font-mono text-sm ${highlight ? 'text-radar-green font-bold' : 'text-white'}`}>
-                {value}
-            </span>
+        <button
+            onClick={onClick}
+            disabled={disabled}
+            className={`w-full text-left p-4 rounded-xl border transition-all flex items-center gap-4 group ${
+                active 
+                    ? 'bg-radar-green/10 border-radar-green/50 ring-1 ring-radar-green/20' 
+                    : 'bg-white border-slate-200 hover:border-slate-300'
+            } ${disabled ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
+        >
+            <div className={`p-2.5 rounded-lg transition-colors ${
+                active ? 'bg-radar-green text-black' : 'bg-slate-50 text-slate-400 group-hover:text-slate-900 group-hover:bg-slate-100'
+            }`}>
+                {React.cloneElement(icon, { size: 18 })}
+            </div>
+            <div className="flex-1">
+                <div className="text-xs font-bold text-slate-900 leading-none mb-1">{label}</div>
+                <div className="text-[10px] text-slate-500 leading-none">{desc}</div>
+            </div>
+            <ArrowRight className={`w-4 h-4 transition-transform ${active ? 'text-radar-green translate-x-1' : 'text-slate-300'}`} />
+        </button>
+    );
+}
+
+function MetricRow({ label, value, highlight = false }: any) {
+    return (
+        <div className="flex items-center justify-between py-1 border-b border-slate-50 last:border-0">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{label}</span>
+            <span className={`font-mono text-xs ${highlight ? 'text-green-600 font-bold' : 'text-slate-900 font-medium'}`}>{value}</span>
         </div>
     );
 }

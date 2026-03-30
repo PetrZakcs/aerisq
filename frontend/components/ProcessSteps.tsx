@@ -72,12 +72,12 @@ export default function ProcessSteps() {
                             <div
                                 style={{
                                     fontFamily: 'var(--font-space-mono)',
-                                    fontSize: '13px',
+                                    fontSize: '11px',
                                     color: '#cc0000',
-                                    letterSpacing: '0.1em',
+                                    marginBottom: '24px',
                                 }}
                             >
-                                {step.num}
+                                PHASE {step.num}
                             </div>
 
                             {/* Content */}

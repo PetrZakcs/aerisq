@@ -14,7 +14,7 @@ export default function TruthSlider({
     beforeImage,
     afterImage,
     beforeLabel = 'Optical (Sentinel-2)',
-    afterLabel = 'AerisQ Radar (Sentinel-1)'
+    afterLabel = 'PhasQ Radar (Sentinel-1)'
 }: TruthSliderProps) {
     const [sliderPosition, setSliderPosition] = useState(50);
     const [isDragging, setIsDragging] = useState(false);
@@ -86,9 +86,9 @@ export default function TruthSlider({
                     className="w-full h-full object-cover"
                     draggable={false}
                 />
-                <div className="absolute top-4 right-4 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded border border-radar-green/50 flex items-center gap-2">
-                    <div className="w-2 h-2 bg-radar-green rounded-full animate-pulse" />
-                    <span className="text-radar-green font-mono text-xs font-bold tracking-wider">{afterLabel.toUpperCase()}</span>
+                <div className="absolute top-4 right-4 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded border border-[#cc0000]/50 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-[#cc0000] rounded-full animate-pulse" />
+                    <span className="text-[#cc0000] font-mono text-xs font-bold tracking-wider">{afterLabel.toUpperCase()}</span>
                 </div>
             </div>
 

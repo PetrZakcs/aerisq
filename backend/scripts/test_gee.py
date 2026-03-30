@@ -1,4 +1,4 @@
-"""
+﻿"""
 Test Google Earth Engine with project initialization
 """
 import ee
@@ -22,7 +22,7 @@ except Exception as e:
         print("⚠️  No project found. Creating one...")
         try:
             # Initialize with a new project
-            ee.Initialize(project='ee-aerisq')
+            ee.Initialize(project='ee-phasq')
             print("✅ Earth Engine initialized with new project!")
         except Exception as e2:
             print(f"❌ Still failed: {e2}")

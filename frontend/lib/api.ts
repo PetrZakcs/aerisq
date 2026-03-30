@@ -1,5 +1,5 @@
-/**
- * AerisQ API Client
+﻿/**
+ * PhasQ API Client
  * Handles all communication with the backend API
  */
 
@@ -12,8 +12,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || (
 );
 
 // Token storage keys
-const TOKEN_KEY = 'aerisq_token';
-const USER_KEY = 'aerisq_user';
+const TOKEN_KEY = 'phasq_token';
+const USER_KEY = 'phasq_user';
 
 // Types
 export interface Token {

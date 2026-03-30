@@ -28,7 +28,7 @@ export default function MissionReports() {
             }}
         >
             <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
-                <div className="section-label">Case Studies</div>
+                <div className="section-label">Case study</div>
 
                 <div
                     style={{
@@ -72,9 +72,8 @@ export default function MissionReports() {
 
                 <div>
                     {CASES.map((item, i) => (
-                        <motion.a
+                        <motion.div
                             key={item.id}
-                            href={item.link}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -84,12 +83,9 @@ export default function MissionReports() {
                                 gap: '0',
                                 background: '#0a0a0a',
                                 border: '1px solid #1a1a1a',
-                                textDecoration: 'none',
-                                transition: 'border-color 0.2s ease',
                                 overflow: 'hidden',
+                                opacity: 0.7,
                             }}
-                            onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.borderColor = '#cc0000')}
-                            onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.borderColor = '#1a1a1a')}
                         >
                             {/* Image */}
                             <div style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden' }}>
@@ -97,14 +93,13 @@ export default function MissionReports() {
                                     src={item.image}
                                     alt={item.title}
                                     fill
-                                    style={{ objectFit: 'cover', filter: 'grayscale(40%) contrast(1.2)', transition: 'transform 0.5s ease' }}
-                                    className="group-hover:scale-105"
+                                    style={{ objectFit: 'cover', filter: 'grayscale(100%) contrast(1.2)' }}
                                 />
                                 <div
                                     style={{
                                         position: 'absolute',
                                         inset: 0,
-                                        background: 'linear-gradient(135deg, rgba(0,0,0,0.6) 0%, transparent 60%)',
+                                        background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, transparent 60%)',
                                     }}
                                 />
                                 {/* Overlay label */}
@@ -117,13 +112,13 @@ export default function MissionReports() {
                                         fontSize: '10px',
                                         letterSpacing: '0.15em',
                                         textTransform: 'uppercase',
-                                        color: '#888',
-                                        background: 'rgba(0,0,0,0.7)',
+                                        color: '#666',
+                                        background: 'rgba(0,0,0,0.8)',
                                         padding: '4px 10px',
                                         backdropFilter: 'blur(4px)',
                                     }}
                                 >
-                                    {item.id}
+                                    {item.id} — RESTRICTED
                                 </div>
                                 <div
                                     style={{
@@ -132,7 +127,7 @@ export default function MissionReports() {
                                         left: 20,
                                         fontFamily: 'var(--font-space-mono)',
                                         fontSize: '10px',
-                                        color: '#666',
+                                        color: '#444',
                                         letterSpacing: '0.1em',
                                         textTransform: 'uppercase',
                                     }}
@@ -150,7 +145,7 @@ export default function MissionReports() {
                                             fontSize: '10px',
                                             letterSpacing: '0.15em',
                                             textTransform: 'uppercase',
-                                            color: '#555',
+                                            color: '#444',
                                             marginBottom: '16px',
                                         }}
                                     >
@@ -162,7 +157,7 @@ export default function MissionReports() {
                                             fontWeight: 700,
                                             textTransform: 'uppercase',
                                             letterSpacing: '-0.01em',
-                                            color: '#fff',
+                                            color: '#888',
                                             margin: '0 0 40px 0',
                                             lineHeight: 1.1,
                                         }}
@@ -183,8 +178,8 @@ export default function MissionReports() {
                                         }}
                                     >
                                         {[
-                                            { label: 'Detection', value: item.detection, highlight: false },
-                                            { label: 'Outcome', value: item.outcome, highlight: true },
+                                            { label: 'Detection', value: 'Restricted', highlight: false },
+                                            { label: 'Outcome', value: 'Restricted', highlight: true },
                                         ].map((row, ri) => (
                                             <div
                                                 key={ri}
@@ -199,7 +194,7 @@ export default function MissionReports() {
                                                         fontSize: '10px',
                                                         letterSpacing: '0.15em',
                                                         textTransform: 'uppercase',
-                                                        color: '#444',
+                                                        color: '#333',
                                                         marginBottom: '8px',
                                                     }}
                                                 >
@@ -209,7 +204,7 @@ export default function MissionReports() {
                                                     style={{
                                                         fontFamily: 'var(--font-space-mono)',
                                                         fontSize: '15px',
-                                                        color: row.highlight ? '#cc3300' : '#fff',
+                                                        color: row.highlight ? '#cc0000' : '#444',
                                                         letterSpacing: '0.02em',
                                                     }}
                                                 >
@@ -225,17 +220,19 @@ export default function MissionReports() {
                                             fontSize: '11px',
                                             letterSpacing: '0.12em',
                                             textTransform: 'uppercase',
-                                            color: '#fff',
+                                            color: '#cc0000',
                                             display: 'inline-flex',
                                             alignItems: 'center',
                                             gap: '8px',
+                                            border: '1px solid rgba(204,0,0,0.3)',
+                                            padding: '8px 16px'
                                         }}
                                     >
-                                        View Analysis ↗
+                                        Access Required ↗
                                     </span>
                                 </div>
                             </div>
-                        </motion.a>
+                        </motion.div>
                     ))}
                 </div>
             </div>

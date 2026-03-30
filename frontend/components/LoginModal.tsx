@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -44,7 +44,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     };
 
     const fillTestCredentials = () => {
-        setEmail('admin@aerisq.tech');
+        setEmail('admin@phasq.tech');
         setPassword('password123');
     };
 
@@ -101,7 +101,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="operator@aerisq.tech"
+                            placeholder="operator@phasq.tech"
                             className="w-full px-4 py-3 bg-black border border-white/10 text-white font-mono text-sm placeholder:text-gray-600 focus:border-radar-green focus:outline-none transition-colors"
                             required
                             disabled={isLoading || success}

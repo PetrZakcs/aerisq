@@ -7,17 +7,43 @@ const TEAM = [
         id: 'PZ-01',
         name: 'Petr Žák',
         role: 'Founder & CEO',
-        bio: 'GIS specialist and high-agency builder who re-engineered AerisQ\'s core physics engine in 14 days — replacing AI hallucinations with raw SAR signal analysis. Detects subsurface drought and hidden assets where optical systems see nothing.',
+        bio: 'GIS specialist and high-agency builder who re-engineered PhasQ\'s core physics engine in 14 days — replacing AI hallucinations with raw SAR signal analysis. Detects subsurface drought and hidden assets where optical systems see nothing.',
         image: '/team/petr-zak.jpg',
         linkedin: 'https://www.linkedin.com/in/petrzak01/',
+        isLead: true,
     },
     {
         id: 'JR-01',
-        name: 'Jan Rudolf',
-        role: 'CTO',
-        bio: 'From engineering autonomous systems at VW/Audi and US generative AI labs to architecting AerisQ\'s radar signal intelligence stack — grounded in physics research from CTU Prague.',
-        image: '/team/jan-rudolf.jpg',
+        name: 'Incoming CTO',
+        role: 'Chief Technical Officer',
+        type: 'incoming',
+        bio: 'Leading engineering talent from US generative AI labs and European autonomous systems research. Arriving to scale our radar signal intelligence stack.',
+        isLead: true,
     },
+    {
+        id: 'COLLAB-01',
+        name: 'University Partners',
+        role: 'Scientific Collaboration',
+        bio: 'Strategic partnerships with leading technical universities for radar physics validation and dielectric modeling research.',
+        icon: '🏛️',
+        isCollab: true,
+    },
+    {
+        id: 'COLLAB-02',
+        name: 'Research Fellows',
+        role: 'Remote Sensed Data',
+        bio: 'Joint research initiatives focused on C-Band SAR interferometry and volumetric soil moisture estimation protocols.',
+        icon: '🔬',
+        isCollab: true,
+    },
+    {
+        id: 'COLLAB-03',
+        name: 'Open Science',
+        role: 'Data Verification',
+        bio: 'Community-driven ground truth validation and cross-sensor calibration for global drought indexing.',
+        icon: '🌍',
+        isCollab: true,
+    }
 ];
 
 export default function Founder() {
@@ -31,7 +57,7 @@ export default function Founder() {
             }}
         >
             <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
-                <div className="section-label">Team</div>
+                <div className="section-label">Organization</div>
 
                 <div
                     style={{
@@ -57,14 +83,14 @@ export default function Founder() {
                         scientists.
                     </h2>
                     <p style={{ color: '#666', fontSize: '14px', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
-                        We bridge the gap between academic radar physics and real-world operational intelligence. Not a team of designers making visualizations — engineers solving the radar equation.
+                        We bridge the gap between academic radar physics and real-world operational intelligence. From core physics to enterprise-scale deployment.
                     </p>
                 </div>
 
                 <div
                     style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
                         borderTop: '1px solid #1a1a1a',
                         borderLeft: '1px solid #1a1a1a',
                     }}
@@ -80,32 +106,50 @@ export default function Founder() {
                                 borderRight: '1px solid #1a1a1a',
                                 borderBottom: '1px solid #1a1a1a',
                                 overflow: 'hidden',
+                                gridColumn: member.isLead ? 'span 1' : 'auto',
+                                opacity: member.type === 'incoming' ? 0.8 : 1,
                             }}
                         >
-                            {/* Photo */}
+                            {/* Visual Header */}
                             <div
                                 style={{
                                     position: 'relative',
-                                    aspectRatio: '4/3',
+                                    aspectRatio: member.isCollab ? '16/7' : '4/3',
                                     overflow: 'hidden',
                                     background: '#0a0a0a',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
                                 }}
                             >
-                                <img
-                                    src={member.image}
-                                    alt={member.name}
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                        objectPosition: 'top',
-                                        filter: 'grayscale(100%) contrast(1.1)',
-                                        display: 'block',
-                                        transition: 'filter 0.4s ease',
-                                    }}
-                                    onMouseEnter={(e) => ((e.currentTarget as HTMLImageElement).style.filter = 'grayscale(0%) contrast(1)')}
-                                    onMouseLeave={(e) => ((e.currentTarget as HTMLImageElement).style.filter = 'grayscale(100%) contrast(1.1)')}
-                                />
+                                {member.image ? (
+                                    <img
+                                        src={member.image}
+                                        alt={member.name}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                            objectPosition: 'top',
+                                            filter: member.type === 'incoming' ? 'grayscale(100%) contrast(1.1) brightness(0.7)' : 'grayscale(100%) contrast(1.1)',
+                                            display: 'block',
+                                            transition: 'filter 0.4s ease',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (member.type !== 'incoming') {
+                                                (e.currentTarget as HTMLImageElement).style.filter = 'grayscale(0%) contrast(1)';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (member.type !== 'incoming') {
+                                                (e.currentTarget as HTMLImageElement).style.filter = 'grayscale(100%) contrast(1.1)';
+                                            }
+                                        }}
+                                    />
+                                ) : (
+                                    <div style={{ fontSize: '48px', opacity: 0.2 }}>{member.icon || '👤'}</div>
+                                )}
+                                
                                 {/* ID overlay */}
                                 <div
                                     style={{
@@ -116,13 +160,33 @@ export default function Founder() {
                                         fontSize: '10px',
                                         letterSpacing: '0.15em',
                                         textTransform: 'uppercase',
-                                        color: '#888',
+                                        color: member.isCollab ? '#444' : '#888',
                                         background: 'rgba(0,0,0,0.8)',
                                         padding: '4px 10px',
                                     }}
                                 >
                                     {member.id}
                                 </div>
+
+                                {member.type === 'incoming' && (
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            bottom: 16,
+                                            right: 16,
+                                            fontFamily: 'var(--font-space-mono)',
+                                            fontSize: '10px',
+                                            letterSpacing: '0.15em',
+                                            textTransform: 'uppercase',
+                                            color: '#cc0000',
+                                            border: '1px solid #cc0000',
+                                            padding: '4px 10px',
+                                            background: 'rgba(0,0,0,0.9)',
+                                        }}
+                                    >
+                                        Incoming
+                                    </div>
+                                )}
                             </div>
 
                             {/* Info */}
@@ -130,14 +194,14 @@ export default function Founder() {
                                 <div
                                     style={{
                                         fontFamily: 'var(--font-space-mono)',
-                                        fontSize: '10px',
+                                        fontSize: '11px',
                                         letterSpacing: '0.15em',
-                                        textTransform: 'uppercase',
-                                        color: '#cc0000',
-                                        marginBottom: '8px',
+                                        color: member.isCollab ? '#444' : '#cc0000',
+                                        marginBottom: '4px',
+                                        textTransform: 'uppercase'
                                     }}
                                 >
-                                    {member.role}
+                                    / {member.role}
                                 </div>
                                 <h3
                                     style={{
@@ -145,7 +209,7 @@ export default function Founder() {
                                         fontWeight: 700,
                                         textTransform: 'uppercase',
                                         letterSpacing: '-0.01em',
-                                        color: '#fff',
+                                        color: member.isCollab ? '#888' : '#fff',
                                         margin: '0 0 20px 0',
                                     }}
                                 >

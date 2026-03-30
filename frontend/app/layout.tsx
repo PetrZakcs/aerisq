@@ -16,7 +16,7 @@ const inter = Inter({
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AerisQ — Radar Intelligence Platform",
+  title: "PhasQ — Radar Intelligence Platform",
   description: "Physics-based Synthetic Aperture Radar analysis. All-weather satellite intelligence for agriculture, defense, and infrastructure.",
 };
 

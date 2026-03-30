@@ -1,4 +1,4 @@
-"""
+﻿"""
 Google Earth Engine - Final Test with Project
 Run this after creating Google Cloud project
 """
@@ -27,7 +27,7 @@ else:
     if not project_id:
         print("❌ Project ID is required!")
         print("\n1. Go to: https://console.cloud.google.com/projectcreate")
-        print("2. Create project: aerisq-earth-engine")
+        print("2. Create project: phasq-earth-engine")
         print("3. Copy the Project ID")
         print("4. Run this script again")
         exit(1)
@@ -165,7 +165,7 @@ try:
             print("   • Get real-time drought detection")
             print("   • Process in cloud (no downloads!)")
             print()
-            print("📝 Next step: Integrate into AerisQ API")
+            print("📝 Next step: Integrate into PhasQ API")
             print(f"   Project ID saved in: {config_file}")
             print()
             

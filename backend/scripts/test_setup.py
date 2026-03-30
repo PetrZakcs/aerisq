@@ -1,5 +1,5 @@
-"""
-AerisQ - Connection Test
+﻿"""
+PhasQ - Connection Test
 Verify that all free services are configured correctly
 """
 import os
@@ -148,7 +148,7 @@ def test_data_directories():
 
 def main():
     print("=" * 60)
-    print("   AerisQ - System Check (FREE Setup)")
+    print("   PhasQ - System Check (FREE Setup)")
     print("=" * 60)
     
     results = {

@@ -1,4 +1,4 @@
-# AerisQ Backend - Local Development Setup (No Docker)
+﻿# PhasQ Backend - Local Development Setup (No Docker)
 # Run this script to set up and start the backend locally
 
 # Create virtual environment if it doesn't exist
@@ -16,7 +16,7 @@ Write-Host "Installing dependencies..." -ForegroundColor Cyan
 pip install -r requirements.txt
 
 # Run the server
-Write-Host "Starting AerisQ Backend on http://localhost:8000" -ForegroundColor Green
+Write-Host "Starting PhasQ Backend on http://localhost:8000" -ForegroundColor Green
 Write-Host "API Docs: http://localhost:8000/docs" -ForegroundColor Yellow
-Write-Host "Test credentials: admin@aerisq.tech / password123" -ForegroundColor Yellow
+Write-Host "Test credentials: admin@phasq.tech / password123" -ForegroundColor Yellow
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000

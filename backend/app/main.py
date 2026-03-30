@@ -1,5 +1,5 @@
-"""
-AerisQ API - Main Application
+﻿"""
+PhasQ API - Main Application
 Physics-Based Sentinel-1 Radar Analysis Platform
 """
 from contextlib import asynccontextmanager
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Application lifespan events"""
     # Startup
-    logger.info("🚀 AerisQ API Starting...")
+    logger.info("🚀 PhasQ API Starting...")
     logger.info(f"🔧 Debug mode: {settings.DEBUG}")
     logger.info(f"🌐 CORS origins: {settings.CORS_ORIGINS}")
     
@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
     yield
     
     # Shutdown
-    logger.info("👋 AerisQ API Shutting down...")
+    logger.info("👋 PhasQ API Shutting down...")
 
 
 # Create FastAPI application
@@ -44,7 +44,7 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="""
-## AerisQ Physics-Based Radar Analysis Platform
+## PhasQ Physics-Based Radar Analysis Platform
 
 **MVP v3.0** - Sentinel-1 SAR drought detection engine.
 
@@ -58,7 +58,7 @@ app = FastAPI(
 Use the `/auth/token` endpoint to obtain a JWT token.
 
 **Test Credentials:**
-- Email: `admin@aerisq.tech`
+- Email: `admin@phasq.tech`
 - Password: `password123`
     """,
     docs_url="/docs",
@@ -96,7 +96,7 @@ def read_root():
     Root endpoint - API health check
     """
     return {
-        "service": "AerisQ API",
+        "service": "PhasQ API",
         "version": settings.APP_VERSION,
         "status": "operational",
         "message": "Physics-Based Radar Analysis Platform Active",
@@ -111,7 +111,7 @@ def health_check():
     """
     return {
         "status": "healthy",
-        "service": "aerisq-backend",
+        "service": "phasq-backend",
         "version": settings.APP_VERSION
     }
 

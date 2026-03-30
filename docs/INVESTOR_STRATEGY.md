@@ -1,4 +1,4 @@
-# 💰 AerisQ - Investor Pitch Strategy
+﻿# 💰 PhasQ - Investor Pitch Strategy
 
 **Goal:** Získat pre-seed/seed investici ($50k-$500k)
 
@@ -85,7 +85,7 @@
 - Google Earth Engine integration (ready)
 
 ✅ **Production Ready:**
-- Live deployment: https://aerisq.vercel.app
+- Live deployment: https://phasq.vercel.app
 - CI/CD pipeline (GitHub → Vercel)
 - Environment-based config
 - Error handling & logging
@@ -103,7 +103,7 @@
 ### **1. Live Demo (5 minutes)**
 
 **Script:**
-1. **Overview:** "AerisQ detects drought from space, weeks before farmers see it"
+1. **Overview:** "PhasQ detects drought from space, weeks before farmers see it"
 2. **Show problem:** "Current methods are visual, slow, unreliable"
 3. **Our solution:** [Open live app]
 4. **Walk through:**
@@ -152,7 +152,7 @@
 > "Current drought detection is visual and slow. By the time you see brown crops, it's too late. Satellites can see soil moisture invisibly, but analysis is manual and expensive."
 
 ### **Solution:**
-> "AerisQ is an AI-powered early warning system. We use radar satellites that penetrate clouds, analyze soil physics, and deliver drought alerts in seconds - not weeks."
+> "PhasQ is an AI-powered early warning system. We use radar satellites that penetrate clouds, analyze soil physics, and deliver drought alerts in seconds - not weeks."
 
 ### **Why Now:**
 - ✅ Climate change accelerating droughts
@@ -208,7 +208,7 @@
 
 ### **2. Create Pitch Deck** (3 hours)
 **10 slides:**
-1. Cover (AerisQ logo, tagline)
+1. Cover (PhasQ logo, tagline)
 2. Problem (drought stats, losses)
 3. Solution (our tech, how it works)
 4. Market (TAM, growth)
@@ -269,7 +269,7 @@
 "Drought costs $13B/year in Europe. Farmers find out too late."
 
 **Slide 2 (Solution):**
-"AerisQ detects drought from space, weeks earlier."
+"PhasQ detects drought from space, weeks earlier."
 [Show live demo - 30 seconds]
 
 **Slide 3 (Market):**
@@ -285,7 +285,7 @@
 "Raising $100-250k to validate PMF. 50 customers in 6 months."
 
 **Close:**
-"Questions? Try it yourself: aerisq.vercel.app"
+"Questions? Try it yourself: phasq.vercel.app"
 
 ---
 

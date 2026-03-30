@@ -1,6 +1,6 @@
-# 🚀 LOCAL SETUP - COMPLETE!
+﻿# 🚀 LOCAL SETUP - COMPLETE!
 
-**Mission:** Run AerisQ locally for "Golden Sample" demo mode
+**Mission:** Run PhasQ locally for "Golden Sample" demo mode
 
 ---
 
@@ -140,7 +140,7 @@ cd ..
 **During demo:**
 1. Start servers: `.\start_local.ps1`
 2. Open app: http://localhost:3000
-3. Login: admin@aerisq.tech / password123
+3. Login: admin@phasq.tech / password123
 4. Draw area on map
 5. Click "Analyze"
 6. FAST results (<30s with real data, <2s with simulation)
@@ -228,7 +228,7 @@ npm run dev
 
 **Browser auto-opens to:** http://localhost:3000
 
-**Login:** admin@aerisq.tech / password123
+**Login:** admin@phasq.tech / password123
 
 ---
 

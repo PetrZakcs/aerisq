@@ -1,5 +1,5 @@
-"""
-AerisQ - Easy Credentials Setup
+﻿"""
+PhasQ - Easy Credentials Setup
 Helper script to save CDSE credentials to .env file
 """
 import os
@@ -9,7 +9,7 @@ def setup_credentials():
     """Interactive credential setup"""
     
     print("=" * 60)
-    print("   AerisQ - CDSE Credentials Setup")
+    print("   PhasQ - CDSE Credentials Setup")
     print("=" * 60)
     print()
     print("This will save your CDSE credentials to .env file")

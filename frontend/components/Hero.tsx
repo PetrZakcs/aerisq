@@ -16,7 +16,7 @@ export default function Hero() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-end',
-                padding: '0 0 80px 0',
+                padding: '120px 0 80px 0',
                 background: '#000',
                 overflow: 'hidden',
             }}
@@ -49,8 +49,9 @@ export default function Hero() {
                     right: 0,
                     height: '1px',
                     top: '40%',
-                    background: 'linear-gradient(90deg, transparent 0%, #cc000033 30%, #cc000066 50%, #cc000033 70%, transparent 100%)',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(204,0,0,0.1) 30%, rgba(204,0,0,0.3) 50%, rgba(204,0,0,0.1) 70%, transparent 100%)',
                     pointerEvents: 'none',
+                    boxShadow: '0 0 15px rgba(204,0,0,0.15)'
                 }}
             />
 
@@ -82,12 +83,15 @@ export default function Hero() {
                         style={{
                             fontFamily: 'var(--font-space-mono)',
                             fontSize: '10px',
-                            letterSpacing: '0.2em',
+                            letterSpacing: '0.25em',
                             textTransform: 'uppercase',
-                            color: '#cc0000',
+                            color: '#fff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px'
                         }}
                     >
-                        ● Sentinel-1 SAR Intelligence
+                        <span style={{ color: '#cc0000' }}>📡</span> Radar Phase Intelligence
                     </span>
                 </motion.div>
 
@@ -99,17 +103,17 @@ export default function Hero() {
                     style={{
                         fontSize: 'clamp(3.5rem, 9vw, 10rem)',
                         fontWeight: 900,
-                        lineHeight: 0.95,
-                        letterSpacing: '-0.03em',
+                        lineHeight: 0.9,
+                        letterSpacing: '-0.04em',
                         textTransform: 'uppercase',
                         color: '#fff',
                         margin: '0 0 32px 0',
                     }}
                 >
-                    See{' '}
-                    <span style={{ color: '#cc0000' }}>through</span>
+                    Shift the{' '}
+                    <span style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)', color: 'transparent' }}>Perspective</span>
                     <br />
-                    any condition.
+                    PhasQ Analysis.
                 </motion.h1>
 
                 {/* Sub-text and CTAs row */}

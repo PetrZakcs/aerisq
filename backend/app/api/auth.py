@@ -1,4 +1,4 @@
-"""
+﻿"""
 Authentication API Endpoints
 Handles user login and JWT token generation
 """
@@ -29,7 +29,7 @@ async def login_for_access_token(
     Authenticates user and returns JWT access token.
     Currently uses hardcoded "God Mode" user for testing.
     
-    - **username**: User email (admin@aerisq.tech for testing)
+    - **username**: User email (admin@phasq.tech for testing)
     - **password**: User password (password123 for testing)
     
     Returns JWT token on success.

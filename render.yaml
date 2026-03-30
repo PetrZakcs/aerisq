@@ -1,12 +1,12 @@
-# Render.com deployment configuration for AerisQ Backend
+# Render.com deployment configuration for PhasQ Backend
 # This enables REAL Google Earth Engine satellite data processing
 
 services:
   # Backend API with GEE support
   - type: web
-    name: aerisq-backend
+    name: phasq-backend
     runtime: python
-    repo: https://github.com/PetrZakcs/aerisq
+    repo: https://github.com/PetrZakcs/phasq
     region: frankfurt  # EU region for GDPR compliance
     branch: master
     rootDir: backend
@@ -19,13 +19,13 @@ services:
         generateValue: true
       
       - key: GOD_MODE_EMAIL
-        value: admin@aerisq.tech
+        value: admin@phasq.tech
       
       - key: GOD_MODE_PASSWORD
         sync: false  # Set manually in Render dashboard
       
       - key: GEE_PROJECT_ID
-        value: aerisq
+        value: phasq
       
       - key: GEE_SERVICE_ACCOUNT_JSON
         sync: false  # Set manually - paste from vercel_env_value.txt

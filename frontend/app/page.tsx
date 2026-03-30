@@ -8,10 +8,10 @@ import TruthSlider from '../components/TruthSlider';
 import MissionReports from '../components/MissionReports';
 import Pricing from '../components/Pricing';
 import FAQ from '../components/FAQ';
-import Founder from '../components/Founder';
 import Waitlist from '../components/Waitlist';
-import Features from '../components/Features';
+import FeatureSection from '../components/Features';
 import { motion } from 'framer-motion';
+import Founder from '../components/Founder';
 
 export default function Home() {
   return (
@@ -31,7 +31,7 @@ export default function Home() {
         }}
       >
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
-          <div className="section-label">Live Demonstrations</div>
+          <div className="section-label">Live demonstration</div>
 
           <div
             style={{
@@ -79,20 +79,17 @@ export default function Home() {
               border: '1px solid #1a1a1a',
             }}
           >
-            {/* Live Demo */}
-            <motion.a
-              href="/mission/alpha"
+            {/* Agriculture Intelligence - Locked Q2 */}
+            <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               style={{
-                display: 'block',
                 position: 'relative',
                 aspectRatio: '16/9',
                 overflow: 'hidden',
                 borderRight: '1px solid #1a1a1a',
-                textDecoration: 'none',
-                cursor: 'pointer',
+                opacity: 0.6,
               }}
             >
               <div
@@ -102,16 +99,14 @@ export default function Home() {
                   backgroundImage: "url('/vysocina_radar.png')",
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
-                  filter: 'grayscale(70%) contrast(1.3)',
-                  transition: 'transform 0.6s ease, filter 0.4s ease',
+                  filter: 'grayscale(100%) contrast(1.1)',
                 }}
-                className="group-hover:scale-105"
               />
               <div
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)',
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 100%)',
                 }}
               />
               <div style={{ position: 'absolute', inset: 0, padding: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -122,22 +117,13 @@ export default function Home() {
                       fontSize: '10px',
                       letterSpacing: '0.15em',
                       textTransform: 'uppercase',
-                      color: '#cc0000',
+                      color: '#444',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
                     }}
                   >
-                    <span
-                      style={{
-                        width: '6px',
-                        height: '6px',
-                        borderRadius: '50%',
-                        background: '#cc0000',
-                        animation: 'pulse 2s infinite',
-                      }}
-                    />
-                    Live
+                    — Restricted Area
                   </span>
                   <span
                     style={{
@@ -145,7 +131,7 @@ export default function Home() {
                       fontSize: '10px',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
-                      color: '#555',
+                      color: '#333',
                       background: 'rgba(0,0,0,0.6)',
                       padding: '3px 10px',
                     }}
@@ -168,21 +154,32 @@ export default function Home() {
                   </h3>
                   <p
                     style={{
-                      color: '#888',
+                      color: '#555',
                       fontSize: '13px',
                       margin: '0 0 20px 0',
                       fontWeight: 300,
                       lineHeight: 1.6,
                     }}
                   >
-                    Crop health, soil moisture, and harvest readiness via Sentinel-1 SAR.
+                    Coming soon: Crop health, soil moisture, and harvest readiness via Sentinel-1 SAR.
                   </p>
-                  <span className="btn-primary" style={{ display: 'inline-flex' }}>
-                    Open Demo ↗
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-space-mono)',
+                      fontSize: '11px',
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      color: '#cc0000',
+                      border: '1px solid rgba(204,0,0,0.2)',
+                      padding: '10px 20px',
+                      display: 'inline-flex',
+                    }}
+                  >
+                    Opening Q2 2026
                   </span>
                 </div>
               </div>
-            </motion.a>
+            </motion.div>
 
             {/* Coming Soon */}
             <motion.div
@@ -267,7 +264,9 @@ export default function Home() {
       </section>
 
       {/* BENEFITS */}
-      <Benefits />
+      <div id="technology">
+        <Benefits />
+      </div>
 
       {/* PROCESS */}
       <ProcessSteps />
@@ -277,23 +276,27 @@ export default function Home() {
         beforeImage="/vysocina_optical.png"
         afterImage="/vysocina_radar.png"
         beforeLabel="Optical (Sentinel-2)"
-        afterLabel="AerisQ SAR (Sentinel-1)"
+        afterLabel="PhasQ SAR (Sentinel-1)"
       />
 
       {/* FEATURES */}
-      <Features />
+      <FeatureSection />
 
       {/* CASE STUDIES */}
-      <MissionReports />
+      <div id="usecases">
+        <MissionReports />
+      </div>
 
       {/* PRICING */}
       <Pricing />
 
-      {/* FAQ */}
-      <FAQ />
-
-      {/* TEAM */}
+      {/* FOUNDERS / TEAM */}
       <Founder />
+
+      {/* FAQ */}
+      <div id="about">
+        <FAQ />
+      </div>
 
       {/* WAITLIST */}
       <Waitlist />
@@ -326,7 +329,7 @@ export default function Home() {
               color: '#444',
             }}
           >
-            © {new Date().getFullYear()} AerisQ — SAR Intelligence
+            © {new Date().getFullYear()} PhasQ — SAR Intelligence
           </span>
 
           <div style={{ display: 'flex', gap: '32px' }}>
@@ -353,9 +356,9 @@ export default function Home() {
 
           <div style={{ display: 'flex', gap: '20px' }}>
             {[
-              { href: 'https://linkedin.com', label: 'LI' },
-              { href: 'https://x.com', label: 'X' },
-              { href: 'mailto:info@aerisq.com', label: '✉' },
+              { href: 'https://linkedin.com/company/phasq1', label: 'LI' },
+              { href: '#', label: 'X' },
+              { href: 'mailto:petr@phasq.com', label: '✉' },
             ].map((link) => (
               <a
                 key={link.label}

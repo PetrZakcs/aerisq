@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Logo from './Logo';
 import { PopupModal } from 'react-calendly';
 
 export default function Navbar() {
@@ -39,14 +39,8 @@ export default function Navbar() {
                 }}
             >
                 {/* Logo */}
-                <Link href="/" style={{ position: 'relative', width: '120px', height: '36px', display: 'block', flexShrink: 0 }}>
-                    <Image
-                        src="/logo.png"
-                        alt="AerisQ"
-                        fill
-                        style={{ objectFit: 'contain', objectPosition: 'left', filter: 'brightness(0) invert(1)' }}
-                        priority
-                    />
+                <Link href="/" style={{ position: 'relative', width: '38px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Logo style={{ width: '100%', height: '100%' }} />
                 </Link>
 
                 {/* Nav Links */}
@@ -74,8 +68,8 @@ export default function Navbar() {
 
                 {/* CTAs */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <button
-                        onClick={() => setOpenCalendly(true)}
+                    <a
+                        href="mailto:petr@phasq.com"
                         className="hidden sm:block"
                         style={{
                             fontFamily: 'var(--font-space-mono)',
@@ -87,19 +81,20 @@ export default function Navbar() {
                             border: '1px solid #2a2a2a',
                             padding: '10px 20px',
                             cursor: 'pointer',
+                            textDecoration: 'none',
                             transition: 'all 0.15s ease',
                         }}
                         onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.borderColor = '#fff';
-                            (e.currentTarget as HTMLButtonElement).style.color = '#fff';
+                            (e.currentTarget as HTMLAnchorElement).style.borderColor = '#fff';
+                            (e.currentTarget as HTMLAnchorElement).style.color = '#fff';
                         }}
                         onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.borderColor = '#2a2a2a';
-                            (e.currentTarget as HTMLButtonElement).style.color = '#888';
+                            (e.currentTarget as HTMLAnchorElement).style.borderColor = '#2a2a2a';
+                            (e.currentTarget as HTMLAnchorElement).style.color = '#888';
                         }}
                     >
-                        Book Demo
-                    </button>
+                        Contact Us
+                    </a>
 
                     <Link
                         href="#waitlist"
@@ -117,28 +112,21 @@ export default function Navbar() {
                             alignItems: 'center',
                             gap: '6px',
                             fontWeight: 700,
-                            transition: 'background 0.15s ease, color 0.15s ease',
+                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                         }}
                         onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLAnchorElement).style.background = '#cc0000';
-                            (e.currentTarget as HTMLAnchorElement).style.color = '#fff';
+                            (e.currentTarget as HTMLAnchorElement).style.background = '#e2e8f0';
+                            (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(-2px)';
                         }}
                         onMouseLeave={(e) => {
                             (e.currentTarget as HTMLAnchorElement).style.background = '#fff';
-                            (e.currentTarget as HTMLAnchorElement).style.color = '#000';
+                            (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(0)';
                         }}
                     >
                         Get Access ↗
                     </Link>
                 </div>
             </nav>
-
-            <PopupModal
-                url="https://calendly.com/petrrmarketing/aerisq"
-                onModalClose={() => setOpenCalendly(false)}
-                open={openCalendly}
-                rootElement={document.getElementById("root") || document.body}
-            />
         </>
     );
 }

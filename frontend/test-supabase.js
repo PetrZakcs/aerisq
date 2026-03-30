@@ -1,4 +1,4 @@
-
+﻿
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config({ path: '.env.local' });
 
@@ -16,7 +16,7 @@ async function testConnection() {
     console.log('Testing Supabase connection...');
     console.log(`URL: ${supabaseUrl}`);
 
-    const testEmail = `test_${Date.now()}@aerisq.tech`;
+    const testEmail = `test_${Date.now()}@phasq.tech`;
 
     const { data, error } = await supabase
         .from('waitlist')
