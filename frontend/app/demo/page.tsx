@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import {
@@ -17,7 +17,12 @@ import {
     ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
-import AnalysisMap from '@/components/AnalysisMap';
+import dynamic from 'next/dynamic';
+
+const AnalysisMap = dynamic(() => import('@/components/AnalysisMap'), {
+    ssr: false,
+    loading: () => <div className="w-full h-full bg-slate-200 animate-pulse flex items-center justify-center font-mono text-xs text-slate-400">INITIALIZING RADAR MAP...</div>
+});
 
 // ===== TYPES =====
 interface AnalysisResult {
