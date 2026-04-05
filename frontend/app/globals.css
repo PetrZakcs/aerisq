@@ -10,10 +10,10 @@
   --color-gray-900: #0a0a0a;
   --color-gray-800: #111111;
   --color-gray-700: #1a1a1a;
-  --color-gray-500: #666666;
-  --color-gray-400: #888888;
-  --color-gray-300: #aaaaaa;
-  --color-gray-200: #cccccc;
+  --color-gray-500: #999999;
+  --color-gray-400: #bbbbbb;
+  --color-gray-300: #dddddd;
+  --color-gray-200: #eeeeee;
   --color-red: #cc0000;
   --color-red-bright: #ff2222;
   --color-red-dim: #8a0000;
@@ -138,7 +138,7 @@
   --secondary: #111111;
   --secondary-foreground: #ffffff;
   --muted: #111111;
-  --muted-foreground: #666666;
+  --muted-foreground: #999999;
   --accent: #cc0000;
   --accent-foreground: #ffffff;
   --destructive: #ff3333;
@@ -186,7 +186,7 @@
   font-size: 10px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #666;
+  color: #888;
 }
 
 .heading-xl {
@@ -245,13 +245,14 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  border: 1px solid #333;
+  border: 1px solid #444;
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-outline:hover {
   border-color: #fff;
+  background: rgba(255, 255, 255, 0.05);
   color: #fff;
 }
 

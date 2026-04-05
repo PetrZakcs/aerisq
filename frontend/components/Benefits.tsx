@@ -35,7 +35,7 @@ export default function Benefits() {
                         The physics<br />
                         <span className="text-[#cc0000]">advantage</span>
                     </h2>
-                    <p className="text-[#666] text-base md:text-lg leading-relaxed font-light m-0 pt-2">
+                    <p className="text-gray-400 text-base md:text-lg leading-relaxed font-light m-0 pt-2">
                         Optical NDVI indices are lagging indicators — they only show stress after visible damage occurs.
                         SAR radar detects subsurface moisture changes 2 weeks earlier. The difference between reacting and preventing.
                     </p>
@@ -62,7 +62,7 @@ export default function Benefits() {
                             <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-white mb-4">
                                 {b.title}
                             </h3>
-                            <p className="text-[#666] text-sm md:text-base leading-relaxed font-light m-0">
+                            <p className="text-gray-400 text-sm md:text-base leading-relaxed font-light m-0">
                                 {b.desc}
                             </p>
                         </motion.div>

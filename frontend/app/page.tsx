@@ -70,7 +70,7 @@ export default function Home() {
                 Agriculture<br />
                 Intelligence.
               </h2>
-              <p className="text-[#666] text-base md:text-lg leading-relaxed font-light mb-10 max-w-[480px]">
+              <p className="text-gray-400 text-base md:text-lg leading-relaxed font-light mb-10 max-w-[480px]">
                 Coming soon: Crop health, soil moisture, and harvest readiness via Sentinel-1 SAR. 
                 Full orbital throughput for precision farming.
               </p>
@@ -102,10 +102,12 @@ export default function Home() {
       </section>
 
       <Founder />
+
+
+
       <Waitlist />
 
       {/* Footer */}
-
       {/* Footer */}
       <footer className="py-20 md:py-24 bg-black border-t border-white/10">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
@@ -129,16 +131,16 @@ export default function Home() {
             </div>
 
             {/* Links */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-6">
               <h4 className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-2">Comms</h4>
-              <a href="mailto:petr@phasq.com" className="group flex items-center gap-3 text-[#666] hover:text-white transition-colors text-sm">
-                <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center group-hover:border-[#cc0000] group-hover:bg-[#cc0000]/5 transition-all">
-                    <Mail className="w-3.5 h-3.5" />
+              <a href="mailto:petr@phasq.com" className="group flex items-center gap-4 text-gray-400 hover:text-white transition-colors text-sm">
+                <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#cc0000] group-hover:bg-[#cc0000]/10 transition-all">
+                    <Mail className="w-4 h-4" />
                 </div>
                 petr@phasq.com
               </a>
-              <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 text-[#666] hover:text-white transition-colors text-sm">
-                <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center group-hover:border-[#cc0000] group-hover:bg-[#cc0000]/5 transition-all font-mono text-[10px] font-bold">
+              <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 text-gray-400 hover:text-white transition-colors text-sm">
+                <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#cc0000] group-hover:bg-[#cc0000]/10 transition-all font-mono text-[10px] font-bold">
                     CAL
                 </div>
                 Book a demo

@@ -5,15 +5,15 @@ import Image from 'next/image';
 
 const CASES = [
     {
-        id: 'CASE-001',
+        id: 'MISSION-01',
         title: 'Invisible Drought Detection',
         location: 'South Moravia — 500 ha',
-        sensor: 'Sentinel-1 IW GRD',
-        date: '2024-07',
-        detection: '−4.2 dB signal drop',
-        outcome: '+15% yield saved',
+        sensor: 'Sentinel-1 Radar Scan',
+        date: 'Opening in Q2 2026',
+        detection: 'Anomaly v2.4 Restricted',
+        outcome: 'Available Q2 2026',
         image: '/vysocina_radar.png',
-        link: '/mission/alpha'
+        link: '#waitlist'
     }
 ];
 
@@ -28,10 +28,10 @@ export default function MissionReports() {
 
                 <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-10 mb-20">
                     <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tighter uppercase text-white m-0">
-                        Real-world<br />
-                        results.
+                        Operational<br />
+                        Roadmap.
                     </h2>
-                    <p className="font-mono text-[11px] tracking-widest uppercase text-[#444] max-w-[300px] leading-relaxed m-0">
+                    <p className="font-mono text-[11px] tracking-widest uppercase text-gray-500 max-w-[300px] leading-relaxed m-0">
                         Physics-based detection applied to real scenarios — with documented, measurable outcomes.
                     </p>
                 </div>
@@ -66,10 +66,10 @@ export default function MissionReports() {
                             {/* Content */}
                             <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-between">
                                 <div className="mb-10">
-                                    <div className="font-mono text-[10px] tracking-widest uppercase text-[#444] mb-4">
+                                    <div className="font-mono text-[10px] tracking-widest uppercase text-gray-400 mb-4">
                                         {item.location} — {item.date}
                                     </div>
-                                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-tighter text-[#888] leading-[1.1]">
+                                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter text-white leading-[1.1]">
                                         {item.title}
                                     </h3>
                                 </div>
@@ -85,10 +85,10 @@ export default function MissionReports() {
                                                 key={ri}
                                                 className={`p-5 md:p-6 lg:p-8 ${ri === 0 ? 'border-r border-white/10' : ''}`}
                                             >
-                                                <div className="font-mono text-[10px] tracking-widest uppercase text-[#333] mb-2">
+                                                <div className="font-mono text-[10px] tracking-widest uppercase text-gray-500 mb-2">
                                                     {row.label}
                                                 </div>
-                                                <div className={`font-mono text-base md:text-lg tracking-wide ${row.highlight ? 'text-[#cc0000]' : 'text-[#444]'}`}>
+                                                <div className={`font-mono text-base md:text-lg tracking-wide ${row.highlight ? 'text-[#cc0000]' : 'text-gray-400'}`}>
                                                     {row.value}
                                                 </div>
                                             </div>

@@ -55,10 +55,10 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.9, delay: 0.15 }}
-                    className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black leading-[0.9] tracking-tighter uppercase text-white mb-8"
+                    className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black leading-[0.9] tracking-tighter uppercase text-white mb-8 pr-12 md:pr-0"
                 >
                     Shift the{' '}
-                    <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}>Perspective</span>
+                    <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.4)' }}>Perspective</span>
                     <br />
                     PhasQ Analysis.
                 </motion.h1>
@@ -71,7 +71,7 @@ export default function Hero() {
                     className="flex flex-col md:flex-row md:items-end justify-between gap-10"
                 >
                     <p
-                        className="text-[#888] text-base md:text-lg lg:text-xl leading-relaxed max-w-[480px] font-light"
+                        className="text-[#aaa] text-base md:text-lg lg:text-xl leading-relaxed max-w-[480px] font-light"
                     >
                         Physics-based Synthetic Aperture Radar analysis.
                         All-weather, all-hour intelligence — where optical satellites go blind.
@@ -118,7 +118,7 @@ export default function Hero() {
                                 {stat.value}
                             </div>
                             <div
-                                className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#555]"
+                                className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#777]"
                             >
                                 {stat.label}
                             </div>

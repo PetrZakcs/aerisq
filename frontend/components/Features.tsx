@@ -43,7 +43,7 @@ export default function Features() {
                         One platform.<br />
                         Every industry.
                     </h2>
-                    <p className="text-[#666] text-base md:text-lg leading-relaxed font-light m-0">
+                    <p className="text-gray-400 text-base md:text-lg leading-relaxed font-light m-0">
                         A single, physics-based radar intelligence engine — adapted to the data requirements and operational tempo of each sector.
                     </p>
                 </div>
@@ -69,7 +69,7 @@ export default function Features() {
                                 <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-white mb-4 m-0">
                                     {s.title}
                                 </h3>
-                                <p className="text-[#666] text-sm md:text-base leading-relaxed font-light m-0">
+                                <p className="text-gray-400 text-sm md:text-base leading-relaxed font-light m-0">
                                     {s.desc}
                                 </p>
                             </div>
