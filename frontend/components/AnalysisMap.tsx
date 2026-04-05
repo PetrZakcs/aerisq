@@ -55,7 +55,7 @@ export default function AnalysisMap({ onPolygonDrawn, resultGeoJSON, tileUrl }: 
         drawnItems.current = drawn;
 
         // Add draw control
-        const drawControl = new (L.Control as any).Draw({
+        const drawControl = new (L as any).Control.Draw({
             position: 'topleft',
             draw: {
                 polygon: {
@@ -65,16 +65,16 @@ export default function AnalysisMap({ onPolygonDrawn, resultGeoJSON, tileUrl }: 
                         message: '<strong>Error:</strong> Shape cannot intersect!'
                     },
                     shapeOptions: {
-                        color: '#518a16',
-                        fillColor: '#518a16',
+                        color: '#cc0000',
+                        fillColor: '#cc0000',
                         fillOpacity: 0.2,
                         weight: 2
                     }
                 },
                 rectangle: {
                     shapeOptions: {
-                        color: '#518a16',
-                        fillColor: '#518a16',
+                        color: '#cc0000',
+                        fillColor: '#cc0000',
                         fillOpacity: 0.2,
                         weight: 2
                     }
@@ -94,14 +94,8 @@ export default function AnalysisMap({ onPolygonDrawn, resultGeoJSON, tileUrl }: 
         // Handle draw events
         map.on((L as any).Draw.Event.CREATED, (e: any) => {
             const layer = e.layer;
-
-            // Clear previous drawings
             drawn.clearLayers();
-
-            // Add new layer
             drawn.addLayer(layer);
-
-            // Convert to GeoJSON and notify parent
             const geojson = layer.toGeoJSON();
             if (onPolygonDrawn) {
                 onPolygonDrawn(geojson.geometry);

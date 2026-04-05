@@ -86,17 +86,27 @@ const CLASSIFICATION_COLORS: Record<string, string> = {
     'DRY': 'text-orange-600 bg-orange-50 border-orange-200',
     'SEVERE': 'text-red-600 bg-red-50 border-red-200',
     'EXTREME': 'text-red-700 bg-red-100 border-red-300',
+    'STRESSED': 'text-orange-600 bg-orange-50 border-orange-200',
+    'BARREN': 'text-gray-600 bg-gray-50 border-gray-200',
+    'NORMAL': 'text-green-600 bg-green-50 border-green-200',
+    'MILD': 'text-yellow-600 bg-yellow-50 border-yellow-200',
 };
 
 const API_BASE = 'http://localhost:8000';
 
 export default function InvestorDemoPage() {
     const [selectedArea, setSelectedArea] = useState(DEMO_AREAS[0]);
+    const [customPolygon, setCustomPolygon] = useState<any>(null);
     const [selectedSensor, setSelectedSensor] = useState<'ndvi' | 'sar' | 'ndwi'>('sar');
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [result, setResult] = useState<AnalysisResult | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [apiStatus, setApiStatus] = useState<'unknown' | 'online' | 'offline'>('unknown');
+
+    // Password Protection
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [password, setPassword] = useState('');
+    const TEST_PASSWORD = 'phasq-admin-2026'; // Simple hardcoded password as requested
 
     // API Status check
     React.useEffect(() => {
@@ -110,10 +120,10 @@ export default function InvestorDemoPage() {
     }, []);
 
     const runAnalysis = async (type: 'ndvi' | 'sar' | 'ndwi') => {
-        console.log(`Starting ${type} analysis for:`, selectedArea.name);
+        const polygonToUse = customPolygon || selectedArea.polygon;
+        console.log(`Starting ${type} analysis for:`, customPolygon ? 'Custom Drawn Area' : selectedArea.name);
         setIsAnalyzing(true);
         setError(null);
-        // setResult(null); // Keep previous result until new one lands for better UX
 
         try {
             const response = await fetch(`${API_BASE}/api/v1/analyze/prompt`, {
@@ -121,16 +131,17 @@ export default function InvestorDemoPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     prompt: `Analyze ${type} for this area`,
-                    polygon: selectedArea.polygon,
+                    polygon: polygonToUse,
                     date_range: {
-                        start: new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0],
-                        end: new Date().toISOString().split('T')[0],
+                        start: '2024-04-01',
+                        end: '2024-04-15',
                     }
                 }),
             });
 
             if (!response.ok) throw new Error('Analysis failed');
-            const data: AnalysisResult = await response.json();
+            const data: any = await response.json();
+            console.log("Analysis Result Received:", data);
             setResult(data);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Analysis failed');
@@ -138,6 +149,53 @@ export default function InvestorDemoPage() {
             setIsAnalyzing(false);
         }
     };
+
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center p-6 font-sans">
+                <div className="w-full max-w-md bg-[#0a0a0a] border border-white/10 p-10 rounded-2xl shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#cc0000] to-transparent opacity-50" />
+
+                    <div className="flex flex-col items-center gap-6 relative z-10">
+                        <div className="w-16 h-16 bg-[#111] border border-white/5 rounded-xl flex items-center justify-center text-[#cc0000] shadow-inner mb-2">
+                            <Shield className="w-8 h-8" />
+                        </div>
+
+                        <div className="text-center">
+                            <h1 className="text-xl font-bold text-white uppercase tracking-widest mb-1 shadow-glow selection:bg-[#cc0000]">Restricted Access</h1>
+                            <p className="text-[9px] font-mono text-gray-700 uppercase tracking-[0.4em] mb-4">ENCRYPTION PROTOCOL V2.1 // PHASQ INTELLIGENCE</p>
+                        </div>
+
+                        <div className="w-full space-y-4">
+                            <div className="relative group/input">
+                                <div className="absolute -inset-0.5 bg-[#cc0000]/20 rounded blur opacity-0 group-hover/input:opacity-100 transition duration-1000"></div>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="NODE ACCESS"
+                                    className="relative w-full bg-black border border-white/5 px-4 py-4 text-center font-mono text-xs tracking-[0.5em] text-white focus:outline-none focus:border-[#cc0000]/30 transition-all rounded uppercase placeholder:text-gray-900"
+                                    onKeyDown={(e) => e.key === 'Enter' && password === TEST_PASSWORD && setIsAuthenticated(true)}
+                                    autoFocus
+                                />
+                            </div>
+
+                            <button
+                                onClick={() => password === TEST_PASSWORD ? setIsAuthenticated(true) : alert('INVALID NODE KEY')}
+                                className="w-full bg-[#111] text-gray-500 py-3.5 border border-white/5 font-bold text-[10px] tracking-[0.3em] uppercase hover:bg-white hover:text-black hover:border-white transition-all rounded"
+                            >
+                                Validate Node
+                            </button>
+                        </div>
+
+                        <Link href="/" className="text-[10px] font-mono text-gray-600 hover:text-gray-400 transition-colors uppercase tracking-widest">
+                            ← Return to surface
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-radar-green/30">
@@ -159,9 +217,9 @@ export default function InvestorDemoPage() {
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 text-radar-green font-mono text-[10px] font-bold tracking-widest border border-radar-green/30">
-                        <Activity className="w-3 h-3 animate-pulse" />
-                        LIVE ANALYTICS MODE
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#cc0000]/10 text-[#cc0000] font-mono text-[10px] font-bold tracking-widest border border-[#cc0000]/30 animate-pulse">
+                        <Activity className="w-3 h-3" />
+                        ARCHIVAL DATA FETCH: APRIL 2024
                     </div>
                 </div>
             </nav>
@@ -185,21 +243,36 @@ export default function InvestorDemoPage() {
                         <div className="space-y-3">
                             <label className="text-xs font-bold text-slate-900">Target Region</label>
                             <div className="grid grid-cols-1 gap-2">
+                                {customPolygon && (
+                                    <button
+                                        onClick={() => setSelectedArea({ name: 'Custom Selection', description: 'User defined coordinates', polygon: customPolygon } as any)}
+                                        className={`w-full text-left p-4 rounded-xl border transition-all ${!selectedArea || selectedArea.name === 'Custom Selection'
+                                                ? 'bg-radar-green/10 border-radar-green/50'
+                                                : 'bg-white border-slate-200'
+                                            }`}
+                                    >
+                                        <div className="text-[9px] font-bold font-mono text-radar-green mb-1">[ ACTIVE SELECTION ]</div>
+                                        <div className="font-bold text-slate-900 text-sm">Target Area Delta</div>
+                                        <div className="text-[10px] text-slate-500">Manual sensor targeting active</div>
+                                    </button>
+                                )}
                                 {DEMO_AREAS.map(area => (
                                     <button
                                         key={area.name}
-                                        onClick={() => setSelectedArea(area)}
-                                        className={`w-full text-left p-4 rounded-xl border transition-all ${
-                                            selectedArea.name === area.name
+                                        onClick={() => {
+                                            setSelectedArea(area);
+                                            setCustomPolygon(null);
+                                        }}
+                                        className={`w-full text-left p-4 rounded-xl border transition-all ${selectedArea.name === area.name && !customPolygon
                                                 ? 'bg-slate-900 border-slate-900 shadow-xl'
                                                 : 'bg-slate-50 border-slate-200 hover:border-slate-300'
-                                        }`}
+                                            }`}
                                     >
-                                        <div className={`text-xs font-bold font-mono mb-1 ${selectedArea.name === area.name ? 'text-radar-green' : 'text-slate-400'}`}>
-                                            {selectedArea.name === area.name ? '[ SELECTED ]' : '[ READY ]'}
+                                        <div className={`text-xs font-bold font-mono mb-1 ${selectedArea.name === area.name && !customPolygon ? 'text-radar-green' : 'text-slate-400'}`}>
+                                            {selectedArea.name === area.name && !customPolygon ? '[ SELECTED ]' : '[ READY ]'}
                                         </div>
-                                        <div className={`font-bold ${selectedArea.name === area.name ? 'text-white' : 'text-slate-900'}`}>{area.name}</div>
-                                        <div className={`text-xs ${selectedArea.name === area.name ? 'text-slate-400' : 'text-slate-500'}`}>{area.description}</div>
+                                        <div className={`font-bold ${selectedArea.name === area.name && !customPolygon ? 'text-white' : 'text-slate-900'}`}>{area.name}</div>
+                                        <div className={`text-xs ${selectedArea.name === area.name && !customPolygon ? 'text-slate-400' : 'text-slate-500'}`}>{area.description}</div>
                                     </button>
                                 ))}
                             </div>
@@ -209,19 +282,19 @@ export default function InvestorDemoPage() {
                         <div className="space-y-3">
                             <label className="text-xs font-bold text-slate-900">Sensor Analysis</label>
                             <div className="grid grid-cols-1 gap-2">
-                                <ControlButton 
-                                    icon={<Zap />} 
-                                    label="SAR Soil Moisture" 
-                                    desc="Sentinel-1 Radar (Radar Scan)" 
-                                    onClick={() => setSelectedSensor('sar')} 
+                                <ControlButton
+                                    icon={<Zap />}
+                                    label="SAR Soil Moisture"
+                                    desc="Sentinel-1 Radar (Radar Scan)"
+                                    onClick={() => setSelectedSensor('sar')}
                                     disabled={isAnalyzing}
                                     active={selectedSensor === 'sar'}
                                 />
-                                <ControlButton 
-                                    icon={<Layers />} 
-                                    label="NDVI Vegetation" 
-                                    desc="Sentinel-2 Optical (Plant Health)" 
-                                    onClick={() => setSelectedSensor('ndvi')} 
+                                <ControlButton
+                                    icon={<Layers />}
+                                    label="NDVI Vegetation"
+                                    desc="Sentinel-2 Optical (Plant Health)"
+                                    onClick={() => setSelectedSensor('ndvi')}
                                     disabled={isAnalyzing}
                                     active={selectedSensor === 'ndvi'}
                                 />
@@ -233,11 +306,10 @@ export default function InvestorDemoPage() {
                             <button
                                 onClick={() => runAnalysis(selectedSensor)}
                                 disabled={isAnalyzing}
-                                className={`w-full py-4 rounded-xl font-bold text-sm tracking-widest flex items-center justify-center gap-3 transition-all shadow-lg ${
-                                    isAnalyzing 
-                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
-                                    : 'bg-slate-900 text-white hover:bg-slate-800 hover:shadow-radar-green/20'
-                                }`}
+                                className={`w-full py-4 rounded-xl font-bold text-sm tracking-widest flex items-center justify-center gap-3 transition-all shadow-lg ${isAnalyzing
+                                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                        : 'bg-slate-900 text-white hover:bg-slate-800 hover:shadow-radar-green/20'
+                                    }`}
                             >
                                 {isAnalyzing ? (
                                     <>
@@ -266,101 +338,106 @@ export default function InvestorDemoPage() {
                 </div>
 
                 {/* Main Viewport */}
-                <div className="relative bg-slate-100 flex flex-col items-stretch">
-                    {/* Visual Overlay - Results Panel */}
-                    {result && (
-                        <div className="absolute top-8 right-8 w-80 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[calc(100vh-8rem)]">
-                            <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                                <div className="flex flex-col">
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{result.results.index_type} Report</span>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        <div className="w-2 h-2 rounded-full bg-green-500" />
-                                        <span className="text-xs font-bold text-slate-900">EVIDENCE CAPTURED</span>
-                                    </div>
-                                </div>
-                                <button className="p-2 hover:bg-slate-100 rounded-lg text-slate-400 transition-colors">
-                                    <Download className="w-4 h-4" />
-                                </button>
-                            </div>
-
-                            <div className="flex-1 overflow-y-auto">
-                                <div className="p-4">
-                                    {/* Snapshot */}
-                                    <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 mb-4 bg-slate-900">
-                                        <img 
-                                            src={result.results.thumbnail_url || `https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800`}
-                                            alt="Snapshot" 
-                                            className="w-full h-full object-cover"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                        <div className="absolute bottom-2 left-3 flex items-center gap-1.5">
-                                            <Maximize2 className="w-3 h-3 text-white/50" />
-                                            <span className="text-[9px] font-mono text-white/70 font-bold uppercase tracking-widest leading-none">SNAPSHOT: LIVE</span>
+                <div className="relative bg-slate-100 flex flex-col items-stretch h-full overflow-hidden">
+                    {/* Fixed Overlays - Moved to top of viewport for stacking safety */}
+                    <div className="absolute inset-0 pointer-events-none z-[10000]">
+                        {result && (
+                            <div className="absolute top-8 right-8 w-80 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] transition-all animate-in fade-in slide-in-from-right-4 duration-500 pointer-events-auto ring-1 ring-black/5 shadow-radar-green/10">
+                                <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{result.results.index_type} Report</span>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <div className="w-2 h-2 rounded-full bg-radar-green shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
+                                            <span className="text-xs font-black text-slate-900 tracking-tight">ANALYSIS COMPLETE</span>
                                         </div>
-                                        {result.results.lead_time_advantage && (
-                                            <div className="absolute top-2 right-2 px-2 py-1 bg-radar-green rounded text-[9px] font-bold text-black shadow-lg animate-pulse">
-                                                +{result.results.lead_time_advantage}D ADVANTAGE
+                                    </div>
+                                    <button className="p-2 hover:bg-white rounded-lg text-slate-400 transition-colors shadow-sm border border-transparent hover:border-slate-100">
+                                        <Download className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto">
+                                    <div className="p-4">
+                                        {/* Snapshot */}
+                                        <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 mb-4 bg-slate-900 shadow-inner">
+                                            <img 
+                                                src={result.results.thumbnail_url || `https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800`}
+                                                alt="Snapshot" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                            <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                                <span className="text-[9px] font-bold text-white uppercase tracking-widest">Snapshot: Live Range</span>
                                             </div>
-                                        )}
-                                    </div>
-
-                                    {/* Main Classification */}
-                                    <div className={`p-4 rounded-xl border mb-6 ${CLASSIFICATION_COLORS[result.results.classification] || 'bg-slate-50 border-slate-200 text-slate-600'}`}>
-                                        <div className="flex items-center justify-between mb-1">
-                                            <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">Status</span>
-                                            <Activity className="w-3.5 h-3.5" />
                                         </div>
-                                        <div className="text-xl font-bold tracking-tight mb-1">{result.results.classification}</div>
-                                        <p className="text-[11px] leading-relaxed opacity-80 italic font-medium">"{result.results.classification_description}"</p>
-                                    </div>
 
-                                    {/* Detailed Metrics */}
-                                    <div className="space-y-1.5">
-                                        <MetricRow label="Confidence" value="98.2%" highlight />
-                                        <MetricRow label="Moisture (vol.%)" value={result.results.soil_moisture_vol_pct ? `${result.results.soil_moisture_vol_pct}%` : '---'} />
-                                        <MetricRow label="Mean Value" value={result.results.mean_value.toFixed(4)} />
-                                        <MetricRow label="Scenes" value={result.results.scene_count?.toString() || '12'} />
-                                        <MetricRow label="Area (Pilot)" value={`${result.results.area_km2.toFixed(1)} km²`} />
-                                    </div>
-
-                                    {/* Footer Info */}
-                                    <div className="mt-8 pt-6 border-t border-slate-100">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <Shield className="w-4 h-4 text-blue-500" />
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scientific Core</span>
+                                        {/* Classification */}
+                                        <div className={`p-4 rounded-xl border mb-6 ${CLASSIFICATION_COLORS[result.results.classification] || 'bg-slate-50 border-slate-200 text-slate-600'}`}>
+                                            <div className="text-[9px] font-bold uppercase mb-1 flex items-center justify-between">
+                                                <span>Condition Status</span>
+                                                <Activity className="w-3 h-3 opacity-50" />
+                                            </div>
+                                            <div className="text-xl font-black tracking-tight mb-1">{result.results.classification}</div>
+                                            <p className="text-[11px] leading-relaxed opacity-80 italic font-medium">"{result.results.classification_description}"</p>
                                         </div>
-                                        <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                            <div className="text-[9px] font-bold text-slate-400 uppercase mb-1">Calculation Method</div>
-                                            <div className="text-[10px] font-mono text-slate-600 font-medium">{result.analysis_info.formula}</div>
+
+                                        {/* Metrics Grid */}
+                                        <div className="space-y-4 mb-6">
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <MetricRow label="Confidence" value={`${result.results.confidence || '98.2'}%`} />
+                                                <MetricRow label="Moisture (vol.%)" value={result.results.soil_moisture_vol_pct ? `${result.results.soil_moisture_vol_pct}%` : '---'} />
+                                            </div>
+                                            <div className="h-px bg-slate-100" />
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <MetricRow label="Mean Value" value={`${result.results.mean_value.toFixed(4)}`} />
+                                                <MetricRow label="Anomaly" value={`${result.results.anomaly_db?.toFixed(2) || '0.0'} dB`} />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <MetricRow label="Area (Pilot)" value={`${result.results.area_km2.toFixed(1)} km²`} />
+                                                <MetricRow label="Lead Time" value={`+${result.results.lead_time_advantage || '0'} days`} />
+                                            </div>
+                                        </div>
+
+                                        {/* Formula / Method */}
+                                        <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 mb-2">
+                                            <div className="flex items-center gap-2 mb-1.5">
+                                                <Activity className="w-3 h-3 text-slate-400" />
+                                                <div className="text-[9px] font-bold text-slate-400 uppercase">Scientific Core</div>
+                                            </div>
+                                            <div className="text-[10px] font-mono text-slate-600 font-medium leading-relaxed">
+                                                {result.analysis_info?.formula || 'Archival seasonal baseline → anomaly detection'}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {/* Loader */}
-                    {isAnalyzing && (
-                        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-[60] flex items-center justify-center">
-                            <div className="bg-white p-8 rounded-2xl shadow-2xl border border-slate-100 flex flex-col items-center gap-4 text-center">
-                                <div className="w-12 h-12 relative">
-                                    <div className="absolute inset-0 rounded-full border-4 border-slate-100" />
-                                    <div className="absolute inset-0 rounded-full border-4 border-radar-green border-t-transparent animate-spin" />
-                                </div>
-                                <div>
-                                    <div className="text-sm font-bold text-slate-900 mb-1">Processing Orbital Data...</div>
-                                    <div className="text-[10px] font-mono text-slate-400 animate-pulse">SENTINEL-X RETRIEVING SCAN</div>
+                        {isAnalyzing && (
+                            <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] pointer-events-auto flex items-center justify-center transition-all">
+                                <div className="bg-white p-8 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100 flex flex-col items-center gap-4 text-center ring-1 ring-black/5">
+                                    <div className="w-12 h-12 relative">
+                                        <div className="absolute inset-0 rounded-full border-4 border-slate-100" />
+                                        <div className="absolute inset-0 rounded-full border-4 border-radar-green border-t-transparent animate-spin" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <div className="text-sm font-bold text-slate-900 tracking-tight">ANALYZING SAR ARRAY</div>
+                                        <div className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Accessing Sentinel-1 Hub...</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
 
-                    {/* Map Interface */}
-                    <div className="flex-1 w-full bg-slate-300">
+                    <div className="flex-1 min-h-0 relative z-0">
                         <AnalysisMap
-                            onPolygonDrawn={() => { }}
-                            resultGeoJSON={null}
-                            tileUrl={result?.results?.map_url}
+                            onPolygonDrawn={(poly) => {
+                                console.log("Polygon drawn in Demo Page:", poly);
+                                setCustomPolygon(poly);
+                            }}
+                            resultGeoJSON={(result as any)?.geojson || null}
+                            tileUrl={result?.results?.map_url || null}
                         />
                     </div>
 
@@ -389,15 +466,13 @@ function ControlButton({ icon, label, desc, onClick, disabled, active }: any) {
         <button
             onClick={onClick}
             disabled={disabled}
-            className={`w-full text-left p-4 rounded-xl border transition-all flex items-center gap-4 group ${
-                active 
-                    ? 'bg-radar-green/10 border-radar-green/50 ring-1 ring-radar-green/20' 
+            className={`w-full text-left p-4 rounded-xl border transition-all flex items-center gap-4 group ${active
+                    ? 'bg-radar-green/10 border-radar-green/50 ring-1 ring-radar-green/20'
                     : 'bg-white border-slate-200 hover:border-slate-300'
-            } ${disabled ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
+                } ${disabled ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
         >
-            <div className={`p-2.5 rounded-lg transition-colors ${
-                active ? 'bg-radar-green text-black' : 'bg-slate-50 text-slate-400 group-hover:text-slate-900 group-hover:bg-slate-100'
-            }`}>
+            <div className={`p-2.5 rounded-lg transition-colors ${active ? 'bg-radar-green text-black' : 'bg-slate-50 text-slate-400 group-hover:text-slate-900 group-hover:bg-slate-100'
+                }`}>
                 {React.cloneElement(icon, { size: 18 })}
             </div>
             <div className="flex-1">

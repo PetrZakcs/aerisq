@@ -12,6 +12,7 @@ import FAQ from "@/components/FAQ";
 import Founder from "@/components/Founder";
 import TruthSlider from "@/components/TruthSlider";
 import { Mail, Linkedin, Instagram } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Home() {
   const INSTAGRAM_URL = "https://www.instagram.com/phasq1/";
@@ -101,9 +102,9 @@ export default function Home() {
       </section>
 
       <Founder />
-      <Pricing />
-      <FAQ />
       <Waitlist />
+
+      {/* Footer */}
 
       {/* Footer */}
       <footer className="py-20 md:py-24 bg-black border-t border-white/10">
@@ -147,7 +148,9 @@ export default function Home() {
             {/* Legal / System */}
             <div className="flex flex-col gap-4">
               <h4 className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-2">System</h4>
-              <span className="text-[#333] text-[10px] font-mono tracking-[0.2em] whitespace-nowrap">v1.2.5 — OPERATIONAL</span>
+              <Link href="/demo" className="text-[#1a1a1a] hover:text-[#222] transition-colors text-[10px] font-mono tracking-[0.2em] whitespace-nowrap cursor-default">
+                v1.2.5 — OPERATIONAL
+              </Link>
               <span className="text-[#333] text-[10px] font-mono tracking-[0.2em] whitespace-nowrap">© 2026 PHASQ INTELLIGENCE</span>
             </div>
           </div>
