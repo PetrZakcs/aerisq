@@ -92,7 +92,18 @@ const CLASSIFICATION_COLORS: Record<string, string> = {
     'MILD': 'text-yellow-600 bg-yellow-50 border-yellow-200',
 };
 
-const API_BASE = 'http://localhost:8000';
+const getApiBase = () => {
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        // If we are on an IP or non-localhost, use that same IP/host for API
+        if (hostname !== 'localhost' && !hostname.includes('127.0.0.1')) {
+            return `http://${hostname}:8000`;
+        }
+    }
+    return 'http://localhost:8000';
+};
+
+const API_BASE = getApiBase();
 
 export default function InvestorDemoPage() {
     const [selectedArea, setSelectedArea] = useState(DEMO_AREAS[0]);

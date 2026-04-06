@@ -1,15 +1,24 @@
-﻿/**
+/**
  * PhasQ API Client
  * Handles all communication with the backend API
  */
 
 // In production (Vercel), API is on same origin at /api
 // In development, use localhost:8000
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || (
-    typeof window !== 'undefined' && window.location.hostname !== 'localhost'
-        ? '' // Same origin in production
-        : 'http://localhost:8000'
-);
+const getApiBaseUrl = () => {
+    const envUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (envUrl) return envUrl;
+    
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        if (hostname !== 'localhost' && !hostname.includes('127.0.0.1') && !hostname.endsWith('vercel.app')) {
+            return `http://${hostname}:8000`;
+        }
+    }
+    return 'http://localhost:8000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Token storage keys
 const TOKEN_KEY = 'phasq_token';
