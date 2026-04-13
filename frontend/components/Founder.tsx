@@ -21,14 +21,6 @@ const TEAM = [
         isLead: true,
     },
     {
-        id: 'CZU-01',
-        name: 'ČZU — University of Life Sciences Prague',
-        role: 'Institute of Precision Agriculture',
-        bio: 'Strategic partnership for radar physics validation and dielectric modeling. Scientific peer-review of our root-zone moisture algorithms.',
-        image: '/czu_logo.png',
-        isCollab: true,
-    },
-    {
         id: 'COLLAB-02',
         name: 'Research Fellows',
         role: 'Remote Sensed Data',

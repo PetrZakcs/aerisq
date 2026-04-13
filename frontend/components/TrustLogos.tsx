@@ -6,7 +6,6 @@ export default function TrustLogos() {
         { name: 'Copernicus', label: 'COPERNICUS' },
         { name: 'GSA', label: 'EUSPA' },
         { name: 'MinAgri', label: 'MINISTRY OF AGRICULTURE' },
-        { name: 'CZU', label: 'ČZU — ÚSTAV PRECIZNÍHO ZEMĚDĚLSTVÍ' },
     ];
 
     return (
