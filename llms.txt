@@ -1,0 +1,28 @@
+# AerisQ
+
+> AerisQ is an engineering studio that builds production-grade AI agents, RAG systems, and internal enterprise software, and engineers MVP infrastructure for startups and scaleups. Based in Prague, Czech Republic (engineers also in Berlin).
+
+## What we do
+- AI Integration & Adaptation: custom RAG pipelines, autonomous business agents, secure local LLM deployment (e.g. Llama 3 on private infrastructure).
+- Startup MVP Engine (0→1): rapid prototyping on Next.js, TypeScript, Python, and Supabase, architected to withstand VC technical due diligence.
+- High-Performance Enterprise Software: legacy tech-debt refactoring, complex API orchestration, cloud-scale infrastructure.
+
+## How we work
+1. Paid Discovery Phase (1–2 weeks): technical audit, fixed-price architecture blueprint, fee credited back on project sign-off.
+2. Core Engineering & Sprint Delivery: bi-weekly deployment reviews on live Vercel staging environments.
+3. Deployment & SLA Infrastructure: production rollout in isolated secure cloud environments, team training, continuous monitoring.
+
+## Guarantees
+- GDPR & data privacy: no client data used to train public models; isolated or on-premise deployment.
+- RAG responses are strictly grounded in a client's own verified documents (no hallucination by design).
+- First working prototype (PoC) delivered within 14 days of kickoff.
+
+## Pages
+- Homepage: https://aerisq.tech/AerisQ.dc.html
+- Case Studies: https://aerisq.tech/Case-Studies.dc.html
+- Blog: https://aerisq.tech/Blog.dc.html
+
+## Contact
+- Email: petr@aerisq.tech
+- Instagram: https://www.instagram.com/aerisq.tech/
+- LinkedIn: https://www.linkedin.com/company/aerisqtech/

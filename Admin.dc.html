@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — AerisQ</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="./favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>html{scroll-behavior:smooth}body{margin:0;background:#000}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.6}}</style>
+</helmet>
+
+<div style="background:#000;color:#fafafa;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased">
+
+<sc-if value="{{ isLoggedOut }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px">
+    <div style="max-width:380px;width:100%;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:#0a0a0a;padding:36px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:28px">
+        <span style="display:flex;align-items:center;gap:4px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#52525b"></span>
+          <span style="width:14px;height:1px;background:#52525b"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:#34d399"></span>
+          <span style="width:14px;height:1px;background:#52525b"></span>
+          <span style="width:6px;height:6px;border-radius:50%;background:#52525b"></span>
+        </span>
+        <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:17px;letter-spacing:-.02em">Aeris<span style="color:#34d399">Q</span> <span style="color:#71717a;font-weight:500">/ admin</span></span>
+      </div>
+      <sc-if value="{{ otpSent }}" hint-placeholder-val="{{ false }}">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399;letter-spacing:.04em;margin-bottom:10px">// LINK_SENT</div>
+        <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin:0">Check your inbox — click the magic link to sign in.</p>
+      </sc-if>
+      <sc-if value="{{ otpNotSent }}" hint-placeholder-val="{{ true }}">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a;letter-spacing:.04em;margin-bottom:16px">// SIGN IN</div>
+        <input placeholder="admin email" value="{{ loginEmail }}" onChange="{{ setLoginEmail }}" style="width:100%;padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:14px;box-sizing:border-box" style-focus="border-color:#34d399;outline:none" />
+        <button onClick="{{ sendMagicLink }}" disabled="{{ loginCannotSubmit }}" style="{{ loginBtnStyle }}">Send Magic Link</button>
+        <sc-if value="{{ loginError }}" hint-placeholder-val="{{ false }}">
+          <p style="color:#f87171;font-size:12px;font-family:'JetBrains Mono',monospace;margin:12px 0 0">{{ loginError }}</p>
+        </sc-if>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ false }}">
+  <nav style="position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px clamp(20px,4vw,40px);background:rgba(0,0,0,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="display:flex;align-items:center;gap:4px">
+        <span style="width:6px;height:6px;border-radius:50%;background:#52525b"></span>
+        <span style="width:14px;height:1px;background:#52525b"></span>
+        <span style="width:9px;height:9px;border-radius:50%;background:#34d399"></span>
+        <span style="width:14px;height:1px;background:#52525b"></span>
+        <span style="width:6px;height:6px;border-radius:50%;background:#52525b"></span>
+      </span>
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:17px;letter-spacing:-.02em">Aeris<span style="color:#34d399">Q</span> <span style="color:#71717a;font-weight:500">/ admin</span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">{{ sessionEmail }}</span>
+      <button onClick="{{ logout }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#a1a1aa;border-radius:4px;padding:7px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Sign out</button>
+    </div>
+  </nav>
+
+  <div style="display:flex;border-bottom:1px solid rgba(255,255,255,.08);padding:0 clamp(20px,4vw,40px);overflow-x:auto">
+    <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="4">
+      <button onClick="{{ tab.onClick }}" style="{{ tab.style }}">{{ tab.label }}</button>
+    </sc-for>
+  </div>
+
+  <div style="max-width:1200px;margin:0 auto;padding:32px clamp(20px,4vw,40px) 80px">
+
+    <sc-if value="{{ isLeadsTab }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:32px">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:12px">AUDIT REQUESTS ({{ auditRequests.length }})</div>
+          <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
+            <sc-for list="{{ auditRequests }}" as="lead" hint-placeholder-count="3">
+              <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;font-size:13px">
+                <div><strong style="color:#fafafa">{{ lead.name }}</strong><div style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ lead.email }}</div></div>
+                <div style="color:#a1a1aa">{{ lead.company }}</div>
+                <div style="color:#a1a1aa">{{ lead.focus }} · {{ lead.budget }}</div>
+                <div style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ lead.created_at }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:12px">NEWSLETTER SUBSCRIBERS ({{ newsletterSubs.length }})</div>
+          <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
+            <sc-for list="{{ newsletterSubs }}" as="sub" hint-placeholder-count="3">
+              <div style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:flex;justify-content:space-between;font-size:13px">
+                <span>{{ sub.email }}</span>
+                <span style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ sub.created_at }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:12px">APPLICATIONS ({{ applications.length }})</div>
+          <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
+            <sc-for list="{{ applications }}" as="app" hint-placeholder-count="3">
+              <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;font-size:13px">
+                <div><strong style="color:#fafafa">{{ app.name }}</strong><div style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ app.email }}</div></div>
+                <div style="color:#a1a1aa">{{ app.role_interest }}</div>
+                <div style="color:#a1a1aa">{{ app.comp_expectation }}</div>
+                <a href="{{ app.cv_link }}" target="_blank" style="color:#34d399;font-family:'JetBrains Mono',monospace;font-size:11px;text-decoration:none">CV →</a>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isClientsTab }}" hint-placeholder-val="{{ false }}">
+      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px;margin-bottom:24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:14px">NEW CLIENT</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px">
+          <input placeholder="Name" value="{{ newClientName }}" onChange="{{ setNewClientName }}" style="{{ inputStyle }}" />
+          <input placeholder="Company" value="{{ newClientCompany }}" onChange="{{ setNewClientCompany }}" style="{{ inputStyle }}" />
+          <input placeholder="Email" value="{{ newClientEmail }}" onChange="{{ setNewClientEmail }}" style="{{ inputStyle }}" />
+        </div>
+        <button onClick="{{ createClient }}" disabled="{{ newClientCannotSubmit }}" style="{{ primaryBtnStyle }}">Add Client</button>
+      </div>
+      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
+        <sc-for list="{{ clients }}" as="client" hint-placeholder-count="3">
+          <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div>
+              <strong style="color:#fafafa;font-size:14px">{{ client.name }}</strong>
+              <div style="color:#71717a;font-size:12px;font-family:'JetBrains Mono',monospace">{{ client.company }} · {{ client.email }}</div>
+            </div>
+            <button onClick="{{ client.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Delete</button>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isProjectsTab }}" hint-placeholder-val="{{ false }}">
+      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px;margin-bottom:24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:14px">NEW PROJECT</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px">
+          <input placeholder="Project name" value="{{ newProjectName }}" onChange="{{ setNewProjectName }}" style="{{ inputStyle }}" />
+          <select value="{{ newProjectClientId }}" onChange="{{ setNewProjectClientId }}" style="{{ inputStyle }}">
+            <option value="">Select client</option>
+            <sc-for list="{{ clients }}" as="c" hint-placeholder-count="3">
+              <option value="{{ c.id }}">{{ c.name }}</option>
+            </sc-for>
+          </select>
+          <select value="{{ newProjectPhase }}" onChange="{{ setNewProjectPhase }}" style="{{ inputStyle }}">
+            <option value="1">Phase 1 — Discovery</option>
+            <option value="2">Phase 2 — Engineering</option>
+            <option value="3">Phase 3 — Deployment</option>
+          </select>
+          <input type="date" value="{{ newProjectTargetDate }}" onChange="{{ setNewProjectTargetDate }}" style="{{ inputStyle }}" />
+        </div>
+        <button onClick="{{ createProject }}" disabled="{{ newProjectCannotSubmit }}" style="{{ primaryBtnStyle }}">Add Project</button>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <sc-for list="{{ projects }}" as="project" hint-placeholder-count="3">
+          <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:22px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+              <div>
+                <div style="font-size:15px;font-weight:700;color:#fafafa">{{ project.name }}</div>
+                <div style="color:#71717a;font-size:12px;font-family:'JetBrains Mono',monospace">{{ project.clientName }} · target {{ project.target_date }}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <select value="{{ project.phase }}" onChange="{{ project.onPhaseChange }}" style="{{ smallSelectStyle }}">
+                  <option value="1">Phase 1</option>
+                  <option value="2">Phase 2</option>
+                  <option value="3">Phase 3</option>
+                </select>
+                <button onClick="{{ project.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Delete</button>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;margin-bottom:14px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#52525b;letter-spacing:.04em;margin-bottom:8px">MILESTONES</div>
+              <sc-for list="{{ project.milestones }}" as="m" hint-placeholder-count="2">
+                <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#a1a1aa">
+                  <span>{{ m.title }} — {{ m.due_date }}</span>
+                  <button onClick="{{ m.onDelete }}" style="background:none;border:none;color:#52525b;cursor:pointer;font-size:11px;font-family:'JetBrains Mono',monospace">✕</button>
+                </div>
+              </sc-for>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <input placeholder="Milestone" value="{{ project.newMilestoneTitle }}" onChange="{{ project.onMilestoneTitleChange }}" style="{{ inputStyle }};flex:1" />
+                <input type="date" value="{{ project.newMilestoneDate }}" onChange="{{ project.onMilestoneDateChange }}" style="{{ inputStyle }}" />
+                <button onClick="{{ project.onAddMilestone }}" style="background:#34d399;color:#000;border:none;border-radius:4px;padding:0 14px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;font-weight:700">+</button>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#52525b;letter-spacing:.04em;margin-bottom:8px">INVOICES</div>
+              <sc-for list="{{ project.invoices }}" as="inv" hint-placeholder-count="2">
+                <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#a1a1aa">
+                  <span>{{ inv.amount }} {{ inv.currency }} — {{ inv.status }} (due {{ inv.due_date }})</span>
+                  <button onClick="{{ inv.onDelete }}" style="background:none;border:none;color:#52525b;cursor:pointer;font-size:11px;font-family:'JetBrains Mono',monospace">✕</button>
+                </div>
+              </sc-for>
+              <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+                <input placeholder="Amount" value="{{ project.newInvoiceAmount }}" onChange="{{ project.onInvoiceAmountChange }}" style="{{ inputStyle }};width:100px" />
+                <select value="{{ project.newInvoiceStatus }}" onChange="{{ project.onInvoiceStatusChange }}" style="{{ inputStyle }}">
+                  <option value="draft">Draft</option>
+                  <option value="sent">Sent</option>
+                  <option value="paid">Paid</option>
+                </select>
+                <input type="date" value="{{ project.newInvoiceDueDate }}" onChange="{{ project.onInvoiceDueDateChange }}" style="{{ inputStyle }}" />
+                <button onClick="{{ project.onAddInvoice }}" style="background:#34d399;color:#000;border:none;border-radius:4px;padding:0 14px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;font-weight:700">+</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isDocumentsTab }}" hint-placeholder-val="{{ false }}">
+      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px;margin-bottom:24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:14px">UPLOAD DOCUMENT</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px">
+          <select value="{{ newDocProjectId }}" onChange="{{ setNewDocProjectId }}" style="{{ inputStyle }}">
+            <option value="">Select project</option>
+            <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+              <option value="{{ p.id }}">{{ p.name }}</option>
+            </sc-for>
+          </select>
+          <input placeholder="Title" value="{{ newDocTitle }}" onChange="{{ setNewDocTitle }}" style="{{ inputStyle }}" />
+          <label style="display:flex;align-items:center;justify-content:center;padding:11px;background:#000;border:1px dashed rgba(255,255,255,.2);border-radius:4px;cursor:pointer;color:#a1a1aa;font-size:13px">
+            <span>{{ newDocFileLabel }}</span>
+            <input type="file" onChange="{{ handleDocFile }}" style="display:none" />
+          </label>
+        </div>
+        <button onClick="{{ uploadDocument }}" disabled="{{ newDocCannotSubmit }}" style="{{ primaryBtnStyle }}">Upload</button>
+      </div>
+      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
+        <sc-for list="{{ documents }}" as="doc" hint-placeholder-count="3">
+          <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div>
+              <strong style="color:#fafafa;font-size:14px">{{ doc.title }}</strong>
+              <div style="color:#71717a;font-size:12px;font-family:'JetBrains Mono',monospace">{{ doc.projectName }}</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <a href="{{ doc.file_url }}" target="_blank" style="color:#34d399;font-family:'JetBrains Mono',monospace;font-size:11px;text-decoration:none">Open →</a>
+              <button onClick="{{ doc.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Delete</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCmsTab }}" hint-placeholder-val="{{ false }}">
+      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// WEBSITE CONTENT & HEADLINES CONTROL</div>
+        <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin-bottom:24px">Manage headline text, hero banners, and service details for AerisQ landing page.</p>
+
+        <div style="display:flex;flex-direction:column;gap:18px;max-width:720px">
+          <div>
+            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:6px">HERO TITLE (EN)</label>
+            <input value="{{ heroTitle }}" onChange="{{ setHeroTitle }}" style="{{ inputStyle }};width:100%" />
+          </div>
+          <div>
+            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:6px">HERO SUBTITLE (EN)</label>
+            <textarea value="{{ heroSub }}" onChange="{{ setHeroSub }}" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+          </div>
+          <div>
+            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:6px">DISCOVERY AUDIT PRICE / SCARCITY BANNER</label>
+            <input value="{{ auditScarcity }}" onChange="{{ setAuditScarcity }}" style="{{ inputStyle }};width:100%" />
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;margin-top:10px">
+            <button onClick="{{ saveCmsChanges }}" style="{{ primaryBtnStyle }}">Save Changes to Live Site</button>
+            <sc-if value="{{ cmsSaved }}" hint-placeholder-val="{{ false }}">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">✓ Content updated locally</span>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SUPABASE_URL = 'https://multgoxlzarxexeeapuo.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11bHRnb3hsemFyeGV4ZWVhcHVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMjc0MDQsImV4cCI6MjEwMTcwMzQwNH0.ItQ4C6Z3MDdpOPqFjsDQ7roCN0rjDn1wsSz3Vu5a-XE';
+
+class Component extends DCLogic {
+  state = {
+    session: null,
+    loginEmail: '', otpSent: false, loginError: '',
+    activeTab: 'leads',
+    auditRequests: [], newsletterSubs: [], applications: [],
+    clients: [], projects: [], milestonesByProject: {}, invoicesByProject: {}, documents: [],
+    newClientName: '', newClientCompany: '', newClientEmail: '',
+    newProjectName: '', newProjectClientId: '', newProjectPhase: '1', newProjectTargetDate: '',
+    newDocProjectId: '', newDocTitle: '', newDocFile: null,
+    projectDrafts: {},
+    heroTitle: 'We Replace Manual Workflows with Autonomous AI',
+    heroSub: 'AerisQ builds production-grade AI agents, RAG systems, and MVP infrastructure for startups and enterprises.',
+    auditScarcity: 'ONLY 2 DISCOVERY AUDIT SLOTS REMAINING FOR THIS MONTH',
+    cmsSaved: false
+  };
+
+  componentDidMount() {
+    const stored = localStorage.getItem('aerisq_admin_session');
+    if (stored) {
+      try {
+        const session = JSON.parse(stored);
+        this.setState({ session });
+        this.loadAll(session);
+      } catch (e) {}
+    }
+    const hash = window.location.hash;
+    if (hash.includes('access_token')) {
+      const params = new URLSearchParams(hash.slice(1));
+      const access_token = params.get('access_token');
+      if (access_token) {
+        this.verifyAndSetSession(access_token);
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  }
+
+  authHeaders(session) {
+    const token = (session || this.state.session)?.access_token || SUPABASE_ANON_KEY;
+    return { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+  }
+
+  verifyAndSetSession = async (access_token) => {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${access_token}` } });
+      if (!res.ok) return;
+      const user = await res.json();
+      const session = { access_token, email: user.email };
+      localStorage.setItem('aerisq_admin_session', JSON.stringify(session));
+      this.setState({ session });
+      this.loadAll(session);
+    } catch (e) { console.error(e); }
+  };
+
+  setLoginEmail = (e) => this.setState({ loginEmail: e.target.value });
+
+  sendMagicLink = async () => {
+    const email = this.state.loginEmail.trim();
+    if (!email) return;
+    try {
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, create_user: false, options: { redirect_to: window.location.href.split('#')[0] } })
+      });
+      if (res.ok) {
+        this.setState({ otpSent: true, loginError: '' });
+      } else {
+        const err = await res.json().catch(() => ({}));
+        this.setState({ loginError: err.msg || err.error_description || 'This email is not registered as an admin.' });
+      }
+    } catch (e) {
+      this.setState({ loginError: 'Network error. Try again.' });
+    }
+  };
+
+  logout = () => {
+    localStorage.removeItem('aerisq_admin_session');
+    this.setState({ session: null });
+  };
+
+  setActiveTab = (tab) => this.setState({ activeTab: tab });
+
+  async fetchTable(table, session, query = '') {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*${query}`, { headers: this.authHeaders(session) });
+    if (!res.ok) return [];
+    return res.json();
+  }
+
+  loadAll = async (session) => {
+    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs] = await Promise.all([
+      this.fetchTable('audit_requests', session, '&order=created_at.desc'),
+      this.fetchTable('newsletter_subscribers', session, '&order=created_at.desc'),
+      this.fetchTable('applications', session, '&order=created_at.desc'),
+      this.fetchTable('clients', session, '&order=created_at.desc'),
+      this.fetchTable('projects', session, '&order=created_at.desc'),
+      this.fetchTable('milestones', session),
+      this.fetchTable('invoices', session),
+      this.fetchTable('documents', session, '&order=created_at.desc')
+    ]);
+    const milestonesByProject = {};
+    milestones.forEach(m => { (milestonesByProject[m.project_id] = milestonesByProject[m.project_id] || []).push(m); });
+    const invoicesByProject = {};
+    invoices.forEach(i => { (invoicesByProject[i.project_id] = invoicesByProject[i.project_id] || []).push(i); });
+    this.setState({
+      auditRequests: audit, newsletterSubs: newsletter, applications: apps,
+      clients, projects, milestonesByProject, invoicesByProject, documents: docs
+    });
+  };
+
+  setNewClientName = (e) => this.setState({ newClientName: e.target.value });
+  setNewClientCompany = (e) => this.setState({ newClientCompany: e.target.value });
+  setNewClientEmail = (e) => this.setState({ newClientEmail: e.target.value });
+
+  createClient = async () => {
+    const s = this.state;
+    await fetch(`${SUPABASE_URL}/rest/v1/clients`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ name: s.newClientName, company: s.newClientCompany, email: s.newClientEmail })
+    });
+    this.setState({ newClientName: '', newClientCompany: '', newClientEmail: '' });
+    this.loadAll(s.session);
+  };
+
+  deleteClient = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/clients?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
+  };
+
+  setNewProjectName = (e) => this.setState({ newProjectName: e.target.value });
+  setNewProjectClientId = (e) => this.setState({ newProjectClientId: e.target.value });
+  setNewProjectPhase = (e) => this.setState({ newProjectPhase: e.target.value });
+  setNewProjectTargetDate = (e) => this.setState({ newProjectTargetDate: e.target.value });
+
+  createProject = async () => {
+    const s = this.state;
+    await fetch(`${SUPABASE_URL}/rest/v1/projects`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ name: s.newProjectName, client_id: s.newProjectClientId, phase: Number(s.newProjectPhase), target_date: s.newProjectTargetDate || null })
+    });
+    this.setState({ newProjectName: '', newProjectClientId: '', newProjectPhase: '1', newProjectTargetDate: '' });
+    this.loadAll(s.session);
+  };
+
+  deleteProject = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/projects?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
+  };
+
+  updateProjectPhase = async (id, phase) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/projects?id=eq.${id}`, { method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' }, body: JSON.stringify({ phase: Number(phase) }) });
+    this.loadAll(this.state.session);
+  };
+
+  getDraft(projectId) {
+    return this.state.projectDrafts[projectId] || { milestoneTitle: '', milestoneDate: '', invoiceAmount: '', invoiceStatus: 'draft', invoiceDueDate: '' };
+  }
+  setDraft(projectId, patch) {
+    this.setState(s => ({ projectDrafts: { ...s.projectDrafts, [projectId]: { ...this.getDraft(projectId), ...patch } } }));
+  }
+
+  addMilestone = async (projectId) => {
+    const draft = this.getDraft(projectId);
+    if (!draft.milestoneTitle.trim()) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/milestones`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ project_id: projectId, title: draft.milestoneTitle, due_date: draft.milestoneDate || null })
+    });
+    this.setDraft(projectId, { milestoneTitle: '', milestoneDate: '' });
+    this.loadAll(this.state.session);
+  };
+
+  deleteMilestone = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/milestones?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
+  };
+
+  addInvoice = async (projectId) => {
+    const draft = this.getDraft(projectId);
+    if (!draft.invoiceAmount) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/invoices`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ project_id: projectId, amount: Number(draft.invoiceAmount), currency: 'EUR', status: draft.invoiceStatus, due_date: draft.invoiceDueDate || null })
+    });
+    this.setDraft(projectId, { invoiceAmount: '', invoiceStatus: 'draft', invoiceDueDate: '' });
+    this.loadAll(this.state.session);
+  };
+
+  deleteInvoice = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/invoices?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
+  };
+
+  setNewDocProjectId = (e) => this.setState({ newDocProjectId: e.target.value });
+  setNewDocTitle = (e) => this.setState({ newDocTitle: e.target.value });
+  handleDocFile = (e) => this.setState({ newDocFile: e.target.files[0] || null });
+
+  uploadDocument = async () => {
+    const s = this.state;
+    if (!s.newDocFile || !s.newDocProjectId || !s.newDocTitle) return;
+    const path = `${s.newDocProjectId}/${Date.now()}-${s.newDocFile.name}`;
+    const upRes = await fetch(`${SUPABASE_URL}/storage/v1/object/documents/${path}`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${s.session.access_token}`, 'Content-Type': s.newDocFile.type || 'application/octet-stream' },
+      body: s.newDocFile
+    });
+    if (!upRes.ok) return;
+    const fileUrl = `${SUPABASE_URL}/storage/v1/object/public/documents/${path}`;
+    await fetch(`${SUPABASE_URL}/rest/v1/documents`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ project_id: s.newDocProjectId, title: s.newDocTitle, file_url: fileUrl })
+    });
+    this.setState({ newDocTitle: '', newDocFile: null, newDocProjectId: '' });
+    this.loadAll(s.session);
+  };
+
+  deleteDocument = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/documents?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
+  };
+
+  setHeroTitle = (e) => this.setState({ heroTitle: e.target.value, cmsSaved: false });
+  setHeroSub = (e) => this.setState({ heroSub: e.target.value, cmsSaved: false });
+  setAuditScarcity = (e) => this.setState({ auditScarcity: e.target.value, cmsSaved: false });
+  saveCmsChanges = () => {
+    localStorage.setItem('aerisq_custom_cms', JSON.stringify({
+      heroTitle: this.state.heroTitle,
+      heroSub: this.state.heroSub,
+      auditScarcity: this.state.auditScarcity
+    }));
+    this.setState({ cmsSaved: true });
+  };
+
+  renderVals() {
+    const s = this.state;
+    const inputStyle = "padding:11px 12px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:13px;font-family:'Manrope',sans-serif";
+    const smallSelectStyle = inputStyle + ";padding:6px 8px;font-size:12px";
+    const primaryBtnStyle = (enabled) => `padding:11px 20px;background:#34d399;color:#000;border:none;border-radius:4px;font-weight:700;font-size:13px;cursor:pointer;opacity:${enabled?1:0.4}`;
+    const tabDefs = [
+      { key: 'leads', label: 'Leads' },
+      { key: 'clients', label: 'Clients' },
+      { key: 'projects', label: 'Projects' },
+      { key: 'documents', label: 'Documents' },
+      { key: 'site_content', label: 'Website CMS' }
+    ];
+    const tabs = tabDefs.map(td => ({
+      label: td.label,
+      onClick: () => this.setActiveTab(td.key),
+      style: `padding:14px 18px;background:transparent;border:none;border-bottom:2px solid ${s.activeTab===td.key?'#34d399':'transparent'};color:${s.activeTab===td.key?'#fafafa':'#71717a'};font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;white-space:nowrap`
+    }));
+
+    const clientsWithDelete = s.clients.map(c => ({ ...c, onDelete: () => this.deleteClient(c.id) }));
+    const clientNameById = Object.fromEntries(s.clients.map(c => [c.id, c.name]));
+
+    const projects = s.projects.map(p => {
+      const draft = this.getDraft(p.id);
+      return {
+        ...p,
+        clientName: clientNameById[p.client_id] || '—',
+        milestones: (s.milestonesByProject[p.id] || []).map(m => ({ ...m, onDelete: () => this.deleteMilestone(m.id) })),
+        invoices: (s.invoicesByProject[p.id] || []).map(i => ({ ...i, onDelete: () => this.deleteInvoice(i.id) })),
+        onPhaseChange: (e) => this.updateProjectPhase(p.id, e.target.value),
+        onDelete: () => this.deleteProject(p.id),
+        newMilestoneTitle: draft.milestoneTitle,
+        newMilestoneDate: draft.milestoneDate,
+        onMilestoneTitleChange: (e) => this.setDraft(p.id, { milestoneTitle: e.target.value }),
+        onMilestoneDateChange: (e) => this.setDraft(p.id, { milestoneDate: e.target.value }),
+        onAddMilestone: () => this.addMilestone(p.id),
+        newInvoiceAmount: draft.invoiceAmount,
+        newInvoiceStatus: draft.invoiceStatus,
+        newInvoiceDueDate: draft.invoiceDueDate,
+        onInvoiceAmountChange: (e) => this.setDraft(p.id, { invoiceAmount: e.target.value }),
+        onInvoiceStatusChange: (e) => this.setDraft(p.id, { invoiceStatus: e.target.value }),
+        onInvoiceDueDateChange: (e) => this.setDraft(p.id, { invoiceDueDate: e.target.value }),
+        onAddInvoice: () => this.addInvoice(p.id)
+      };
+    });
+
+    const projectNameById = Object.fromEntries(s.projects.map(p => [p.id, p.name]));
+    const documents = s.documents.map(d => ({ ...d, projectName: projectNameById[d.project_id] || '—', onDelete: () => this.deleteDocument(d.id) }));
+
+    const loginCanSubmit = /\S+@\S+\.\S+/.test(s.loginEmail);
+
+    return {
+      isLoggedOut: !s.session,
+      isLoggedIn: !!s.session,
+      sessionEmail: s.session?.email || '',
+      loginEmail: s.loginEmail, setLoginEmail: this.setLoginEmail, sendMagicLink: this.sendMagicLink,
+      loginCannotSubmit: !loginCanSubmit,
+      loginBtnStyle: `width:100%;padding:13px;background:#34d399;color:#000;border:none;border-radius:4px;font-weight:700;font-size:14px;cursor:pointer;opacity:${loginCanSubmit?1:0.4}`,
+      otpSent: s.otpSent, otpNotSent: !s.otpSent, loginError: s.loginError,
+      logout: this.logout,
+      tabs,
+      isLeadsTab: s.activeTab === 'leads', isClientsTab: s.activeTab === 'clients',
+      isProjectsTab: s.activeTab === 'projects', isDocumentsTab: s.activeTab === 'documents',
+      isCmsTab: s.activeTab === 'site_content',
+      heroTitle: s.heroTitle, setHeroTitle: this.setHeroTitle,
+      heroSub: s.heroSub, setHeroSub: this.setHeroSub,
+      auditScarcity: s.auditScarcity, setAuditScarcity: this.setAuditScarcity,
+      saveCmsChanges: this.saveCmsChanges, cmsSaved: s.cmsSaved,
+      auditRequests: s.auditRequests, newsletterSubs: s.newsletterSubs, applications: s.applications,
+      clients: clientsWithDelete,
+      newClientName: s.newClientName, newClientCompany: s.newClientCompany, newClientEmail: s.newClientEmail,
+      setNewClientName: this.setNewClientName, setNewClientCompany: this.setNewClientCompany, setNewClientEmail: this.setNewClientEmail,
+      createClient: this.createClient, newClientCannotSubmit: !s.newClientName.trim(),
+      projects,
+      newProjectName: s.newProjectName, newProjectClientId: s.newProjectClientId, newProjectPhase: s.newProjectPhase, newProjectTargetDate: s.newProjectTargetDate,
+      setNewProjectName: this.setNewProjectName, setNewProjectClientId: this.setNewProjectClientId, setNewProjectPhase: this.setNewProjectPhase, setNewProjectTargetDate: this.setNewProjectTargetDate,
+      createProject: this.createProject, newProjectCannotSubmit: !(s.newProjectName.trim() && s.newProjectClientId),
+      documents,
+      newDocProjectId: s.newDocProjectId, newDocTitle: s.newDocTitle,
+      setNewDocProjectId: this.setNewDocProjectId, setNewDocTitle: this.setNewDocTitle,
+      newDocFileLabel: s.newDocFile?.name || 'Choose file',
+      handleDocFile: this.handleDocFile, uploadDocument: this.uploadDocument,
+      newDocCannotSubmit: !(s.newDocFile && s.newDocProjectId && s.newDocTitle.trim()),
+      inputStyle, smallSelectStyle, primaryBtnStyle: primaryBtnStyle(true)
+    };
+  }
+}
+</script>
+</body>
+</html>
