@@ -990,6 +990,14 @@ class Component extends DCLogic {
           TRANSLATIONS.en.auditScarcity = cms.auditScarcity;
           TRANSLATIONS.cs.auditScarcity = cms.auditScarcity;
         }
+        if (cms.openWorkTitle) {
+          TRANSLATIONS.en.openWorkTitle = cms.openWorkTitle;
+          TRANSLATIONS.cs.openWorkTitle = cms.openWorkTitle;
+        }
+        if (cms.openWorkDesc) {
+          TRANSLATIONS.en.openWorkEmpty = cms.openWorkDesc;
+          TRANSLATIONS.cs.openWorkEmpty = cms.openWorkDesc;
+        }
       }
     } catch(e) {}
     this.loadLiveRoles();

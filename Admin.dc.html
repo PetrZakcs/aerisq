@@ -335,9 +335,32 @@
           </div>
         </div>
 
-        <!-- Správa Pracovních Pozic (Careers) -->
+        <!-- Správa Pracovních Pozic (Careers) a Open Work Sekce -->
         <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// SPRÁVA PRACOVNÍCH POZIC (KARIÉRA)</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// SPRÁVA SEKCE OPEN WORK & KARIÉRY</div>
+          
+          <div style="border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:6px;background:#050505;margin-bottom:24px;max-width:760px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:12px">STAV NABÍDKY PRÁCE (OPEN WORK BANNER NA HLAVNÍ STRÁNCE)</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:14px">
+                <label style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#fafafa;cursor:pointer">
+                  <input type="checkbox" checked="{{ openWorkHiring }}" onChange="{{ toggleOpenWorkHiring }}" style="margin-right:8px;accent-color:#34d399" />
+                  Aktivně nabíráme (Aktivovat výzvu k náboru)
+                </label>
+              </div>
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HLAVNÍ NADPIS NÁBORU</label>
+                <input value="{{ openWorkTitle }}" onChange="{{ setOpenWorkTitle }}" style="{{ inputStyle }};width:100%" />
+              </div>
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">POPIS NÁBORU / OZNÁMENÍ</label>
+                <textarea value="{{ openWorkDesc }}" onChange="{{ setOpenWorkDesc }}" rows="2" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+              </div>
+              <button onClick="{{ saveCmsChanges }}" style="{{ primaryBtnStyle }}">Uložit stav náboru</button>
+            </div>
+          </div>
+
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:10px">OTEVŘENÉ POZICE</div>
           <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;max-width:760px">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
               <input placeholder="Název pozice (např. AI / ML Engineer)" value="{{ newRoleTitle }}" onChange="{{ setNewRoleTitle }}" style="{{ inputStyle }}" />
@@ -424,6 +447,9 @@ class Component extends DCLogic {
     heroTitleCs: 'Nahrazujeme vaše manuální procesy AI agenty, kteří běží v produkci.',
     heroSubCs: 'Žádné demo chatbota. Zmapujeme váš skutečný problém — faktury, tickety, ruční přepis dat — postavíme pipeline, která ho nahradí, nasadíme ji do vaší infrastruktury a zůstaneme, dokud ji váš tým neumí provozovat sám.',
     auditScarcity: '◆ Only 3 audit slots open this quarter',
+    openWorkHiring: false,
+    openWorkTitle: "We're not hiring right now — but we're always looking.",
+    openWorkDesc: "No open roles at the moment. If you're a strong Python, TypeScript, or AI-systems engineer, send us your work — we keep good people on file for when a seat opens.",
     cmsSaved: false,
 
     blogPosts: [], newBlogTitle: '', newBlogExcerpt: '', newBlogContent: '',
@@ -729,13 +755,20 @@ class Component extends DCLogic {
   setHeroTitleCs = (e) => this.setState({ heroTitleCs: e.target.value, cmsSaved: false });
   setHeroSubCs = (e) => this.setState({ heroSubCs: e.target.value, cmsSaved: false });
   setAuditScarcity = (e) => this.setState({ auditScarcity: e.target.value, cmsSaved: false });
+  toggleOpenWorkHiring = (e) => this.setState({ openWorkHiring: e.target.checked, cmsSaved: false });
+  setOpenWorkTitle = (e) => this.setState({ openWorkTitle: e.target.value, cmsSaved: false });
+  setOpenWorkDesc = (e) => this.setState({ openWorkDesc: e.target.value, cmsSaved: false });
+
   saveCmsChanges = () => {
     localStorage.setItem('aerisq_custom_cms', JSON.stringify({
       heroTitleEn: this.state.heroTitleEn,
       heroSubEn: this.state.heroSubEn,
       heroTitleCs: this.state.heroTitleCs,
       heroSubCs: this.state.heroSubCs,
-      auditScarcity: this.state.auditScarcity
+      auditScarcity: this.state.auditScarcity,
+      openWorkHiring: this.state.openWorkHiring,
+      openWorkTitle: this.state.openWorkTitle,
+      openWorkDesc: this.state.openWorkDesc
     }));
     this.setState({ cmsSaved: true });
   };
@@ -812,6 +845,9 @@ class Component extends DCLogic {
       heroTitleCs: s.heroTitleCs, setHeroTitleCs: this.setHeroTitleCs,
       heroSubCs: s.heroSubCs, setHeroSubCs: this.setHeroSubCs,
       auditScarcity: s.auditScarcity, setAuditScarcity: this.setAuditScarcity,
+      openWorkHiring: s.openWorkHiring, toggleOpenWorkHiring: this.toggleOpenWorkHiring,
+      openWorkTitle: s.openWorkTitle, setOpenWorkTitle: this.setOpenWorkTitle,
+      openWorkDesc: s.openWorkDesc, setOpenWorkDesc: this.setOpenWorkDesc,
       saveCmsChanges: this.saveCmsChanges, cmsSaved: s.cmsSaved,
 
       blogPosts: s.blogPosts.map(p => ({ ...p, onDelete: () => this.deleteBlogPost(p.id) })),
