@@ -185,7 +185,7 @@ body{animation:pageFadeIn .35s ease both}
       <div style="font-size:clamp(28px,3.4vw,38px);font-weight:800;letter-spacing:-.01em;margin-bottom:6px">{{ savedHoursMonthly }} h <span style="color:#71717a;font-weight:600;font-size:16px">{{ t.roiPerMonth }}</span></div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:15px;color:{{ accentColor }};margin-bottom:24px">≈ {{ roiYearlyDisplay }}</div>
       <div style="font-size:13px;color:#a1a1aa;line-height:1.6;margin-bottom:22px">{{ roiAssumption }}</div>
-      <a onClick="{{ goAudit }}" style="display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13px;text-decoration:none;transition:transform .15s;cursor:pointer" style-hover="transform:translateY(-2px)">{{ t.roiCta }}</a>
+      <a onClick="{{ goAuditWithRoi }}" style="display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13px;text-decoration:none;transition:transform .15s;cursor:pointer" style-hover="transform:translateY(-2px)">{{ t.roiCta }}</a>
     </div>
   </div>
 </section>
@@ -1027,6 +1027,13 @@ class Component extends DCLogic {
 
   heroDeployAI = () => { this.setState({ focus: 'ai' }); this.scrollToId('audit'); };
   heroBuildMVP = () => { this.setState({ focus: 'mvp' }); this.scrollToId('audit'); };
+  goAuditWithRoi = () => {
+    const focus = 'ai';
+    const teamSize = `${this.state.employees} people`;
+    const problem = `ROI Calculator pre-fill: ${this.state.employees} team members spending ${this.state.hoursPerDay}h/day on manual work. Looking to automate repetitive tasks.`;
+    this.setState({ focus, teamSize, problem, step: 2 });
+    this.scrollToId('audit');
+  };
 
   estimateFor(focus, budget, lang) {
     const cs = lang === 'cs';
@@ -1186,7 +1193,7 @@ class Component extends DCLogic {
       cardGap: s.compact ? '16px' : '24px', cardPad: s.compact ? '22px' : '32px',
       pipelineAnim: s.animatePipeline ? 'flowDot 2.2s linear infinite' : 'none',
       pipelineAnim2: s.animatePipeline ? 'flowDot 2.2s linear infinite .7s' : 'none',
-      heroDeployAI: this.heroDeployAI, heroBuildMVP: this.heroBuildMVP,
+      heroDeployAI: this.heroDeployAI, heroBuildMVP: this.heroBuildMVP, goAuditWithRoi: this.goAuditWithRoi,
       stackGroups: [
         { label: 'CORE & AI', items: ['Python', 'Node.js (TS)', 'FastAPI', 'LangChain'] },
         { label: 'FRONTEND & UI', items: ['React', 'Next.js', 'Tailwind CSS', 'Shadcn/ui'] },
