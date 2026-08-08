@@ -98,14 +98,60 @@
           </div>
         </div>
         <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:12px">APPLICATIONS ({{ applications.length }})</div>
-          <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
-            <sc-for list="{{ applications }}" as="app" hint-placeholder-count="3">
-              <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;font-size:13px">
-                <div><strong style="color:#fafafa">{{ app.name }}</strong><div style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ app.email }}</div></div>
-                <div style="color:#a1a1aa">{{ app.role_interest }}</div>
-                <div style="color:#a1a1aa">{{ app.comp_expectation }}</div>
-                <a href="{{ app.cv_link }}" target="_blank" style="color:#34d399;font-family:'JetBrains Mono',monospace;font-size:11px;text-decoration:none">CV →</a>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:12px">// PŘIHLÁŠKY UCHAZEČŮ A KANDIDÁTI ({{ applications.length }})</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ applications }}" as="app" hint-placeholder-count="2">
+              <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:20px">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px">
+                  <div>
+                    <h3 style="margin:0 0 4px;font-size:16px;color:#fafafa">{{ app.name }}</h3>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a">{{ app.email }} · {{ app.created_at }}</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <select value="{{ app.status }}" onChange="{{ app.onStatusChange }}" style="{{ smallSelectStyle }}">
+                      <option value="new">🆕 Nová přihláška</option>
+                      <option value="reviewing">🔍 V posouzení</option>
+                      <option value="interview">💬 Pohovor</option>
+                      <option value="hired">🎉 Přijat(a)</option>
+                      <option value="rejected">❌ Zamítnut(a)</option>
+                    </select>
+                    <sc-if value="{{ app.hasCv }}" hint-placeholder-val="{{ true }}">
+                      <a href="{{ app.cv_link }}" target="_blank" rel="noopener" style="padding:6px 12px;background:#34d399;color:#000;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-decoration:none">Otevřít / Stáhnout CV ↗</a>
+                    </sc-if>
+                  </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;background:#050505;padding:14px;border-radius:4px;border:1px solid rgba(255,255,255,.06);margin-bottom:14px">
+                  <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">PREFEROVANÁ POZICE:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ app.role_interest }}</span></div>
+                  <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">FINANČNÍ OČEKÁVÁNÍ:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ app.comp_expectation }}</span></div>
+                  <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">LINKEDIN / PORTFOLIO:</strong> 
+                    <sc-if value="{{ app.hasLinkedin }}" hint-placeholder-val="{{ true }}">
+                      <a href="{{ app.linkedin }}" target="_blank" rel="noopener" style="color:#34d399;font-size:13px;display:block">{{ app.linkedin }}</a>
+                    </sc-if>
+                  </div>
+                </div>
+
+                <sc-if value="{{ app.hasWhyUs }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-bottom:10px">
+                    <strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">PROČ CHCE PRACOVAT U AERISQ:</strong>
+                    <p style="margin:4px 0 0;font-size:13px;color:#a1a1aa;line-height:1.5;background:#050505;padding:10px;border-radius:4px">{{ app.why_us }}</p>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ app.hasMessage }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-bottom:14px">
+                    <strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">ZPRÁVA / DETAIL:</strong>
+                    <p style="margin:4px 0 0;font-size:13px;color:#a1a1aa;line-height:1.5;background:#050505;padding:10px;border-radius:4px">{{ app.message }}</p>
+                  </div>
+                </sc-if>
+
+                <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:12px">
+                  <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:6px">INTERNÍ POZNÁMKY K UCHAZEČI</label>
+                  <div style="display:flex;gap:10px">
+                    <textarea value="{{ app.notes }}" onChange="{{ app.onNotesChange }}" placeholder="Zadejte interní hodnocení, zkušenosti z pohovoru..." rows="2" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                    <button onClick="{{ app.onSaveNotes }}" style="{{ primaryBtnStyle }}">Uložit poznámku</button>
+                  </div>
+                </div>
               </div>
             </sc-for>
           </div>
@@ -436,7 +482,7 @@ class Component extends DCLogic {
     session: null,
     loginEmail: '', loginPassword: '', loginError: '',
     activeTab: 'leads',
-    auditRequests: [], newsletterSubs: [], applications: [],
+    auditRequests: [], newsletterSubs: [], applications: [], appNotesDrafts: {},
     clients: [], projects: [], milestonesByProject: {}, invoicesByProject: {}, documents: [],
     newClientName: '', newClientCompany: '', newClientEmail: '',
     newProjectName: '', newProjectClientId: '', newProjectPhase: '1', newProjectTargetDate: '',
@@ -521,6 +567,22 @@ class Component extends DCLogic {
     if (!res.ok) return [];
     return res.json();
   }
+
+  updateAppStatus = async (id, status) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/applications?id=eq.${id}`, {
+      method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ status })
+    });
+    this.loadAll(this.state.session);
+  };
+
+  updateAppNotes = async (id, notes) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/applications?id=eq.${id}`, {
+      method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ notes })
+    });
+    this.loadAll(this.state.session);
+  };
 
   loadAll = async (session) => {
     const [audit, newsletter, apps, clients, projects, milestones, invoices, docs, blog, cases, roles, team] = await Promise.all([
@@ -869,7 +931,27 @@ class Component extends DCLogic {
       newUserFullName: s.newUserFullName, newUserEmail: s.newUserEmail, newUserPassword: s.newUserPassword, newUserRole: s.newUserRole,
       setNewUserFullName: this.setNewUserFullName, setNewUserEmail: this.setNewUserEmail, setNewUserPassword: this.setNewUserPassword, setNewUserRole: this.setNewUserRole,
       createUserAccount: this.createUserAccount, newUserCannotSubmit: !(s.newUserFullName.trim() && s.newUserEmail.trim()),
-      auditRequests: s.auditRequests, newsletterSubs: s.newsletterSubs, applications: s.applications,
+      auditRequests: s.auditRequests, newsletterSubs: s.newsletterSubs,
+      applications: s.applications.map(a => {
+        const notesValue = (s.appNotesDrafts[a.id] !== undefined) ? s.appNotesDrafts[a.id] : (a.notes || '');
+        return {
+          ...a,
+          status: a.status || 'new',
+          role_interest: a.role_interest || '—',
+          comp_expectation: a.comp_expectation || '—',
+          hasCv: !!a.cv_link,
+          hasLinkedin: !!a.linkedin,
+          hasWhyUs: !!a.why_us,
+          hasMessage: !!a.message,
+          notes: notesValue,
+          onStatusChange: (e) => this.updateAppStatus(a.id, e.target.value),
+          onNotesChange: (e) => {
+            const val = e.target.value;
+            this.setState(st => ({ appNotesDrafts: { ...st.appNotesDrafts, [a.id]: val } }));
+          },
+          onSaveNotes: () => this.updateAppNotes(a.id, notesValue)
+        };
+      }),
       clients: clientsWithDelete,
       newClientName: s.newClientName, newClientCompany: s.newClientCompany, newClientEmail: s.newClientEmail,
       setNewClientName: this.setNewClientName, setNewClientCompany: this.setNewClientCompany, setNewClientEmail: this.setNewClientEmail,

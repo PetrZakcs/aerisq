@@ -735,7 +735,7 @@ body{animation:pageFadeIn .35s ease both}
     </a>
     <a onClick="{{ goPrivacy }}" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a;text-decoration:none;cursor:pointer" style-hover="color:#fafafa">Privacy</a>
     <a onClick="{{ goTerms }}" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a;text-decoration:none;cursor:pointer" style-hover="color:#fafafa">Terms</a>
-    <a href="/admin" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#52525b;text-decoration:none;border:1px solid rgba(255,255,255,.1);padding:4px 8px;border-radius:4px" style-hover="color:#34d399;border-color:#34d399">Admin 🔒</a>
+    <a href="#" onClick="{{ alertClientPortalComingSoon }}" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;text-decoration:none;border:1px solid rgba(255,255,255,.1);padding:4px 8px;border-radius:4px" style-hover="color:#34d399;border-color:#34d399">Klientský portál 🔐</a>
   </div>
   <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#52525b;letter-spacing:.03em">{{ t.footerTagline }}</span>
 </footer>
@@ -1038,6 +1038,10 @@ class Component extends DCLogic {
     const params = new URLSearchParams(window.location.search);
     this.setState({ page: params.get('page') || 'home', lang: params.get('lang') === 'cs' ? 'cs' : 'en' });
   };
+  alertClientPortalComingSoon = (e) => {
+    e.preventDefault();
+    alert('Klientský portál pro sledování projektů a milníků připravujeme.');
+  };
 
   scrollToId(id) {
     setTimeout(() => {
@@ -1191,11 +1195,22 @@ class Component extends DCLogic {
 
   uploadCvFile = async (path, file) => {
     try {
-      const res = await fetch(`${SUPABASE_URL}/storage/v1/object/cvs/${path}`, {
-        method: 'POST', headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': file.type || 'application/pdf' }, body: file
+      const safePath = encodeURIComponent(path);
+      const res = await fetch(`${SUPABASE_URL}/storage/v1/object/cvs/${safePath}`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'x-upsert': 'true',
+          'Content-Type': file.type || 'application/pdf'
+        },
+        body: file
       });
-      return res.ok;
-    } catch (e) { console.error('CV upload failed', e); return false; }
+      if (res.ok) {
+        return `${SUPABASE_URL}/storage/v1/object/public/cvs/${safePath}`;
+      }
+      return null;
+    } catch (e) { console.error('CV upload failed', e); return null; }
   };
 
   submitApplication = async () => {
@@ -1205,9 +1220,10 @@ class Component extends DCLogic {
     this.setState({ appSubmitted: true });
     let cvUrl = s.appCvLink;
     if (s.appCvFile) {
-      const path = `${Date.now()}-${s.appCvFile.name}`;
-      const ok = await this.uploadCvFile(path, s.appCvFile);
-      if (ok) cvUrl = `${SUPABASE_URL}/storage/v1/object/public/cvs/${path}`;
+      const cleanFileName = s.appCvFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const path = `${Date.now()}_${cleanFileName}`;
+      const uploadedUrl = await this.uploadCvFile(path, s.appCvFile);
+      if (uploadedUrl) cvUrl = uploadedUrl;
     }
     await supabaseInsert('applications', {
       name: s.appName, email: s.appEmail, linkedin: s.appLinkedin, cv_link: cvUrl,
@@ -1317,7 +1333,7 @@ class Component extends DCLogic {
       appSubmitBtnStyle: `width:100%;padding:14px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:14px;cursor:pointer;opacity:${canSubmitApp?1:0.4}`,
       submitApplication: this.submitApplication,
 
-      caseFilters,
+      caseFilters, alertClientPortalComingSoon: this.alertClientPortalComingSoon,
       liveBlogPosts, hasBlogPosts, noBlogPosts,
       liveCaseStudies, hasCaseStudies, noCaseStudies
     };
