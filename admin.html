@@ -33,17 +33,13 @@
         </span>
         <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:17px;letter-spacing:-.02em">Aeris<span style="color:#34d399">Q</span> <span style="color:#71717a;font-weight:500">/ admin</span></span>
       </div>
-      <sc-if value="{{ otpSent }}" hint-placeholder-val="{{ false }}">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399;letter-spacing:.04em;margin-bottom:10px">// LINK_SENT</div>
-        <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin:0">Check your inbox — click the magic link to sign in.</p>
-      </sc-if>
-      <sc-if value="{{ otpNotSent }}" hint-placeholder-val="{{ true }}">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a;letter-spacing:.04em;margin-bottom:16px">// SIGN IN</div>
-        <input placeholder="admin email" value="{{ loginEmail }}" onChange="{{ setLoginEmail }}" style="width:100%;padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:14px;box-sizing:border-box" style-focus="border-color:#34d399;outline:none" />
-        <button onClick="{{ sendMagicLink }}" disabled="{{ loginCannotSubmit }}" style="{{ loginBtnStyle }}">Send Magic Link</button>
-        <sc-if value="{{ loginError }}" hint-placeholder-val="{{ false }}">
-          <p style="color:#f87171;font-size:12px;font-family:'JetBrains Mono',monospace;margin:12px 0 0">{{ loginError }}</p>
-        </sc-if>
+
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a;letter-spacing:.04em;margin-bottom:16px">// PŘIHLÁŠENÍ SOUKROMÉ SPRÁVY</div>
+      <input placeholder="Přihlašovací jméno / e-mail" value="{{ loginEmail }}" onChange="{{ setLoginEmail }}" style="width:100%;padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:14px;box-sizing:border-box" style-focus="border-color:#34d399;outline:none" />
+      <input type="password" placeholder="Heslo" value="{{ loginPassword }}" onChange="{{ setLoginPassword }}" style="width:100%;padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:18px;box-sizing:border-box" style-focus="border-color:#34d399;outline:none" />
+      <button onClick="{{ loginWithPassword }}" disabled="{{ loginCannotSubmit }}" style="{{ loginBtnStyle }}">Vstoupit do administrace</button>
+      <sc-if value="{{ loginError }}" hint-placeholder-val="{{ false }}">
+        <p style="color:#f87171;font-size:12px;font-family:'JetBrains Mono',monospace;margin:12px 0 0">{{ loginError }}</p>
       </sc-if>
     </div>
   </div>
@@ -255,26 +251,49 @@
     <sc-if value="{{ isCmsTab }}" hint-placeholder-val="{{ false }}">
       <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px">
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// WEBSITE CONTENT & HEADLINES CONTROL</div>
-        <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin-bottom:24px">Manage headline text, hero banners, and service details for AerisQ landing page.</p>
+        <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin-bottom:24px">Spravujte texty, nadpisy a podrobnosti služeb pro hlavní web AerisQ.</p>
 
-        <div style="display:flex;flex-direction:column;gap:18px;max-width:720px">
-          <div>
-            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:6px">HERO TITLE (EN)</label>
-            <input value="{{ heroTitle }}" onChange="{{ setHeroTitle }}" style="{{ inputStyle }};width:100%" />
+        <div style="display:flex;flex-direction:column;gap:20px;max-width:760px">
+          <div style="border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:6px;background:#050505">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:12px">ENGLISH CONTENT</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO TITLE (EN)</label>
+                <input value="{{ heroTitleEn }}" onChange="{{ setHeroTitleEn }}" style="{{ inputStyle }};width:100%" />
+              </div>
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO SUBTITLE (EN)</label>
+                <textarea value="{{ heroSubEn }}" onChange="{{ setHeroSubEn }}" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+              </div>
+            </div>
           </div>
-          <div>
-            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:6px">HERO SUBTITLE (EN)</label>
-            <textarea value="{{ heroSub }}" onChange="{{ setHeroSub }}" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+
+          <div style="border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:6px;background:#050505">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:12px">CZECH CONTENT (ČESKY)</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO NADPIS (CS)</label>
+                <input value="{{ heroTitleCs }}" onChange="{{ setHeroTitleCs }}" style="{{ inputStyle }};width:100%" />
+              </div>
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO PODNADPIS (CS)</label>
+                <textarea value="{{ heroSubCs }}" onChange="{{ setHeroSubCs }}" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+              </div>
+            </div>
           </div>
-          <div>
-            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:6px">DISCOVERY AUDIT PRICE / SCARCITY BANNER</label>
-            <input value="{{ auditScarcity }}" onChange="{{ setAuditScarcity }}" style="{{ inputStyle }};width:100%" />
+
+          <div style="border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:6px;background:#050505">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:12px">AUDIT & SCARCITY BANNER</div>
+            <div>
+              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">TEXT DOSTUPNOSTI AUDITU</label>
+              <input value="{{ auditScarcity }}" onChange="{{ setAuditScarcity }}" style="{{ inputStyle }};width:100%" />
+            </div>
           </div>
 
           <div style="display:flex;align-items:center;gap:14px;margin-top:10px">
-            <button onClick="{{ saveCmsChanges }}" style="{{ primaryBtnStyle }}">Save Changes to Live Site</button>
+            <button onClick="{{ saveCmsChanges }}" style="{{ primaryBtnStyle }}">Uložit změny pro web</button>
             <sc-if value="{{ cmsSaved }}" hint-placeholder-val="{{ false }}">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">✓ Content updated locally</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">✓ Změny byly úspěšně uloženy</span>
             </sc-if>
           </div>
         </div>
@@ -294,7 +313,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 class Component extends DCLogic {
   state = {
     session: null,
-    loginEmail: '', otpSent: false, loginError: '',
+    loginEmail: '', loginPassword: '', loginError: '',
     activeTab: 'leads',
     auditRequests: [], newsletterSubs: [], applications: [],
     clients: [], projects: [], milestonesByProject: {}, invoicesByProject: {}, documents: [],
@@ -302,9 +321,11 @@ class Component extends DCLogic {
     newProjectName: '', newProjectClientId: '', newProjectPhase: '1', newProjectTargetDate: '',
     newDocProjectId: '', newDocTitle: '', newDocFile: null,
     projectDrafts: {},
-    heroTitle: 'We Replace Manual Workflows with Autonomous AI',
-    heroSub: 'AerisQ builds production-grade AI agents, RAG systems, and MVP infrastructure for startups and enterprises.',
-    auditScarcity: 'ONLY 2 DISCOVERY AUDIT SLOTS REMAINING FOR THIS MONTH',
+    heroTitleEn: 'We replace your manual workflows with AI agents that run in production.',
+    heroSubEn: 'Not a chatbot demo. We map your actual bottleneck — invoices, tickets, back-office data entry — build the pipeline that replaces it, deploy it into your existing stack, and stay until your team runs it without us.',
+    heroTitleCs: 'Nahrazujeme vaše manuální procesy AI agenty, kteří běží v produkci.',
+    heroSubCs: 'Žádné demo chatbota. Zmapujeme váš skutečný problém — faktury, tickety, ruční přepis dat — postavíme pipeline, která ho nahradí, nasadíme ji do vaší infrastruktury a zůstaneme, dokud ji váš tým neumí provozovat sám.',
+    auditScarcity: '◆ Only 3 audit slots open this quarter',
     cmsSaved: false
   };
 
@@ -317,15 +338,6 @@ class Component extends DCLogic {
         this.loadAll(session);
       } catch (e) {}
     }
-    const hash = window.location.hash;
-    if (hash.includes('access_token')) {
-      const params = new URLSearchParams(hash.slice(1));
-      const access_token = params.get('access_token');
-      if (access_token) {
-        this.verifyAndSetSession(access_token);
-        window.history.replaceState(null, '', window.location.pathname);
-      }
-    }
   }
 
   authHeaders(session) {
@@ -333,37 +345,30 @@ class Component extends DCLogic {
     return { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
   }
 
-  verifyAndSetSession = async (access_token) => {
-    try {
-      const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${access_token}` } });
-      if (!res.ok) return;
-      const user = await res.json();
-      const session = { access_token, email: user.email };
-      localStorage.setItem('aerisq_admin_session', JSON.stringify(session));
-      this.setState({ session });
-      this.loadAll(session);
-    } catch (e) { console.error(e); }
-  };
-
   setLoginEmail = (e) => this.setState({ loginEmail: e.target.value });
+  setLoginPassword = (e) => this.setState({ loginPassword: e.target.value });
 
-  sendMagicLink = async () => {
+  loginWithPassword = async () => {
     const email = this.state.loginEmail.trim();
-    if (!email) return;
+    const password = this.state.loginPassword;
+    if (!email || !password) return;
     try {
-      const res = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
         method: 'POST',
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, create_user: false, options: { redirect_to: window.location.href.split('#')[0] } })
+        body: JSON.stringify({ email, password })
       });
-      if (res.ok) {
-        this.setState({ otpSent: true, loginError: '' });
+      const data = await res.json();
+      if (res.ok && data.access_token) {
+        const session = { access_token: data.access_token, email: data.user?.email || email };
+        localStorage.setItem('aerisq_admin_session', JSON.stringify(session));
+        this.setState({ session, loginError: '' });
+        this.loadAll(session);
       } else {
-        const err = await res.json().catch(() => ({}));
-        this.setState({ loginError: err.msg || err.error_description || 'This email is not registered as an admin.' });
+        this.setState({ loginError: data.error_description || data.msg || 'Nesprávné přihlašovací jméno nebo heslo.' });
       }
     } catch (e) {
-      this.setState({ loginError: 'Network error. Try again.' });
+      this.setState({ loginError: 'Chyba připojení. Zkuste to prosím znovu.' });
     }
   };
 
@@ -512,13 +517,17 @@ class Component extends DCLogic {
     this.loadAll(this.state.session);
   };
 
-  setHeroTitle = (e) => this.setState({ heroTitle: e.target.value, cmsSaved: false });
-  setHeroSub = (e) => this.setState({ heroSub: e.target.value, cmsSaved: false });
+  setHeroTitleEn = (e) => this.setState({ heroTitleEn: e.target.value, cmsSaved: false });
+  setHeroSubEn = (e) => this.setState({ heroSubEn: e.target.value, cmsSaved: false });
+  setHeroTitleCs = (e) => this.setState({ heroTitleCs: e.target.value, cmsSaved: false });
+  setHeroSubCs = (e) => this.setState({ heroSubCs: e.target.value, cmsSaved: false });
   setAuditScarcity = (e) => this.setState({ auditScarcity: e.target.value, cmsSaved: false });
   saveCmsChanges = () => {
     localStorage.setItem('aerisq_custom_cms', JSON.stringify({
-      heroTitle: this.state.heroTitle,
-      heroSub: this.state.heroSub,
+      heroTitleEn: this.state.heroTitleEn,
+      heroSubEn: this.state.heroSubEn,
+      heroTitleCs: this.state.heroTitleCs,
+      heroSubCs: this.state.heroSubCs,
       auditScarcity: this.state.auditScarcity
     }));
     this.setState({ cmsSaved: true });
@@ -572,23 +581,27 @@ class Component extends DCLogic {
     const projectNameById = Object.fromEntries(s.projects.map(p => [p.id, p.name]));
     const documents = s.documents.map(d => ({ ...d, projectName: projectNameById[d.project_id] || '—', onDelete: () => this.deleteDocument(d.id) }));
 
-    const loginCanSubmit = /\S+@\S+\.\S+/.test(s.loginEmail);
+    const loginCanSubmit = s.loginEmail.trim().length > 0 && s.loginPassword.length > 0;
 
     return {
       isLoggedOut: !s.session,
       isLoggedIn: !!s.session,
       sessionEmail: s.session?.email || '',
-      loginEmail: s.loginEmail, setLoginEmail: this.setLoginEmail, sendMagicLink: this.sendMagicLink,
+      loginEmail: s.loginEmail, setLoginEmail: this.setLoginEmail,
+      loginPassword: s.loginPassword, setLoginPassword: this.setLoginPassword,
+      loginWithPassword: this.loginWithPassword,
       loginCannotSubmit: !loginCanSubmit,
       loginBtnStyle: `width:100%;padding:13px;background:#34d399;color:#000;border:none;border-radius:4px;font-weight:700;font-size:14px;cursor:pointer;opacity:${loginCanSubmit?1:0.4}`,
-      otpSent: s.otpSent, otpNotSent: !s.otpSent, loginError: s.loginError,
+      loginError: s.loginError,
       logout: this.logout,
       tabs,
       isLeadsTab: s.activeTab === 'leads', isClientsTab: s.activeTab === 'clients',
       isProjectsTab: s.activeTab === 'projects', isDocumentsTab: s.activeTab === 'documents',
       isCmsTab: s.activeTab === 'site_content',
-      heroTitle: s.heroTitle, setHeroTitle: this.setHeroTitle,
-      heroSub: s.heroSub, setHeroSub: this.setHeroSub,
+      heroTitleEn: s.heroTitleEn, setHeroTitleEn: this.setHeroTitleEn,
+      heroSubEn: s.heroSubEn, setHeroSubEn: this.setHeroSubEn,
+      heroTitleCs: s.heroTitleCs, setHeroTitleCs: this.setHeroTitleCs,
+      heroSubCs: s.heroSubCs, setHeroSubCs: this.setHeroSubCs,
       auditScarcity: s.auditScarcity, setAuditScarcity: this.setAuditScarcity,
       saveCmsChanges: this.saveCmsChanges, cmsSaved: s.cmsSaved,
       auditRequests: s.auditRequests, newsletterSubs: s.newsletterSubs, applications: s.applications,

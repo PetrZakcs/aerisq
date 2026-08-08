@@ -936,6 +936,20 @@ class Component extends DCLogic {
 
   componentDidMount() {
     window.addEventListener('popstate', this.onPopState);
+    try {
+      const stored = localStorage.getItem('aerisq_custom_cms');
+      if (stored) {
+        const cms = JSON.parse(stored);
+        if (cms.heroTitleEn) TRANSLATIONS.en.heroTitle = cms.heroTitleEn;
+        if (cms.heroSubEn) TRANSLATIONS.en.heroSub = cms.heroSubEn;
+        if (cms.heroTitleCs) TRANSLATIONS.cs.heroTitle = cms.heroTitleCs;
+        if (cms.heroSubCs) TRANSLATIONS.cs.heroSub = cms.heroSubCs;
+        if (cms.auditScarcity) {
+          TRANSLATIONS.en.auditScarcity = cms.auditScarcity;
+          TRANSLATIONS.cs.auditScarcity = cms.auditScarcity;
+        }
+      }
+    } catch(e) {}
   }
   componentWillUnmount() {
     window.removeEventListener('popstate', this.onPopState);
