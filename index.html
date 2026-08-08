@@ -973,7 +973,8 @@ class Component extends DCLogic {
 
     csActive: 'all',
     liveBlogPosts: [],
-    liveCaseStudies: []
+    liveCaseStudies: [],
+    cmsLoadedAt: null
   };
 
   componentDidMount() {
@@ -1005,11 +1006,35 @@ class Component extends DCLogic {
 
   loadLiveRoles = async () => {
     try {
-      const [rRes, bRes, cRes] = await Promise.all([
+      const [rRes, bRes, cRes, sRes] = await Promise.all([
         fetch(`${SUPABASE_URL}/rest/v1/job_roles?select=*`, { headers: { 'apikey': SUPABASE_ANON_KEY } }),
         fetch(`${SUPABASE_URL}/rest/v1/blog_posts?select=*&order=created_at.desc`, { headers: { 'apikey': SUPABASE_ANON_KEY } }),
-        fetch(`${SUPABASE_URL}/rest/v1/case_studies?select=*&order=created_at.desc`, { headers: { 'apikey': SUPABASE_ANON_KEY } })
+        fetch(`${SUPABASE_URL}/rest/v1/case_studies?select=*&order=created_at.desc`, { headers: { 'apikey': SUPABASE_ANON_KEY } }),
+        fetch(`${SUPABASE_URL}/rest/v1/site_settings?id=eq.main`, { headers: { 'apikey': SUPABASE_ANON_KEY } })
       ]);
+      if (sRes.ok) {
+        const rows = await sRes.json();
+        if (rows && rows.length > 0 && rows[0].settings) {
+          const cms = rows[0].settings;
+          if (cms.heroTitleEn) TRANSLATIONS.en.heroTitle = cms.heroTitleEn;
+          if (cms.heroSubEn) TRANSLATIONS.en.heroSub = cms.heroSubEn;
+          if (cms.heroTitleCs) TRANSLATIONS.cs.heroTitle = cms.heroTitleCs;
+          if (cms.heroSubCs) TRANSLATIONS.cs.heroSub = cms.heroSubCs;
+          if (cms.auditScarcity) {
+            TRANSLATIONS.en.auditScarcity = cms.auditScarcity;
+            TRANSLATIONS.cs.auditScarcity = cms.auditScarcity;
+          }
+          if (cms.openWorkTitle) {
+            TRANSLATIONS.en.openWorkTitle = cms.openWorkTitle;
+            TRANSLATIONS.cs.openWorkTitle = cms.openWorkTitle;
+          }
+          if (cms.openWorkDesc) {
+            TRANSLATIONS.en.openWorkEmpty = cms.openWorkDesc;
+            TRANSLATIONS.cs.openWorkEmpty = cms.openWorkDesc;
+          }
+          this.setState({ cmsLoadedAt: Date.now() });
+        }
+      }
       if (rRes.ok) {
         const roles = await rRes.json();
         if (roles && roles.length > 0) {

@@ -118,6 +118,9 @@
                     <sc-if value="{{ app.hasCv }}" hint-placeholder-val="{{ true }}">
                       <a href="{{ app.cv_link }}" target="_blank" rel="noopener" style="padding:6px 12px;background:#34d399;color:#000;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-decoration:none">Otevřít / Stáhnout CV ↗</a>
                     </sc-if>
+                    <sc-if value="{{ app.noCv }}" hint-placeholder-val="{{ false }}">
+                      <span style="padding:6px 10px;background:rgba(255,255,255,.05);color:#71717a;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px">Bez přiloženého CV</span>
+                    </sc-if>
                   </div>
                 </div>
 
@@ -569,19 +572,23 @@ class Component extends DCLogic {
   }
 
   updateAppStatus = async (id, status) => {
+    this.setState(s => ({
+      applications: s.applications.map(a => a.id === id ? { ...a, status } : a)
+    }));
     await fetch(`${SUPABASE_URL}/rest/v1/applications?id=eq.${id}`, {
       method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
       body: JSON.stringify({ status })
     });
-    this.loadAll(this.state.session);
   };
 
   updateAppNotes = async (id, notes) => {
+    this.setState(s => ({
+      applications: s.applications.map(a => a.id === id ? { ...a, notes } : a)
+    }));
     await fetch(`${SUPABASE_URL}/rest/v1/applications?id=eq.${id}`, {
       method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
       body: JSON.stringify({ notes })
     });
-    this.loadAll(this.state.session);
   };
 
   loadAll = async (session) => {
@@ -821,8 +828,8 @@ class Component extends DCLogic {
   setOpenWorkTitle = (e) => this.setState({ openWorkTitle: e.target.value, cmsSaved: false });
   setOpenWorkDesc = (e) => this.setState({ openWorkDesc: e.target.value, cmsSaved: false });
 
-  saveCmsChanges = () => {
-    localStorage.setItem('aerisq_custom_cms', JSON.stringify({
+  saveCmsChanges = async () => {
+    const payload = {
       heroTitleEn: this.state.heroTitleEn,
       heroSubEn: this.state.heroSubEn,
       heroTitleCs: this.state.heroTitleCs,
@@ -831,7 +838,15 @@ class Component extends DCLogic {
       openWorkHiring: this.state.openWorkHiring,
       openWorkTitle: this.state.openWorkTitle,
       openWorkDesc: this.state.openWorkDesc
-    }));
+    };
+    localStorage.setItem('aerisq_custom_cms', JSON.stringify(payload));
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
+        method: 'POST',
+        headers: { ...this.authHeaders(), 'Prefer': 'resolution=merge-duplicates' },
+        body: JSON.stringify({ id: 'main', settings: payload })
+      });
+    } catch (e) {}
     this.setState({ cmsSaved: true });
   };
 
@@ -939,7 +954,8 @@ class Component extends DCLogic {
           status: a.status || 'new',
           role_interest: a.role_interest || '—',
           comp_expectation: a.comp_expectation || '—',
-          hasCv: !!a.cv_link,
+          hasCv: !!(a.cv_link && a.cv_link.trim().length > 0),
+          noCv: !(a.cv_link && a.cv_link.trim().length > 0),
           hasLinkedin: !!a.linkedin,
           hasWhyUs: !!a.why_us,
           hasMessage: !!a.message,
