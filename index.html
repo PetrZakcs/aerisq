@@ -965,7 +965,10 @@ class Component extends DCLogic {
   budgetMeta = ['$7,000 – $15,000', '$15,000 – $40,000', '$40,000 – $100,000', '$100,000+'];
 
   state = {
-    page: (new URLSearchParams(window.location.search).get('page')) || 'home',
+    page: (() => {
+      const p = window.location.pathname.substring(1);
+      return (!p || p === 'index.html' || p === 'index') ? 'home' : p;
+    })(),
     lang: (new URLSearchParams(window.location.search).get('lang') === 'cs') ? 'cs' : 'en',
     step: 1, focus: null, budget: null,
     name: '', email: '', company: '', phone: '', website: '', teamSize: '', problem: '',
@@ -1052,10 +1055,13 @@ class Component extends DCLogic {
   };
 
   onPopState = () => {
+    let page = window.location.pathname.substring(1);
+    if (!page || page === 'index.html' || page === 'index') {
+      page = 'home';
+    }
     const params = new URLSearchParams(window.location.search);
-    const page = params.get('page') || 'home';
-    this.setState({ page, lang: params.get('lang') === 'cs' ? 'cs' : 'en' });
     const anchor = params.get('anchor');
+    this.setState({ page, lang: params.get('lang') === 'cs' ? 'cs' : 'en' });
     if (anchor) this.scrollToId(anchor);
   };
 
@@ -1076,10 +1082,17 @@ class Component extends DCLogic {
 
   goTo = (page, anchor) => {
     const qs = new URLSearchParams();
-    qs.set('page', page);
     if (this.state.lang === 'cs') qs.set('lang', 'cs');
     if (anchor) qs.set('anchor', anchor);
-    const newUrl = `${window.location.pathname}?${qs.toString()}`;
+    
+    let path = '/';
+    if (page !== 'home') {
+      path = `/${page}`;
+    }
+    
+    const qsString = qs.toString();
+    const newUrl = qsString ? `${path}?${qsString}` : path;
+    
     window.history.pushState({ page }, '', newUrl);
     this.setState({ page });
     this.scrollToId(anchor);
