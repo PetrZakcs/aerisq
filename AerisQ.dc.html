@@ -575,9 +575,22 @@ body{animation:pageFadeIn .35s ease both}
   <p style="color:#a1a1aa;font-size:16px;line-height:1.6;max-width:600px;margin:0">{{ t.blogSub }}</p>
 </section>
 <section style="max-width:1280px;margin:0 auto;padding:16px clamp(20px,4vw,48px) 80px">
-  <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:60px 32px;text-align:center">
-    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#71717a">{{ t.blogEmpty }}</span>
-  </div>
+  <sc-if value="{{ hasBlogPosts }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:24px">
+      <sc-for list="{{ liveBlogPosts }}" as="post" hint-placeholder-count="2">
+        <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:32px">
+          <h2 style="font-size:20px;font-weight:700;margin:0 0 10px">{{ post.title }}</h2>
+          <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin:0 0 16px">{{ post.excerpt }}</p>
+          <div style="font-size:13px;color:#d4d4d8;line-height:1.6">{{ post.content }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+  <sc-if value="{{ noBlogPosts }}" hint-placeholder-val="{{ true }}">
+    <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:60px 32px;text-align:center">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#71717a">{{ t.blogEmpty }}</span>
+    </div>
+  </sc-if>
 </section>
 </sc-if>
 
@@ -586,17 +599,32 @@ body{animation:pageFadeIn .35s ease both}
   <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:16px">{{ t.caseEyebrow }}</div>
   <h1 style="font-size:clamp(32px,4.4vw,52px);font-weight:800;line-height:1.08;letter-spacing:-.02em;margin:0 0 20px;max-width:800px">{{ t.caseTitle }}</h1>
   <p style="color:#a1a1aa;font-size:16px;line-height:1.6;max-width:600px;margin:0 0 8px">{{ t.caseSub1 }}</p>
-  <p style="color:#52525b;font-family:'JetBrains Mono',monospace;font-size:11.5px;margin:0">{{ t.caseSub2 }}</p>
-</section>
-<section style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,48px) 24px;display:flex;gap:10px;flex-wrap:wrap">
-  <sc-for list="{{ caseFilters }}" as="f" hint-placeholder-count="4">
-    <button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button>
-  </sc-for>
 </section>
 <section style="max-width:1280px;margin:0 auto;padding:16px clamp(20px,4vw,48px) 80px">
-  <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:60px 32px;text-align:center">
-    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#71717a">{{ t.caseEmpty }}</span>
-  </div>
+  <sc-if value="{{ hasCaseStudies }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:24px">
+      <sc-for list="{{ liveCaseStudies }}" as="cs" hint-placeholder-count="2">
+        <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:32px">
+          <h2 style="font-size:20px;font-weight:700;margin:0 0 6px">{{ cs.title }}</h2>
+          <div style="font-size:13px;color:{{ accentColor }};font-family:'JetBrains Mono',monospace;margin-bottom:16px">{{ cs.subhead }}</div>
+          <div style="border-left:2px solid #52525b;padding-left:14px;margin-bottom:12px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">PROBLÉM</div>
+            <div style="font-size:14px;color:#a1a1aa;line-height:1.6">{{ cs.problem }}</div>
+          </div>
+          <div style="border-left:2px solid {{ accentColor }};padding-left:14px;margin-bottom:16px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ accentColor }};margin-bottom:4px">ŘEŠENÍ</div>
+            <div style="font-size:14px;color:#d4d4d8;line-height:1.6">{{ cs.solution }}</div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">{{ cs.tags }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+  <sc-if value="{{ noCaseStudies }}" hint-placeholder-val="{{ true }}">
+    <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:60px 32px;text-align:center">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#71717a">{{ t.caseEmpty }}</span>
+    </div>
+  </sc-if>
 </section>
 </sc-if>
 
@@ -931,7 +959,9 @@ class Component extends DCLogic {
     appName: '', appEmail: '', appLinkedin: '', appCvLink: '', appMessage: '', appComp: '', appWhyUs: '',
     appCvFile: null, appCvFileName: '', cvParsing: false, cvParsed: false, appSubmitted: false,
 
-    csActive: 'all'
+    csActive: 'all',
+    liveBlogPosts: [],
+    liveCaseStudies: []
   };
 
   componentDidMount() {
@@ -950,7 +980,37 @@ class Component extends DCLogic {
         }
       }
     } catch(e) {}
+    this.loadLiveRoles();
   }
+
+  loadLiveRoles = async () => {
+    try {
+      const [rRes, bRes, cRes] = await Promise.all([
+        fetch(`${SUPABASE_URL}/rest/v1/job_roles?select=*`, { headers: { 'apikey': SUPABASE_ANON_KEY } }),
+        fetch(`${SUPABASE_URL}/rest/v1/blog_posts?select=*&order=created_at.desc`, { headers: { 'apikey': SUPABASE_ANON_KEY } }),
+        fetch(`${SUPABASE_URL}/rest/v1/case_studies?select=*&order=created_at.desc`, { headers: { 'apikey': SUPABASE_ANON_KEY } })
+      ]);
+      if (rRes.ok) {
+        const roles = await rRes.json();
+        if (roles && roles.length > 0) {
+          const tracks = roles.map(r => ({ title: r.title, stack: r.stack || r.description || '' }));
+          TRANSLATIONS.en.carTracksData = tracks;
+          TRANSLATIONS.cs.carTracksData = tracks;
+          TRANSLATIONS.en.carRoleOptions = roles.map(r => r.title).concat(['Something else']);
+          TRANSLATIONS.cs.carRoleOptions = roles.map(r => r.title).concat(['Něco jiného']);
+        }
+      }
+      if (bRes.ok) {
+        const posts = await bRes.json();
+        this.setState({ liveBlogPosts: posts });
+      }
+      if (cRes.ok) {
+        const cases = await cRes.json();
+        this.setState({ liveCaseStudies: cases });
+      }
+      this.forceUpdate();
+    } catch(e) {}
+  };
   componentWillUnmount() {
     window.removeEventListener('popstate', this.onPopState);
   }
@@ -1173,8 +1233,16 @@ class Component extends DCLogic {
     const caseFilterLabels = { all: t.caseFilterAll, ai: t.caseFilterAi, mvp: t.caseFilterMvp, enterprise: t.caseFilterEnterprise };
     const caseFilters = caseFilterKeys.map(key => ({
       label: caseFilterLabels[key], onClick: () => this.setCsActive(key),
-      style: `padding:9px 16px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;border:1px solid ${s.csActive === key ? accent : 'rgba(255,255,255,.12)'};background:${s.csActive === key ? accent + '1a' : 'transparent'};color:${s.csActive === key ? '#fafafa' : '#a1a1aa'}`
+      style: `padding:99px 16px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;border:1px solid ${s.csActive === key ? accent : 'rgba(255,255,255,.12)'};background:${s.csActive === key ? accent + '1a' : 'transparent'};color:${s.csActive === key ? '#fafafa' : '#a1a1aa'}`
     }));
+
+    const liveBlogPosts = s.liveBlogPosts || [];
+    const hasBlogPosts = liveBlogPosts.length > 0;
+    const noBlogPosts = !hasBlogPosts;
+
+    const liveCaseStudies = s.liveCaseStudies || [];
+    const hasCaseStudies = liveCaseStudies.length > 0;
+    const noCaseStudies = !hasCaseStudies;
 
     return {
       t,
@@ -1229,7 +1297,9 @@ class Component extends DCLogic {
       appSubmitBtnStyle: `width:100%;padding:14px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:14px;cursor:pointer;opacity:${canSubmitApp?1:0.4}`,
       submitApplication: this.submitApplication,
 
-      caseFilters
+      caseFilters,
+      liveBlogPosts, hasBlogPosts, noBlogPosts,
+      liveCaseStudies, hasCaseStudies, noCaseStudies
     };
   }
 }

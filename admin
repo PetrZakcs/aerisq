@@ -361,6 +361,43 @@
       </div>
     </sc-if>
 
+    <sc-if value="{{ isUsersTab }}" hint-placeholder-val="{{ false }}">
+      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px;margin-bottom:24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// PŘIDAT NOVÉHO UŽIVATELE / SPRÁVCE</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px">
+          <input placeholder="Jméno a příjmení" value="{{ newUserFullName }}" onChange="{{ setNewUserFullName }}" style="{{ inputStyle }}" />
+          <input placeholder="E-mail uživatele" value="{{ newUserEmail }}" onChange="{{ setNewUserEmail }}" style="{{ inputStyle }}" />
+          <input type="password" placeholder="Přihlašovací heslo" value="{{ newUserPassword }}" onChange="{{ setNewUserPassword }}" style="{{ inputStyle }}" />
+          <select value="{{ newUserRole }}" onChange="{{ setNewUserRole }}" style="{{ inputStyle }}">
+            <option value="admin">Super Admin (Plný přístup)</option>
+            <option value="editor">Editor (Správa obsahu & Leads)</option>
+            <option value="viewer">Viewer (Pouze čtení)</option>
+          </select>
+        </div>
+        <button onClick="{{ createUserAccount }}" disabled="{{ newUserCannotSubmit }}" style="{{ primaryBtnStyle }}">Vytvořit účet uživatele</button>
+      </div>
+
+      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
+        <div style="padding:12px 18px;background:#050505;border-bottom:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">SEZNAM UŽIVATELŮ A ROLE PERMISSIONS</div>
+        <sc-for list="{{ teamMembers }}" as="member" hint-placeholder-count="3">
+          <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div>
+              <strong style="color:#fafafa;font-size:14px">{{ member.full_name }}</strong>
+              <div style="color:#71717a;font-size:12px;font-family:'JetBrains Mono',monospace">{{ member.email }}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <select value="{{ member.role }}" onChange="{{ member.onRoleChange }}" style="{{ smallSelectStyle }}">
+                <option value="admin">Super Admin</option>
+                <option value="editor">Editor</option>
+                <option value="viewer">Viewer</option>
+              </select>
+              <button onClick="{{ member.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Smazat</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
   </div>
 </sc-if>
 
@@ -391,7 +428,16 @@ class Component extends DCLogic {
 
     blogPosts: [], newBlogTitle: '', newBlogExcerpt: '', newBlogContent: '',
     caseStudiesList: [], newCaseTitle: '', newCaseSubhead: '', newCaseProblem: '', newCaseSolution: '', newCaseTags: '',
-    jobRoles: [], newRoleTitle: '', newRoleStack: '', newRoleDesc: ''
+    jobRoles: [
+      { id: 'default-1', title: 'AI / ML Engineer', stack: 'Python · LangChain · RAG', description: 'Autonomous agent pipelines & vector search' },
+      { id: 'default-2', title: 'Full-Stack Engineer', stack: 'TypeScript · Next.js · Supabase', description: 'High performance edge applications' },
+      { id: 'default-3', title: 'Business Development', stack: 'Client acquisition · Partnerships', description: 'Enterprise deal closing & client strategy' },
+      { id: 'default-4', title: 'Mechanical Engineer', stack: 'CAD · Prototyping · Hardware', description: 'Hardware & physical product integration' },
+      { id: 'default-5', title: 'Architect / Civil Engineering Student', stack: 'Structural analysis · CAD · Site data', description: 'Spatial analysis & structural engineering' }
+    ],
+    newRoleTitle: '', newRoleStack: '', newRoleDesc: '',
+
+    teamMembers: [], newUserFullName: '', newUserEmail: '', newUserPassword: '', newUserRole: 'admin'
   };
 
   componentDidMount() {
@@ -451,7 +497,7 @@ class Component extends DCLogic {
   }
 
   loadAll = async (session) => {
-    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs, blog, cases, roles] = await Promise.all([
+    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs, blog, cases, roles, team] = await Promise.all([
       this.fetchTable('audit_requests', session, '&order=created_at.desc'),
       this.fetchTable('newsletter_subscribers', session, '&order=created_at.desc'),
       this.fetchTable('applications', session, '&order=created_at.desc'),
@@ -462,7 +508,8 @@ class Component extends DCLogic {
       this.fetchTable('documents', session, '&order=created_at.desc'),
       this.fetchTable('blog_posts', session, '&order=created_at.desc'),
       this.fetchTable('case_studies', session, '&order=created_at.desc'),
-      this.fetchTable('job_roles', session, '&order=created_at.desc')
+      this.fetchTable('job_roles', session, '&order=created_at.desc'),
+      this.fetchTable('team_members', session, '&order=created_at.desc')
     ]);
     const milestonesByProject = {};
     milestones.forEach(m => { (milestonesByProject[m.project_id] = milestonesByProject[m.project_id] || []).push(m); });
@@ -471,8 +518,37 @@ class Component extends DCLogic {
     this.setState({
       auditRequests: audit, newsletterSubs: newsletter, applications: apps,
       clients, projects, milestonesByProject, invoicesByProject, documents: docs,
-      blogPosts: blog, caseStudiesList: cases, jobRoles: roles
+      blogPosts: blog, caseStudiesList: cases, jobRoles: roles.length > 0 ? roles : this.state.jobRoles, teamMembers: team
     });
+  };
+
+  setNewUserFullName = (e) => this.setState({ newUserFullName: e.target.value });
+  setNewUserEmail = (e) => this.setState({ newUserEmail: e.target.value });
+  setNewUserPassword = (e) => this.setState({ newUserPassword: e.target.value });
+  setNewUserRole = (e) => this.setState({ newUserRole: e.target.value });
+
+  createUserAccount = async () => {
+    const s = this.state;
+    if (!s.newUserEmail.trim() || !s.newUserFullName.trim()) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/team_members`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ full_name: s.newUserFullName, email: s.newUserEmail, role: s.newUserRole })
+    });
+    this.setState({ newUserFullName: '', newUserEmail: '', newUserPassword: '', newUserRole: 'admin' });
+    this.loadAll(s.session);
+  };
+
+  updateUserRole = async (id, role) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/team_members?id=eq.${id}`, {
+      method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ role })
+    });
+    this.loadAll(this.state.session);
+  };
+
+  deleteTeamMember = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/team_members?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
   };
 
   setNewBlogTitle = (e) => this.setState({ newBlogTitle: e.target.value });
@@ -674,7 +750,8 @@ class Component extends DCLogic {
       { key: 'clients', label: 'Clients' },
       { key: 'projects', label: 'Projects' },
       { key: 'documents', label: 'Documents' },
-      { key: 'site_content', label: 'Website CMS' }
+      { key: 'site_content', label: 'Website CMS' },
+      { key: 'users', label: 'Team & Permissions' }
     ];
     const tabs = tabDefs.map(td => ({
       label: td.label,
@@ -729,6 +806,7 @@ class Component extends DCLogic {
       isLeadsTab: s.activeTab === 'leads', isClientsTab: s.activeTab === 'clients',
       isProjectsTab: s.activeTab === 'projects', isDocumentsTab: s.activeTab === 'documents',
       isCmsTab: s.activeTab === 'site_content',
+      isUsersTab: s.activeTab === 'users',
       heroTitleEn: s.heroTitleEn, setHeroTitleEn: this.setHeroTitleEn,
       heroSubEn: s.heroSubEn, setHeroSubEn: this.setHeroSubEn,
       heroTitleCs: s.heroTitleCs, setHeroTitleCs: this.setHeroTitleCs,
@@ -750,6 +828,11 @@ class Component extends DCLogic {
       newRoleTitle: s.newRoleTitle, newRoleStack: s.newRoleStack, newRoleDesc: s.newRoleDesc,
       setNewRoleTitle: this.setNewRoleTitle, setNewRoleStack: this.setNewRoleStack, setNewRoleDesc: this.setNewRoleDesc,
       createJobRole: this.createJobRole, newRoleCannotSubmit: !s.newRoleTitle.trim(),
+
+      teamMembers: s.teamMembers.map(m => ({ ...m, onDelete: () => this.deleteTeamMember(m.id), onRoleChange: (e) => this.updateUserRole(m.id, e.target.value) })),
+      newUserFullName: s.newUserFullName, newUserEmail: s.newUserEmail, newUserPassword: s.newUserPassword, newUserRole: s.newUserRole,
+      setNewUserFullName: this.setNewUserFullName, setNewUserEmail: this.setNewUserEmail, setNewUserPassword: this.setNewUserPassword, setNewUserRole: this.setNewUserRole,
+      createUserAccount: this.createUserAccount, newUserCannotSubmit: !(s.newUserFullName.trim() && s.newUserEmail.trim()),
       auditRequests: s.auditRequests, newsletterSubs: s.newsletterSubs, applications: s.applications,
       clients: clientsWithDelete,
       newClientName: s.newClientName, newClientCompany: s.newClientCompany, newClientEmail: s.newClientEmail,
