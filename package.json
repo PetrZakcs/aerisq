@@ -4,7 +4,7 @@
   "description": "AerisQ — AI Integration & Startup MVP Engineering Studio",
   "main": "index.html",
   "scripts": {
-    "dev": "python3 -m http.server 8000",
+    "dev": "npx -y serve . -p 3000",
     "serve": "npx -y serve ."
   },
   "keywords": [

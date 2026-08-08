@@ -287,7 +287,7 @@ body{animation:pageFadeIn .35s ease both}
 <section style="max-width:1280px;margin:0 auto;padding:clamp(40px,6vw,72px) clamp(20px,4vw,48px);border-top:1px solid rgba(255,255,255,.08)">
   <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:14px">{{ t.thinkEyebrow }}</div>
   <h2 style="font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-.01em;margin:0 0 40px;max-width:700px">{{ t.thinkTitle }}</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:24px">
+  <div style="display:grid;grid-template-columns:1fr;gap:24px">
     <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:32px">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:16px">{{ t.case01Tag }}</div>
       <h3 style="font-size:19px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em">{{ t.case01Headline }}</h3>
@@ -306,26 +306,6 @@ body{animation:pageFadeIn .35s ease both}
         <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">Llama 3</span>
         <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">Vector DB</span>
         <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">On-premise</span>
-      </div>
-    </div>
-    <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:32px">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:16px">{{ t.case02Tag }}</div>
-      <h3 style="font-size:19px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em">{{ t.case02Headline }}</h3>
-      <div style="font-size:13px;color:{{ accentColor }};font-family:'JetBrains Mono',monospace;margin-bottom:18px">{{ t.case02Subhead }}</div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div style="border-left:2px solid #52525b;padding-left:14px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">{{ t.problemLabel }}</div>
-          <div style="font-size:14px;color:#a1a1aa;line-height:1.6">{{ t.case02Problem }}</div>
-        </div>
-        <div style="border-left:2px solid {{ accentColor }};padding-left:14px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ accentColor }};margin-bottom:4px">{{ t.solutionLabel }}</div>
-          <div style="font-size:14px;color:#d4d4d8;line-height:1.6">{{ t.case02Solution }}</div>
-        </div>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:20px">
-        <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">Python</span>
-        <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">LLM extraction</span>
-        <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">ERP API</span>
       </div>
     </div>
   </div>
@@ -374,12 +354,6 @@ body{animation:pageFadeIn .35s ease both}
       <div style="font-size:14px;color:#a1a1aa;line-height:1.6">{{ t.speedDesc }}</div>
     </div>
   </div>
-</section>
-
-<section style="max-width:900px;margin:0 auto;padding:clamp(40px,6vw,64px) clamp(20px,4vw,48px);border-top:1px solid rgba(255,255,255,.08);text-align:center">
-  <svg width="26" height="20" viewBox="0 0 24 24" fill="{{ accentColor }}" style="margin:0 auto 20px;display:block"><path d="M3 12v-2a4 4 0 014-4h1v2H7a2 2 0 00-2 2v1h3v5H3v-4zm10 0v-2a4 4 0 014-4h1v2h-1a2 2 0 00-2 2v1h3v5h-5v-4z"></path></svg>
-  <p style="font-size:clamp(18px,2vw,22px);line-height:1.55;color:#e4e4e7;max-width:680px;margin:0 auto 20px;font-weight:500">{{ t.testimonialQuote }}</p>
-  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a">Petr Žák, Founder @ PhasQ <span style="color:{{ accentColor }}">·</span> {{ t.testimonialCaseIn }} <a onClick="{{ goCaseStudies }}" style="color:{{ accentColor }};text-decoration:none;cursor:pointer">{{ t.navCaseStudies }}</a></div>
 </section>
 
 <section id="audit" style="max-width:1280px;margin:0 auto;padding:clamp(48px,7vw,96px) clamp(20px,4vw,48px);border-top:1px solid rgba(255,255,255,.08)">
@@ -775,7 +749,7 @@ const DICT = {
     archEyebrow: '// ARCHITECTURE PREVIEW', archTitle: 'This is the actual shape of what we ship.',
     stackEyebrow: '// TECH STACK PROOF', stackTitle: 'Strict technical dominance.',
     stackSub: "We don't build on legacy platforms or vanilla PHP monoliths. We develop with the exact toolchain that scales Silicon Valley.",
-    thinkEyebrow: '// HOW WE THINK', thinkTitle: 'Two real technical cases. Zero buzzwords.',
+    thinkEyebrow: '// HOW WE THINK', thinkTitle: 'Real technical case study. Zero buzzwords.',
     case01Tag: 'CASE #01 — SECURE RAG', case01Headline: 'Document search: minutes to 0.4 seconds', case01Subhead: 'Secure internal ChatGPT over company data',
     case01Problem: 'The company has thousands of contracts and PDFs, and staff waste hours searching. Data can never leave to OpenAI.',
     case01Solution: 'A local LLM (Llama 3) on private infrastructure with a vector database. Search resolves in 0.4s.',
@@ -869,7 +843,7 @@ const DICT = {
     archEyebrow: '// UKÁZKA ARCHITEKTURY', archTitle: 'Takhle skutečně vypadá to, co dodáváme.',
     stackEyebrow: '// DŮKAZ TECHNOLOGIÍ', stackTitle: 'Přísně moderní technologický stack.',
     stackSub: 'Nestavíme na zastaralých platformách ani vanilla PHP monolitech. Vyvíjíme s přesně tím stackem, který škáluje Silicon Valley.',
-    thinkEyebrow: '// JAK PŘEMÝŠLÍME', thinkTitle: 'Dva reálné technické případy. Žádné buzzwordy.',
+    thinkEyebrow: '// JAK PŘEMÝŠLÍME', thinkTitle: 'Reálný technický případ. Žádné buzzwordy.',
     case01Tag: 'CASE #01 — SECURE RAG', case01Headline: 'Vyhledávání v dokumentech: z minut na 0,4 sekundy', case01Subhead: 'Bezpečný interní ChatGPT nad firemními daty',
     case01Problem: 'Firma má tisíce smluv a PDF, zaměstnanci ztrácí hodiny hledáním. Data nesmí nikdy uniknout do OpenAI.',
     case01Solution: 'Lokální LLM (Llama 3) na privátní infrastruktuře s vektorovou databází. Vyhledávání trvá 0,4 s.',
