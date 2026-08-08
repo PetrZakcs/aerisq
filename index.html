@@ -443,13 +443,19 @@ body{animation:pageFadeIn .35s ease both}
       <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
         <h3 style="font-size:19px;font-weight:700;margin:0 0 20px">{{ t.step3Title }}</h3>
         <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px">
-          <input placeholder="{{ t.namePlaceholder }}" value="{{ name }}" onChange="{{ setName }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-          <input placeholder="{{ t.emailPlaceholder }}" value="{{ email }}" onChange="{{ setEmail }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-          <input placeholder="{{ t.companyPlaceholder }} *" value="{{ company }}" onChange="{{ setCompany }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-          <input placeholder="{{ t.phonePlaceholder }} *" value="{{ phone }}" onChange="{{ setPhone }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-          <input placeholder="{{ t.websitePlaceholder }} *" value="{{ website }}" onChange="{{ setWebsite }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-          <input placeholder="{{ t.teamSizePlaceholder }} *" value="{{ teamSize }}" onChange="{{ setTeamSize }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-          <textarea placeholder="{{ t.problemPlaceholder }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="3" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <input placeholder="{{ t.namePlaceholder }}" value="{{ name }}" onChange="{{ setName }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+            <input placeholder="{{ t.emailPlaceholder }}" value="{{ email }}" onChange="{{ setEmail }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <input placeholder="{{ t.companyPlaceholder }} *" value="{{ company }}" onChange="{{ setCompany }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+            <input placeholder="{{ t.phonePlaceholder }} *" value="{{ phone }}" onChange="{{ setPhone }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <input placeholder="{{ t.websitePlaceholder }} *" value="{{ website }}" onChange="{{ setWebsite }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+            <input placeholder="{{ t.techStackPlaceholder }} *" value="{{ teamSize }}" onChange="{{ setTeamSize }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          </div>
+          <textarea placeholder="{{ t.problemPlaceholder }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="4" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
         </div>
         <div style="display:flex;justify-content:space-between">
           <button onClick="{{ goBack }}" style="padding:12px 22px;background:transparent;color:#a1a1aa;border:1px solid rgba(255,255,255,.12);border-radius:4px;font-weight:600;font-size:13px;cursor:pointer">{{ t.backBtn }}</button>
@@ -821,11 +827,13 @@ const DICT = {
     testimonialQuote: "AerisQ refined the AI-agent pipeline at the core of our product — the one that helps our clients find and get in front of their ideal customers. More reliable, production-grade, and a lot less babysitting.",
     testimonialCaseIn: 'CASE STUDY IN',
     auditEyebrow: '// SYSTEM AUDIT', auditTitle: 'Initiate your infrastructure audit', auditScarcity: '◆ Only 3 audit slots open this quarter',
-    stepLabel: 'STEP', step1Title: 'Select Infrastructure Focus', step2Title: 'Target Budget / Scope', step3Title: 'Contact Details',
-    continueBtn: 'Continue →', backBtn: '← Back', submitBtn: 'Submit System Payload',
+    stepLabel: 'STEP', step1Title: 'Select Infrastructure Focus', step2Title: 'Target Budget / Scope', step3Title: 'Technical Specification',
+    continueBtn: 'Continue →', backBtn: '← Back', submitBtn: 'Submit Technical Specification',
     namePlaceholder: 'Full name', emailPlaceholder: 'Business email',
     companyPlaceholder: 'Company name', phonePlaceholder: 'Phone', websitePlaceholder: 'Company website',
-    teamSizePlaceholder: 'Team / company size', problemPlaceholder: 'What\'s the main bottleneck you want to solve?',
+    teamSizePlaceholder: 'Team / company size',
+    techStackPlaceholder: 'Current Tech Stack (e.g. Python, React, AWS)',
+    problemPlaceholder: 'Describe the manual bottlenecks or system integrations you want to automate...',
     calendlyLabel: '// BOOK A CALL', estimateLabel: '// PRELIMINARY ESTIMATE',
     confirmedTitle: 'Audit request confirmed', confirmedFootnote: "We'll respond within one business day.",
     mapEyebrow: '// WHERE WE WORK', mapCaption: 'Engineers based in CET — full-day overlap with EU teams, no timezone handoff delay.',
@@ -909,17 +917,18 @@ const DICT = {
     phase03Title: 'Nasazení a SLA infrastruktura', phase03Time: 'PRODUKCE A DÁL',
     phase03Desc: 'Produkční nasazení v izolovaném zabezpečeném cloudu, zaškolení týmu a nepřetržitý automatizovaný monitoring.',
     slaEyebrow: '// TECHNICKÉ ZÁRUKY', slaTitle: 'SLA a bezpečnostní checklist.',
-    gdprTitle: 'GDPR A OCHRANA DAT', gdprDesc: 'Žádná vaše firemní data nejsou nikdy použita k trénování veřejných modelů. Vše běží v izolovaném prostředí nebo on-premise.',
+    gdprTitle: 'GDPR A OCHRANA DAT', gdprDesc: 'Žájná vaše firemní data nejsou nikdy použita k trénování veřejných modelů. Vše běží v izolovaném prostředí nebo on-premise.',
     hallucTitle: 'NULOVÉ HALUCINACE', hallucDesc: 'Naše RAG architektura striktně omezuje odpovědi AI na ověřená data z vašich interních dokumentů.',
     speedTitle: 'RYCHLOST DODÁNÍ', speedDesc: 'První funkční prototyp (PoC) dodáváme do 14 dnů od zahájení.',
     testimonialQuote: 'AerisQ vylepšili pipeline AI agentů, na kterých stojí jádro našeho produktu — ten, co pomáhá našim klientům najít a oslovit jejich ideální zákazníky. Spolehlivější, produkčně zralé a mnohem méně hlídání.',
     testimonialCaseIn: 'PŘÍPADOVÁ STUDIE V',
-    auditEyebrow: '// SYSTÉMOVÝ AUDIT', auditTitle: 'Zahajte audit své infrastruktury', auditScarcity: '◆ Jen 3 volné termíny na audit tento kvartál',
-    stepLabel: 'KROK', step1Title: 'Vyberte oblast zaměření', step2Title: 'Cílový rozpočet / rozsah', step3Title: 'Kontaktní údaje',
-    continueBtn: 'Pokračovat →', backBtn: '← Zpět', submitBtn: 'Odeslat požadavek',
+    stepLabel: 'KROK', step1Title: 'Vyberte oblast zaměření', step2Title: 'Cílový rozpočet / rozsah', step3Title: 'Technická specifikace',
+    continueBtn: 'Pokračovat →', backBtn: '← Zpět', submitBtn: 'Odeslat specifikaci auditu',
     namePlaceholder: 'Celé jméno', emailPlaceholder: 'Firemní e-mail',
-    companyPlaceholder: 'Název firmy', phonePlaceholder: 'Telefon', websitePlaceholder: 'Web společnosti',
-    teamSizePlaceholder: 'Velikost týmu / firmy', problemPlaceholder: 'Jaký je hlavní problém, který chcete vyřešit?',
+    companyPlaceholder: 'Název firmy', phonePlaceholder: 'Telefon', websitePlaceholder: 'Webová stránka',
+    teamSizePlaceholder: 'Velikost týmu / firmy',
+    techStackPlaceholder: 'Používané technologie (např. Python, Node.js, AWS, Postgres)',
+    problemPlaceholder: 'Detailně popište systémy nebo ruční procesy, které chcete analyzovat / automatizovat...',
     calendlyLabel: '// REZERVOVAT HOVOR', estimateLabel: '// PŘEDBĚŽNÝ ODHAD',
     confirmedTitle: 'Žádost o audit potvrzena', confirmedFootnote: 'Ozveme se vám do jednoho pracovního dne.',
     mapEyebrow: '// KDE PŮSOBÍME', mapCaption: 'Naši inženýři sídlí v CET — plné pracovní překrytí s EU týmy, žádné čekání na časové pásmo.',
