@@ -83,9 +83,11 @@ body{animation:pageFadeIn .35s ease both}
   <x-import component-from-global-scope="TweakToggle" from="./tweaks-panel.jsx" label="Compact density" value="{{ compact }}" onChange="{{ setCompact }}" hint-size="0,0"></x-import>
 </x-import>
 
-<div onMouseMove="{{ handleMouseMove }}" style="background:#0a0a0b;color:#fafafa;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),radial-gradient(700px circle at {{ mouseX }}% {{ mouseY }}%,{{ accentColor }}17,transparent 70%);background-size:56px 56px,56px 56px,100% 100%">
+<div id="aerisq-cursor-glow" style="position:fixed;top:0;left:0;width:550px;height:550px;margin-left:-275px;margin-top:-275px;border-radius:50%;background:radial-gradient(circle, rgba(52,211,153,0.18) 0%, rgba(52,211,153,0.06) 45%, transparent 70%);pointer-events:none;z-index:9998;transition:transform 0.06s cubic-bezier(0.215, 0.61, 0.355, 1);will-change:transform"></div>
 
-<nav style="position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px clamp(20px,4vw,48px);background:rgba(0,0,0,.82);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap">
+<div onMouseMove="{{ handleMouseMove }}" style="background:#0a0a0b;color:#fafafa;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),radial-gradient(700px circle at {{ mouseX }}px {{ mouseY }}px,{{ accentColor }}22,transparent 70%);background-size:56px 56px,56px 56px,100% 100%">
+
+<nav style="position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px clamp(20px,4vw,48px);background:rgba(0,0,0,.82);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap">
   <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap">
     <a onClick="{{ goHome }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer">
       <span style="display:flex;align-items:center;gap:4px">
@@ -116,20 +118,30 @@ body{animation:pageFadeIn .35s ease both}
   </div>
 </nav>
 
+<sc-if value="{{ isHiringActive }}" hint-placeholder-val="{{ false }}">
+<div style="position:sticky;top:53px;z-index:39;padding:10px clamp(20px,4vw,48px);background:rgba(10,25,18,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(52,211,153,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 8px;background:{{ accentColor }};color:#000;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;letter-spacing:.05em">WE ARE HIRING</span>
+    <span style="font-size:13.5px;color:#fafafa;font-weight:600">{{ t.openWorkTitle }}</span>
+  </div>
+  <a onClick="{{ goCareers }}" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};text-decoration:none;font-weight:700;cursor:pointer" style-hover="text-decoration:underline">{{ t.openWorkCta }}</a>
+</div>
+</sc-if>
+
 <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-<div style="position:relative;z-index:39;padding:8px clamp(20px,4vw,48px);background:rgba(0,0,0,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:flex-end;flex-wrap:wrap">
+<div style="position:relative;z-index:39;padding:5px clamp(20px,4vw,48px);background:rgba(0,0,0,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:flex-end;flex-wrap:wrap">
   <div style="display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#71717a;letter-spacing:.02em;flex-wrap:wrap;justify-content:flex-end">
     <span style="width:6px;height:6px;border-radius:50%;background:{{ accentColor }};display:inline-block;animation:pulseDot 2s infinite"></span>
     VERCEL EDGE: 12ms <span style="color:#3f3f46">//</span> SUPABASE RLS: ACTIVE <span style="color:#3f3f46">//</span> PIPELINE THROUGHPUT: 99.99%
   </div>
 </div>
 
-<section style="max-width:1280px;margin:0 auto;padding:clamp(56px,9vw,120px) clamp(20px,4vw,48px) clamp(48px,6vw,80px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:56px;align-items:center">
+<section style="max-width:1280px;margin:0 auto;padding:clamp(20px,3.5vw,40px) clamp(20px,4vw,48px) clamp(32px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:40px;align-items:center">
   <div style="animation:fadeUp .5s ease both">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:20px">{{ t.heroEyebrow }}</div>
-    <h1 style="font-size:clamp(36px,5vw,68px);font-weight:800;line-height:1.02;letter-spacing:-.03em;margin:0 0 28px">{{ t.heroTitle }}</h1>
-    <p style="font-size:clamp(15px,1.1vw,17px);line-height:1.65;color:#a1a1aa;max-width:560px;margin:0 0 20px">{{ t.heroSub }}</p>
-    <p style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#71717a;margin:0 0 36px">{{ t.heroSub2 }}</p>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:14px">{{ t.heroEyebrow }}</div>
+    <h1 style="font-size:clamp(32px,4.5vw,60px);font-weight:800;line-height:1.04;letter-spacing:-.03em;margin:0 0 18px">{{ t.heroTitle }}</h1>
+    <p style="font-size:clamp(14px,1vw,16px);line-height:1.6;color:#a1a1aa;max-width:560px;margin:0 0 14px">{{ t.heroSub }}</p>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a;margin:0 0 24px">{{ t.heroSub2 }}</p>
     <div style="display:flex;gap:14px;flex-wrap:wrap">
       <button onClick="{{ heroDeployAI }}" style="padding:14px 26px;background:{{ accentColor }};color:#000;border:none;border-radius:4px;font-weight:700;font-size:14px;cursor:pointer;transition:transform .15s,box-shadow .15s" style-hover="transform:translateY(-2px);box-shadow:0 8px 24px rgba(52,211,153,.25)">{{ t.ctaDeployAI }}</button>
       <button onClick="{{ heroBuildMVP }}" style="padding:14px 26px;background:transparent;color:#fafafa;border:1px solid rgba(255,255,255,.18);border-radius:4px;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s" style-hover="border-color:#fafafa;background:rgba(255,255,255,.04)">{{ t.ctaBuildMVP }}</button>
@@ -298,27 +310,34 @@ body{animation:pageFadeIn .35s ease both}
 <section style="max-width:1280px;margin:0 auto;padding:clamp(40px,6vw,72px) clamp(20px,4vw,48px);border-top:1px solid rgba(255,255,255,.08)">
   <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:14px">{{ t.thinkEyebrow }}</div>
   <h2 style="font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-.01em;margin:0 0 40px;max-width:700px">{{ t.thinkTitle }}</h2>
-  <div style="display:grid;grid-template-columns:1fr;gap:24px">
-    <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:32px">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:16px">{{ t.case01Tag }}</div>
-      <h3 style="font-size:19px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em">{{ t.case01Headline }}</h3>
-      <div style="font-size:13px;color:{{ accentColor }};font-family:'JetBrains Mono',monospace;margin-bottom:18px">{{ t.case01Subhead }}</div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div style="border-left:2px solid #52525b;padding-left:14px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">{{ t.problemLabel }}</div>
-          <div style="font-size:14px;color:#a1a1aa;line-height:1.6">{{ t.case01Problem }}</div>
+  
+  <div style="display:flex;gap:24px;overflow-x:auto;padding-bottom:16px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch">
+    <sc-for list="{{ homeCaseStudies }}" as="cs" hint-placeholder-count="2">
+      <div style="flex:0 0 min(540px,85vw);scroll-snap-align:start;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:32px;display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:16px">CASE #0{{ cs.idx }} — {{ cs.tag }}</div>
+          <h3 style="font-size:19px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em">{{ cs.title }}</h3>
+          <div style="font-size:13px;color:{{ accentColor }};font-family:'JetBrains Mono',monospace;margin-bottom:18px">{{ cs.subhead }}</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="border-left:2px solid #52525b;padding-left:14px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">{{ t.problemLabel }}</div>
+              <div style="font-size:14px;color:#a1a1aa;line-height:1.6">{{ cs.problem }}</div>
+            </div>
+            <div style="border-left:2px solid {{ accentColor }};padding-left:14px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ accentColor }};margin-bottom:4px">{{ t.solutionLabel }}</div>
+              <div style="font-size:14px;color:#d4d4d8;line-height:1.6">{{ cs.solution }}</div>
+            </div>
+          </div>
         </div>
-        <div style="border-left:2px solid {{ accentColor }};padding-left:14px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ accentColor }};margin-bottom:4px">{{ t.solutionLabel }}</div>
-          <div style="font-size:14px;color:#d4d4d8;line-height:1.6">{{ t.case01Solution }}</div>
-        </div>
+        <sc-if value="{{ cs.hasTags }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:20px">
+            <sc-for list="{{ cs.tagList }}" as="tag" hint-placeholder-count="3">
+              <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">{{ tag }}</span>
+            </sc-for>
+          </div>
+        </sc-if>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:20px">
-        <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">Llama 3</span>
-        <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">Vector DB</span>
-        <span style="border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d8">On-premise</span>
-      </div>
-    </div>
+    </sc-for>
   </div>
 </section>
 
@@ -423,20 +442,14 @@ body{animation:pageFadeIn .35s ease both}
 
       <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
         <h3 style="font-size:19px;font-weight:700;margin:0 0 20px">{{ t.step3Title }}</h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:32px;margin-bottom:28px">
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <input placeholder="{{ t.namePlaceholder }}" value="{{ name }}" onChange="{{ setName }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <input placeholder="{{ t.emailPlaceholder }}" value="{{ email }}" onChange="{{ setEmail }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <input placeholder="{{ t.companyPlaceholder }} *" value="{{ company }}" onChange="{{ setCompany }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <input placeholder="{{ t.phonePlaceholder }} *" value="{{ phone }}" onChange="{{ setPhone }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <input placeholder="{{ t.websitePlaceholder }} *" value="{{ website }}" onChange="{{ setWebsite }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <input placeholder="{{ t.teamSizePlaceholder }} *" value="{{ teamSize }}" onChange="{{ setTeamSize }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <textarea placeholder="{{ t.problemPlaceholder }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="3" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
-          </div>
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:10px">{{ t.calendlyLabel }}</div>
-            <iframe src="{{ calendlyEmbedUrl }}" style="width:100%;height:420px;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#fff"></iframe>
-          </div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px">
+          <input placeholder="{{ t.namePlaceholder }}" value="{{ name }}" onChange="{{ setName }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          <input placeholder="{{ t.emailPlaceholder }}" value="{{ email }}" onChange="{{ setEmail }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          <input placeholder="{{ t.companyPlaceholder }} *" value="{{ company }}" onChange="{{ setCompany }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          <input placeholder="{{ t.phonePlaceholder }} *" value="{{ phone }}" onChange="{{ setPhone }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          <input placeholder="{{ t.websitePlaceholder }} *" value="{{ website }}" onChange="{{ setWebsite }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          <input placeholder="{{ t.teamSizePlaceholder }} *" value="{{ teamSize }}" onChange="{{ setTeamSize }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          <textarea placeholder="{{ t.problemPlaceholder }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="3" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
         </div>
         <div style="display:flex;justify-content:space-between">
           <button onClick="{{ goBack }}" style="padding:12px 22px;background:transparent;color:#a1a1aa;border:1px solid rgba(255,255,255,.12);border-radius:4px;font-weight:600;font-size:13px;cursor:pointer">{{ t.backBtn }}</button>
@@ -446,18 +459,14 @@ body{animation:pageFadeIn .35s ease both}
     </sc-if>
 
     <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
-      <div style="text-align:center;padding:20px 0 8px">
+      <div style="text-align:center;padding:32px 0 20px">
         <div style="width:48px;height:48px;border-radius:50%;border:1px solid {{ accentColor }};display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:{{ accentColor }}">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"></polyline></svg>
         </div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:10px">PAYLOAD_RECEIVED</div>
-        <h3 style="font-size:20px;font-weight:700;margin:0 0 10px">{{ t.confirmedTitle }}</h3>
-        <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin:0 0 4px">{{ summaryLine }}</p>
-        <p style="color:#71717a;font-size:13px;font-family:'JetBrains Mono',monospace;margin:0 0 24px">{{ t.confirmedFootnote }}</p>
-      </div>
-      <div style="max-width:520px;margin:0 auto">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:10px;text-align:center">{{ t.calendlyLabel }}</div>
-        <iframe src="{{ calendlyEmbedUrl }}" style="width:100%;height:480px;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#fff"></iframe>
+        <h3 style="font-size:22px;font-weight:700;margin:0 0 10px">{{ t.confirmedTitle }}</h3>
+        <p style="color:#a1a1aa;font-size:15px;line-height:1.6;margin:0 0 6px">{{ summaryLine }}</p>
+        <p style="color:#71717a;font-size:13px;font-family:'JetBrains Mono',monospace;margin:0">{{ t.confirmedFootnote }}</p>
       </div>
     </sc-if>
   </div>
@@ -818,7 +827,7 @@ const DICT = {
     companyPlaceholder: 'Company name', phonePlaceholder: 'Phone', websitePlaceholder: 'Company website',
     teamSizePlaceholder: 'Team / company size', problemPlaceholder: 'What\'s the main bottleneck you want to solve?',
     calendlyLabel: '// BOOK A CALL', estimateLabel: '// PRELIMINARY ESTIMATE',
-    confirmedTitle: 'Audit request confirmed', confirmedFootnote: "We'll respond within one business day — or pick a slot below.",
+    confirmedTitle: 'Audit request confirmed', confirmedFootnote: "We'll respond within one business day.",
     mapEyebrow: '// WHERE WE WORK', mapCaption: 'Engineers based in CET — full-day overlap with EU teams, no timezone handoff delay.',
     openWorkEyebrow: '// OPEN WORK', openWorkTitle: "We're not hiring right now — but we're always looking.",
     openWorkEmpty: "No open roles at the moment. If you're a strong Python, TypeScript, or AI-systems engineer, send us your work — we keep good people on file for when a seat opens.",
@@ -912,7 +921,7 @@ const DICT = {
     companyPlaceholder: 'Název firmy', phonePlaceholder: 'Telefon', websitePlaceholder: 'Web společnosti',
     teamSizePlaceholder: 'Velikost týmu / firmy', problemPlaceholder: 'Jaký je hlavní problém, který chcete vyřešit?',
     calendlyLabel: '// REZERVOVAT HOVOR', estimateLabel: '// PŘEDBĚŽNÝ ODHAD',
-    confirmedTitle: 'Žádost o audit potvrzena', confirmedFootnote: 'Ozveme se do jednoho pracovního dne — nebo si rovnou vyberte termín níže.',
+    confirmedTitle: 'Žádost o audit potvrzena', confirmedFootnote: 'Ozveme se vám do jednoho pracovního dne.',
     mapEyebrow: '// KDE PŮSOBÍME', mapCaption: 'Naši inženýři sídlí v CET — plné pracovní překrytí s EU týmy, žádné čekání na časové pásmo.',
     openWorkEyebrow: '// OTEVŘENÉ POZICE', openWorkTitle: 'Teď zrovna nenabíráme — ale hledáme pořád.',
     openWorkEmpty: 'Momentálně nemáme otevřené pozice. Pokud jste silný Python, TypeScript nebo AI-systems inženýr, pošlete nám ukázku práce — dobré lidi si držíme v evidenci pro chvíli, kdy se místo uvolní.',
@@ -979,6 +988,7 @@ class Component extends DCLogic {
 
   componentDidMount() {
     window.addEventListener('popstate', this.onPopState);
+    window.addEventListener('mousemove', this.onWindowMouseMove, { passive: true });
     try {
       const stored = localStorage.getItem('aerisq_custom_cms');
       if (stored) {
@@ -986,6 +996,22 @@ class Component extends DCLogic {
       }
     } catch(e) {}
     this.loadLiveRoles();
+  }
+
+  onWindowMouseMove = (e) => {
+    const glow = document.getElementById('aerisq-cursor-glow');
+    if (glow) {
+      glow.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    }
+    const now = Date.now();
+    if (this._lastMove && now - this._lastMove < 30) return;
+    this._lastMove = now;
+    this.setState({ mouseX: e.clientX, mouseY: e.clientY });
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.onPopState);
+    window.removeEventListener('mousemove', this.onWindowMouseMove);
   }
 
   loadLiveRoles = async () => {
@@ -1024,13 +1050,15 @@ class Component extends DCLogic {
       this.forceUpdate();
     } catch(e) {}
   };
-  componentWillUnmount() {
-    window.removeEventListener('popstate', this.onPopState);
-  }
+
   onPopState = () => {
     const params = new URLSearchParams(window.location.search);
-    this.setState({ page: params.get('page') || 'home', lang: params.get('lang') === 'cs' ? 'cs' : 'en' });
+    const page = params.get('page') || 'home';
+    this.setState({ page, lang: params.get('lang') === 'cs' ? 'cs' : 'en' });
+    const anchor = params.get('anchor');
+    if (anchor) this.scrollToId(anchor);
   };
+
   alertClientPortalComingSoon = (e) => {
     e.preventDefault();
     alert('Klientský portál pro sledování projektů a milníků připravujeme.');
@@ -1047,9 +1075,10 @@ class Component extends DCLogic {
   }
 
   goTo = (page, anchor) => {
-    const qs = new URLSearchParams(window.location.search);
+    const qs = new URLSearchParams();
     qs.set('page', page);
-    if (this.state.lang === 'cs') qs.set('lang', 'cs'); else qs.delete('lang');
+    if (this.state.lang === 'cs') qs.set('lang', 'cs');
+    if (anchor) qs.set('anchor', anchor);
     const newUrl = `${window.location.pathname}?${qs.toString()}`;
     window.history.pushState({ page }, '', newUrl);
     this.setState({ page });
@@ -1085,6 +1114,7 @@ class Component extends DCLogic {
   setLangEn = () => { this.setState({ lang: 'en' }); this.syncLangUrl('en'); };
   syncLangUrl(lang) {
     const qs = new URLSearchParams(window.location.search);
+    if (!qs.get('page')) qs.set('page', this.state.page || 'home');
     if (lang === 'cs') qs.set('lang', 'cs'); else qs.delete('lang');
     window.history.replaceState(null, '', `${window.location.pathname}?${qs.toString()}`);
   }
@@ -1237,7 +1267,9 @@ class Component extends DCLogic {
       heroSub: s.lang === 'cs' ? (cms.heroSubCs || baseT.heroSub) : (cms.heroSubEn || baseT.heroSub),
       auditScarcity: cms.auditScarcity || baseT.auditScarcity,
       openWorkTitle: cms.openWorkTitle || baseT.openWorkTitle,
-      openWorkEmpty: cms.openWorkDesc || baseT.openWorkEmpty
+      openWorkEmpty: cms.openWorkDesc || baseT.openWorkEmpty,
+      carTitle: cms.openWorkTitle || baseT.carTitle,
+      carSub: cms.openWorkDesc || baseT.carSub
     };
 
     const focusMeta = [{ key: 'ai', label: t.focusAi }, { key: 'mvp', label: t.focusMvp }, { key: 'enterprise', label: t.focusEnterprise }];
@@ -1282,8 +1314,30 @@ class Component extends DCLogic {
     const hasCaseStudies = liveCaseStudies.length > 0;
     const noCaseStudies = !hasCaseStudies;
 
+    const defaultHomeCases = [
+      { idx: 1, tag: 'SECURE RAG', title: t.case01Headline, subhead: t.case01Subhead, problem: t.case01Problem, solution: t.case01Solution, tagList: ['Llama 3', 'Vector DB', 'On-premise'], hasTags: true },
+      { idx: 2, tag: 'AUTONOMOUS AGENT', title: t.case02Headline, subhead: t.case02Subhead, problem: t.case02Problem, solution: t.case02Solution, tagList: ['Python', 'ERP API', 'LLM Extractor'], hasTags: true }
+    ];
+    const customHomeCases = liveCaseStudies
+      .filter(cs => cs.show_on_home)
+      .map((cs, i) => ({
+        idx: defaultHomeCases.length + i + 1,
+        tag: cs.title ? cs.title.toUpperCase() : 'CASE STUDY',
+        title: cs.title,
+        subhead: cs.subhead,
+        problem: cs.problem,
+        solution: cs.solution,
+        tagList: cs.tags ? cs.tags.split(',').map(x => x.trim()) : [],
+        hasTags: cs.tags && cs.tags.trim().length > 0
+      }));
+    const homeCaseStudies = defaultHomeCases.concat(customHomeCases);
+
+    const isHiringActive = !!cms.openWorkHiring;
+
     return {
       t,
+      isHiringActive,
+      homeCaseStudies,
       isHome: s.page === 'home', isCareers: s.page === 'careers', isBlog: s.page === 'blog',
       isCaseStudies: s.page === 'case-studies', isPrivacy: s.page === 'privacy', isTerms: s.page === 'terms',
       goHome: this.goHome, goServices: this.goServices, goStack: this.goStack, goAudit: this.goAudit,

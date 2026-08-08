@@ -369,7 +369,11 @@
             <textarea placeholder="Problém klienta" value="{{ newCaseProblem }}" onChange="{{ setNewCaseProblem }}" rows="2" style="{{ inputStyle }};resize:vertical"></textarea>
             <textarea placeholder="Naše řešení" value="{{ newCaseSolution }}" onChange="{{ setNewCaseSolution }}" rows="2" style="{{ inputStyle }};resize:vertical"></textarea>
             <input placeholder="Tagy a technologie (např. Llama 3, Vector DB, Python)" value="{{ newCaseTags }}" onChange="{{ setNewCaseTags }}" style="{{ inputStyle }}" />
-            <button onClick="{{ createCaseStudy }}" disabled="{{ newCaseCannotSubmit }}" style="{{ primaryBtnStyle }}">Pridat Case Study</button>
+            <label style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#fafafa;cursor:pointer;display:flex;align-items:center;gap:8px">
+              <input type="checkbox" checked="{{ newCaseShowOnHome }}" onChange="{{ toggleNewCaseShowOnHome }}" style="accent-color:#34d399" />
+              Zobrazit v sekci "How We Think / Jak přemýšlíme" na hlavní stránce
+            </label>
+            <button onClick="{{ createCaseStudy }}" disabled="{{ newCaseCannotSubmit }}" style="{{ primaryBtnStyle }}">Přidat Case Study</button>
           </div>
           <div style="border:1px solid rgba(255,255,255,.08);border-radius:6px;overflow:hidden">
             <sc-for list="{{ caseStudiesList }}" as="cs" hint-placeholder-count="2">
@@ -377,6 +381,9 @@
                 <div>
                   <strong style="color:#fafafa;font-size:14px">{{ cs.title }}</strong>
                   <div style="color:#71717a;font-size:12px">{{ cs.subhead }} · {{ cs.tags }}</div>
+                  <sc-if value="{{ cs.show_on_home }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:inline-block;margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#34d399;border:1px solid rgba(52,211,153,.3);padding:2px 6px;border-radius:3px">✓ Zobrazeno v How We Think</span>
+                  </sc-if>
                 </div>
                 <button onClick="{{ cs.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Smazat</button>
               </div>
@@ -671,15 +678,19 @@ class Component extends DCLogic {
   setNewCaseProblem = (e) => this.setState({ newCaseProblem: e.target.value });
   setNewCaseSolution = (e) => this.setState({ newCaseSolution: e.target.value });
   setNewCaseTags = (e) => this.setState({ newCaseTags: e.target.value });
+  toggleNewCaseShowOnHome = (e) => this.setState({ newCaseShowOnHome: e.target.checked });
 
   createCaseStudy = async () => {
     const s = this.state;
     if (!s.newCaseTitle.trim()) return;
     await fetch(`${SUPABASE_URL}/rest/v1/case_studies`, {
       method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ title: s.newCaseTitle, subhead: s.newCaseSubhead, problem: s.newCaseProblem, solution: s.newCaseSolution, tags: s.newCaseTags })
+      body: JSON.stringify({
+        title: s.newCaseTitle, subhead: s.newCaseSubhead, problem: s.newCaseProblem,
+        solution: s.newCaseSolution, tags: s.newCaseTags, show_on_home: !!s.newCaseShowOnHome
+      })
     });
-    this.setState({ newCaseTitle: '', newCaseSubhead: '', newCaseProblem: '', newCaseSolution: '', newCaseTags: '' });
+    this.setState({ newCaseTitle: '', newCaseSubhead: '', newCaseProblem: '', newCaseSolution: '', newCaseTags: '', newCaseShowOnHome: false });
     this.loadAll(s.session);
   };
 
