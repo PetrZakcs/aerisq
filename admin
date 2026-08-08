@@ -249,52 +249,113 @@
     </sc-if>
 
     <sc-if value="{{ isCmsTab }}" hint-placeholder-val="{{ false }}">
-      <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// WEBSITE CONTENT & HEADLINES CONTROL</div>
-        <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin-bottom:24px">Spravujte texty, nadpisy a podrobnosti služeb pro hlavní web AerisQ.</p>
-
-        <div style="display:flex;flex-direction:column;gap:20px;max-width:760px">
-          <div style="border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:6px;background:#050505">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:12px">ENGLISH CONTENT</div>
-            <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:32px">
+        <!-- Texty a Nadpisy Webové Stránky -->
+        <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// HLAVNÍ TEXTY & HERO SEKCÍ</div>
+          <div style="display:flex;flex-direction:column;gap:16px;max-width:760px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
               <div>
-                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO TITLE (EN)</label>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO NADPIS (EN)</label>
                 <input value="{{ heroTitleEn }}" onChange="{{ setHeroTitleEn }}" style="{{ inputStyle }};width:100%" />
               </div>
               <div>
-                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO SUBTITLE (EN)</label>
-                <textarea value="{{ heroSubEn }}" onChange="{{ setHeroSubEn }}" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
-              </div>
-            </div>
-          </div>
-
-          <div style="border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:6px;background:#050505">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:12px">CZECH CONTENT (ČESKY)</div>
-            <div style="display:flex;flex-direction:column;gap:12px">
-              <div>
                 <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO NADPIS (CS)</label>
                 <input value="{{ heroTitleCs }}" onChange="{{ setHeroTitleCs }}" style="{{ inputStyle }};width:100%" />
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO PODNADPIS (EN)</label>
+                <textarea value="{{ heroSubEn }}" onChange="{{ setHeroSubEn }}" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
               </div>
               <div>
                 <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">HERO PODNADPIS (CS)</label>
                 <textarea value="{{ heroSubCs }}" onChange="{{ setHeroSubCs }}" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
               </div>
             </div>
-          </div>
-
-          <div style="border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:6px;background:#050505">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:12px">AUDIT & SCARCITY BANNER</div>
             <div>
-              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">TEXT DOSTUPNOSTI AUDITU</label>
+              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">BANER AUDITU DOSTUPNOSTI (SCARCITY)</label>
               <input value="{{ auditScarcity }}" onChange="{{ setAuditScarcity }}" style="{{ inputStyle }};width:100%" />
             </div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:6px">
+              <button onClick="{{ saveCmsChanges }}" style="{{ primaryBtnStyle }}">Uložit základní texty</button>
+              <sc-if value="{{ cmsSaved }}" hint-placeholder-val="{{ false }}">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">✓ Uloženo</span>
+              </sc-if>
+            </div>
           </div>
+        </div>
 
-          <div style="display:flex;align-items:center;gap:14px;margin-top:10px">
-            <button onClick="{{ saveCmsChanges }}" style="{{ primaryBtnStyle }}">Uložit změny pro web</button>
-            <sc-if value="{{ cmsSaved }}" hint-placeholder-val="{{ false }}">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">✓ Změny byly úspěšně uloženy</span>
-            </sc-if>
+        <!-- Správa Blogu -->
+        <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// SPRÁVA BLOGU (ČLÁNKY)</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;max-width:760px">
+            <input placeholder="Název článku" value="{{ newBlogTitle }}" onChange="{{ setNewBlogTitle }}" style="{{ inputStyle }}" />
+            <textarea placeholder="Perex / Krátký popis článku" value="{{ newBlogExcerpt }}" onChange="{{ setNewBlogExcerpt }}" rows="2" style="{{ inputStyle }};resize:vertical"></textarea>
+            <textarea placeholder="Obsah článku (Markdown / Text)" value="{{ newBlogContent }}" onChange="{{ setNewBlogContent }}" rows="5" style="{{ inputStyle }};resize:vertical"></textarea>
+            <button onClick="{{ createBlogPost }}" disabled="{{ newBlogCannotSubmit }}" style="{{ primaryBtnStyle }}">Publikovat nový článek</button>
+          </div>
+          <div style="border:1px solid rgba(255,255,255,.08);border-radius:6px;overflow:hidden">
+            <sc-for list="{{ blogPosts }}" as="post" hint-placeholder-count="2">
+              <div style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#050505;display:flex;justify-content:space-between;align-items:center;gap:12px">
+                <div>
+                  <strong style="color:#fafafa;font-size:14px">{{ post.title }}</strong>
+                  <div style="color:#71717a;font-size:12px">{{ post.excerpt }}</div>
+                </div>
+                <button onClick="{{ post.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Smazat</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Správa Case Studies -->
+        <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// SPRÁVA CASE STUDIES (PŘÍPADOVÉ STUDIE)</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;max-width:760px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <input placeholder="Titulek (Headline)" value="{{ newCaseTitle }}" onChange="{{ setNewCaseTitle }}" style="{{ inputStyle }}" />
+              <input placeholder="Podtitulek (Subhead)" value="{{ newCaseSubhead }}" onChange="{{ setNewCaseSubhead }}" style="{{ inputStyle }}" />
+            </div>
+            <textarea placeholder="Problém klienta" value="{{ newCaseProblem }}" onChange="{{ setNewCaseProblem }}" rows="2" style="{{ inputStyle }};resize:vertical"></textarea>
+            <textarea placeholder="Naše řešení" value="{{ newCaseSolution }}" onChange="{{ setNewCaseSolution }}" rows="2" style="{{ inputStyle }};resize:vertical"></textarea>
+            <input placeholder="Tagy a technologie (např. Llama 3, Vector DB, Python)" value="{{ newCaseTags }}" onChange="{{ setNewCaseTags }}" style="{{ inputStyle }}" />
+            <button onClick="{{ createCaseStudy }}" disabled="{{ newCaseCannotSubmit }}" style="{{ primaryBtnStyle }}">Pridat Case Study</button>
+          </div>
+          <div style="border:1px solid rgba(255,255,255,.08);border-radius:6px;overflow:hidden">
+            <sc-for list="{{ caseStudiesList }}" as="cs" hint-placeholder-count="2">
+              <div style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#050505;display:flex;justify-content:space-between;align-items:center;gap:12px">
+                <div>
+                  <strong style="color:#fafafa;font-size:14px">{{ cs.title }}</strong>
+                  <div style="color:#71717a;font-size:12px">{{ cs.subhead }} · {{ cs.tags }}</div>
+                </div>
+                <button onClick="{{ cs.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Smazat</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Správa Pracovních Pozic (Careers) -->
+        <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:24px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:14px">// SPRÁVA PRACOVNÍCH POZIC (KARIÉRA)</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;max-width:760px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <input placeholder="Název pozice (např. AI / ML Engineer)" value="{{ newRoleTitle }}" onChange="{{ setNewRoleTitle }}" style="{{ inputStyle }}" />
+              <input placeholder="Požadovaný stack (např. Python · LangChain · RAG)" value="{{ newRoleStack }}" onChange="{{ setNewRoleStack }}" style="{{ inputStyle }}" />
+            </div>
+            <textarea placeholder="Popis pozice a požadavky" value="{{ newRoleDesc }}" onChange="{{ setNewRoleDesc }}" rows="3" style="{{ inputStyle }};resize:vertical"></textarea>
+            <button onClick="{{ createJobRole }}" disabled="{{ newRoleCannotSubmit }}" style="{{ primaryBtnStyle }}">Vytvořit pracovní pozici</button>
+          </div>
+          <div style="border:1px solid rgba(255,255,255,.08);border-radius:6px;overflow:hidden">
+            <sc-for list="{{ jobRoles }}" as="role" hint-placeholder-count="2">
+              <div style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#050505;display:flex;justify-content:space-between;align-items:center;gap:12px">
+                <div>
+                  <strong style="color:#fafafa;font-size:14px">{{ role.title }}</strong>
+                  <div style="color:#71717a;font-size:12px;font-family:'JetBrains Mono',monospace">{{ role.stack }}</div>
+                </div>
+                <button onClick="{{ role.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Smazat</button>
+              </div>
+            </sc-for>
           </div>
         </div>
       </div>
@@ -326,7 +387,11 @@ class Component extends DCLogic {
     heroTitleCs: 'Nahrazujeme vaše manuální procesy AI agenty, kteří běží v produkci.',
     heroSubCs: 'Žádné demo chatbota. Zmapujeme váš skutečný problém — faktury, tickety, ruční přepis dat — postavíme pipeline, která ho nahradí, nasadíme ji do vaší infrastruktury a zůstaneme, dokud ji váš tým neumí provozovat sám.',
     auditScarcity: '◆ Only 3 audit slots open this quarter',
-    cmsSaved: false
+    cmsSaved: false,
+
+    blogPosts: [], newBlogTitle: '', newBlogExcerpt: '', newBlogContent: '',
+    caseStudiesList: [], newCaseTitle: '', newCaseSubhead: '', newCaseProblem: '', newCaseSolution: '', newCaseTags: '',
+    jobRoles: [], newRoleTitle: '', newRoleStack: '', newRoleDesc: ''
   };
 
   componentDidMount() {
@@ -386,7 +451,7 @@ class Component extends DCLogic {
   }
 
   loadAll = async (session) => {
-    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs] = await Promise.all([
+    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs, blog, cases, roles] = await Promise.all([
       this.fetchTable('audit_requests', session, '&order=created_at.desc'),
       this.fetchTable('newsletter_subscribers', session, '&order=created_at.desc'),
       this.fetchTable('applications', session, '&order=created_at.desc'),
@@ -394,7 +459,10 @@ class Component extends DCLogic {
       this.fetchTable('projects', session, '&order=created_at.desc'),
       this.fetchTable('milestones', session),
       this.fetchTable('invoices', session),
-      this.fetchTable('documents', session, '&order=created_at.desc')
+      this.fetchTable('documents', session, '&order=created_at.desc'),
+      this.fetchTable('blog_posts', session, '&order=created_at.desc'),
+      this.fetchTable('case_studies', session, '&order=created_at.desc'),
+      this.fetchTable('job_roles', session, '&order=created_at.desc')
     ]);
     const milestonesByProject = {};
     milestones.forEach(m => { (milestonesByProject[m.project_id] = milestonesByProject[m.project_id] || []).push(m); });
@@ -402,8 +470,71 @@ class Component extends DCLogic {
     invoices.forEach(i => { (invoicesByProject[i.project_id] = invoicesByProject[i.project_id] || []).push(i); });
     this.setState({
       auditRequests: audit, newsletterSubs: newsletter, applications: apps,
-      clients, projects, milestonesByProject, invoicesByProject, documents: docs
+      clients, projects, milestonesByProject, invoicesByProject, documents: docs,
+      blogPosts: blog, caseStudiesList: cases, jobRoles: roles
     });
+  };
+
+  setNewBlogTitle = (e) => this.setState({ newBlogTitle: e.target.value });
+  setNewBlogExcerpt = (e) => this.setState({ newBlogExcerpt: e.target.value });
+  setNewBlogContent = (e) => this.setState({ newBlogContent: e.target.value });
+
+  createBlogPost = async () => {
+    const s = this.state;
+    if (!s.newBlogTitle.trim()) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/blog_posts`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ title: s.newBlogTitle, excerpt: s.newBlogExcerpt, content: s.newBlogContent })
+    });
+    this.setState({ newBlogTitle: '', newBlogExcerpt: '', newBlogContent: '' });
+    this.loadAll(s.session);
+  };
+
+  deleteBlogPost = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/blog_posts?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
+  };
+
+  setNewCaseTitle = (e) => this.setState({ newCaseTitle: e.target.value });
+  setNewCaseSubhead = (e) => this.setState({ newCaseSubhead: e.target.value });
+  setNewCaseProblem = (e) => this.setState({ newCaseProblem: e.target.value });
+  setNewCaseSolution = (e) => this.setState({ newCaseSolution: e.target.value });
+  setNewCaseTags = (e) => this.setState({ newCaseTags: e.target.value });
+
+  createCaseStudy = async () => {
+    const s = this.state;
+    if (!s.newCaseTitle.trim()) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/case_studies`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ title: s.newCaseTitle, subhead: s.newCaseSubhead, problem: s.newCaseProblem, solution: s.newCaseSolution, tags: s.newCaseTags })
+    });
+    this.setState({ newCaseTitle: '', newCaseSubhead: '', newCaseProblem: '', newCaseSolution: '', newCaseTags: '' });
+    this.loadAll(s.session);
+  };
+
+  deleteCaseStudy = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/case_studies?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
+  };
+
+  setNewRoleTitle = (e) => this.setState({ newRoleTitle: e.target.value });
+  setNewRoleStack = (e) => this.setState({ newRoleStack: e.target.value });
+  setNewRoleDesc = (e) => this.setState({ newRoleDesc: e.target.value });
+
+  createJobRole = async () => {
+    const s = this.state;
+    if (!s.newRoleTitle.trim()) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/job_roles`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ title: s.newRoleTitle, stack: s.newRoleStack, description: s.newRoleDesc })
+    });
+    this.setState({ newRoleTitle: '', newRoleStack: '', newRoleDesc: '' });
+    this.loadAll(s.session);
+  };
+
+  deleteJobRole = async (id) => {
+    await fetch(`${SUPABASE_URL}/rest/v1/job_roles?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+    this.loadAll(this.state.session);
   };
 
   setNewClientName = (e) => this.setState({ newClientName: e.target.value });
@@ -604,6 +735,21 @@ class Component extends DCLogic {
       heroSubCs: s.heroSubCs, setHeroSubCs: this.setHeroSubCs,
       auditScarcity: s.auditScarcity, setAuditScarcity: this.setAuditScarcity,
       saveCmsChanges: this.saveCmsChanges, cmsSaved: s.cmsSaved,
+
+      blogPosts: s.blogPosts.map(p => ({ ...p, onDelete: () => this.deleteBlogPost(p.id) })),
+      newBlogTitle: s.newBlogTitle, newBlogExcerpt: s.newBlogExcerpt, newBlogContent: s.newBlogContent,
+      setNewBlogTitle: this.setNewBlogTitle, setNewBlogExcerpt: this.setNewBlogExcerpt, setNewBlogContent: this.setNewBlogContent,
+      createBlogPost: this.createBlogPost, newBlogCannotSubmit: !s.newBlogTitle.trim(),
+
+      caseStudiesList: s.caseStudiesList.map(c => ({ ...c, onDelete: () => this.deleteCaseStudy(c.id) })),
+      newCaseTitle: s.newCaseTitle, newCaseSubhead: s.newCaseSubhead, newCaseProblem: s.newCaseProblem, newCaseSolution: s.newCaseSolution, newCaseTags: s.newCaseTags,
+      setNewCaseTitle: this.setNewCaseTitle, setNewCaseSubhead: this.setNewCaseSubhead, setNewCaseProblem: this.setNewCaseProblem, setNewCaseSolution: this.setNewCaseSolution, setNewCaseTags: this.setNewCaseTags,
+      createCaseStudy: this.createCaseStudy, newCaseCannotSubmit: !s.newCaseTitle.trim(),
+
+      jobRoles: s.jobRoles.map(r => ({ ...r, onDelete: () => this.deleteJobRole(r.id) })),
+      newRoleTitle: s.newRoleTitle, newRoleStack: s.newRoleStack, newRoleDesc: s.newRoleDesc,
+      setNewRoleTitle: this.setNewRoleTitle, setNewRoleStack: this.setNewRoleStack, setNewRoleDesc: this.setNewRoleDesc,
+      createJobRole: this.createJobRole, newRoleCannotSubmit: !s.newRoleTitle.trim(),
       auditRequests: s.auditRequests, newsletterSubs: s.newsletterSubs, applications: s.applications,
       clients: clientsWithDelete,
       newClientName: s.newClientName, newClientCompany: s.newClientCompany, newClientEmail: s.newClientEmail,
