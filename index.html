@@ -974,7 +974,7 @@ class Component extends DCLogic {
     csActive: 'all',
     liveBlogPosts: [],
     liveCaseStudies: [],
-    cmsLoadedAt: null
+    cmsCustomSettings: null
   };
 
   componentDidMount() {
@@ -982,23 +982,7 @@ class Component extends DCLogic {
     try {
       const stored = localStorage.getItem('aerisq_custom_cms');
       if (stored) {
-        const cms = JSON.parse(stored);
-        if (cms.heroTitleEn) TRANSLATIONS.en.heroTitle = cms.heroTitleEn;
-        if (cms.heroSubEn) TRANSLATIONS.en.heroSub = cms.heroSubEn;
-        if (cms.heroTitleCs) TRANSLATIONS.cs.heroTitle = cms.heroTitleCs;
-        if (cms.heroSubCs) TRANSLATIONS.cs.heroSub = cms.heroSubCs;
-        if (cms.auditScarcity) {
-          TRANSLATIONS.en.auditScarcity = cms.auditScarcity;
-          TRANSLATIONS.cs.auditScarcity = cms.auditScarcity;
-        }
-        if (cms.openWorkTitle) {
-          TRANSLATIONS.en.openWorkTitle = cms.openWorkTitle;
-          TRANSLATIONS.cs.openWorkTitle = cms.openWorkTitle;
-        }
-        if (cms.openWorkDesc) {
-          TRANSLATIONS.en.openWorkEmpty = cms.openWorkDesc;
-          TRANSLATIONS.cs.openWorkEmpty = cms.openWorkDesc;
-        }
+        this.setState({ cmsCustomSettings: JSON.parse(stored) });
       }
     } catch(e) {}
     this.loadLiveRoles();
@@ -1016,23 +1000,7 @@ class Component extends DCLogic {
         const rows = await sRes.json();
         if (rows && rows.length > 0 && rows[0].settings) {
           const cms = rows[0].settings;
-          if (cms.heroTitleEn) TRANSLATIONS.en.heroTitle = cms.heroTitleEn;
-          if (cms.heroSubEn) TRANSLATIONS.en.heroSub = cms.heroSubEn;
-          if (cms.heroTitleCs) TRANSLATIONS.cs.heroTitle = cms.heroTitleCs;
-          if (cms.heroSubCs) TRANSLATIONS.cs.heroSub = cms.heroSubCs;
-          if (cms.auditScarcity) {
-            TRANSLATIONS.en.auditScarcity = cms.auditScarcity;
-            TRANSLATIONS.cs.auditScarcity = cms.auditScarcity;
-          }
-          if (cms.openWorkTitle) {
-            TRANSLATIONS.en.openWorkTitle = cms.openWorkTitle;
-            TRANSLATIONS.cs.openWorkTitle = cms.openWorkTitle;
-          }
-          if (cms.openWorkDesc) {
-            TRANSLATIONS.en.openWorkEmpty = cms.openWorkDesc;
-            TRANSLATIONS.cs.openWorkEmpty = cms.openWorkDesc;
-          }
-          this.setState({ cmsLoadedAt: Date.now() });
+          this.setState({ cmsCustomSettings: cms });
         }
       }
       if (rRes.ok) {
@@ -1261,7 +1229,16 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const accent = s.accentColor;
-    const t = DICT[s.lang];
+    const baseT = DICT[s.lang];
+    const cms = s.cmsCustomSettings || {};
+    const t = {
+      ...baseT,
+      heroTitle: s.lang === 'cs' ? (cms.heroTitleCs || baseT.heroTitle) : (cms.heroTitleEn || baseT.heroTitle),
+      heroSub: s.lang === 'cs' ? (cms.heroSubCs || baseT.heroSub) : (cms.heroSubEn || baseT.heroSub),
+      auditScarcity: cms.auditScarcity || baseT.auditScarcity,
+      openWorkTitle: cms.openWorkTitle || baseT.openWorkTitle,
+      openWorkEmpty: cms.openWorkDesc || baseT.openWorkEmpty
+    };
 
     const focusMeta = [{ key: 'ai', label: t.focusAi }, { key: 'mvp', label: t.focusMvp }, { key: 'enterprise', label: t.focusEnterprise }];
     const focusOptions = focusMeta.map(m => ({ label: m.label, box: s.focus === m.key ? '[×] ' : '[ ] ', onClick: () => this.selectFocus(m.key), style: this.baseChoiceStyle(s.focus === m.key, accent) }));
