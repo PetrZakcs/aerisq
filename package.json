@@ -1,0 +1,18 @@
+{
+  "name": "aerisq-studio",
+  "version": "1.0.0",
+  "description": "AerisQ — AI Integration & Startup MVP Engineering Studio",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "serve": "npx -y serve ."
+  },
+  "keywords": [
+    "aerisq",
+    "ai",
+    "rag",
+    "studio"
+  ],
+  "author": "AerisQ",
+  "license": "ISC"
+}
