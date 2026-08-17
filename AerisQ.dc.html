@@ -909,68 +909,169 @@ body{animation:pageFadeIn .35s ease both}
 </sc-if>
 
 <sc-if value="{{ isHospitality }}" hint-placeholder-val="{{ false }}">
-<div class="pg-wrap">
-  <section class="pg-hero">
-    <div class="pg-eyebrow" style="color:{{ accentColor }}">// ODVĚTVÍ · HOTELNICTVÍ A GASTRO</div>
-    <h1>{{ hospTitle }}</h1>
-    <p>{{ hospPage.heroSub }}</p>
-    <div class="pg-hero-ctas">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
-    </div>
-  </section>
-</div>
 
-<div class="pg-strip">
-  <div class="pg-strip-inner">
-    <sc-for list="{{ hospPage.strip }}" as="item" hint-placeholder-count="3">
-      <div class="pg-strip-item">
-        <div class="k">{{ item.k }}</div>
-        <div class="v">{{ item.pre }}<span class="bold">{{ item.bold }}</span></div>
+<section style="position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.08)">
+  <div style="position:absolute;inset:0;background:radial-gradient(600px circle at 82% 18%,{{ accentColor }}14,transparent 65%)"></div>
+  <div style="position:relative;max-width:1180px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(20px,4vw,48px) clamp(56px,7vw,76px);display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;border:1px solid {{ accentColor }}55;color:{{ accentColor }};border-radius:20px;padding:6px 12px 6px 8px;margin-bottom:22px">
+        <span style="width:6px;height:6px;border-radius:50%;background:{{ accentColor }};display:inline-block"></span>
+        Odvětví · Hotelnictví a gastro
       </div>
-    </sc-for>
+      <h1 style="font-family:'Unbounded',sans-serif;font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.025em;line-height:1.08;margin:0 0 22px">{{ hospPage.heroLine1 }}<br>{{ hospPage.heroLine2 }}</h1>
+      <p style="font-size:16px;line-height:1.7;color:#a1a1aa;max-width:480px;margin:0 0 34px">{{ hospPage.heroSub }}</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:8px;padding:15px 26px;background:{{ accentColor }};color:#04140d;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;transition:transform .2s">
+          {{ t.navAudit }}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a href="#hosp-pristup" style="display:inline-flex;align-items:center;padding:15px 26px;border:1px solid rgba(255,255,255,.16);border-radius:6px;font-weight:700;font-size:14px;color:#fafafa;text-decoration:none">Jak to řešíme</a>
+      </div>
+    </div>
+
+    <div style="position:relative;display:flex;align-items:center;justify-content:center;height:min(420px,86vw)">
+      <svg width="100%" height="100%" viewBox="0 0 380 380" style="overflow:visible;max-width:380px">
+        <circle cx="190" cy="190" r="150" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"></circle>
+        <circle cx="190" cy="190" r="150" fill="none" stroke="{{ accentColor }}" stroke-width="2" stroke-dasharray="4 6" opacity="0.55"></circle>
+        <g stroke="rgba(255,255,255,.16)" stroke-width="1">
+          <line x1="190" y1="34" x2="190" y2="46"></line>
+          <line x1="346" y1="190" x2="334" y2="190"></line>
+          <line x1="190" y1="346" x2="190" y2="334"></line>
+          <line x1="34" y1="190" x2="46" y2="190"></line>
+        </g>
+        <path d="M 297.4 108.6 A 150 150 0 0 1 297.4 271.4" fill="none" stroke="{{ accentColor }}" stroke-width="3" stroke-linecap="round"></path>
+        <circle cx="190" cy="190" r="64" fill="#0e0e10" stroke="rgba(255,255,255,.1)"></circle>
+        <text x="190" y="184" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#8f8f98" letter-spacing="1">AGENT</text>
+        <text x="190" y="204" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="{{ accentColor }}" font-weight="700">24 / 7</text>
+        <g font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">
+          <circle cx="297" cy="109" r="4" fill="{{ accentColor }}"></circle>
+          <text x="308" y="99">{{ hospPage.clock.p1 }}</text>
+          <circle cx="297" cy="271" r="4" fill="{{ accentColor }}"></circle>
+          <text x="308" y="281">{{ hospPage.clock.p2 }}</text>
+          <circle cx="97" cy="271" r="4" fill="#52525b"></circle>
+          <text x="15" y="296" text-anchor="start">{{ hospPage.clock.p3 }}</text>
+          <circle cx="97" cy="109" r="4" fill="#52525b"></circle>
+          <text x="15" y="94" text-anchor="start">{{ hospPage.clock.p4 }}</text>
+        </g>
+      </svg>
+    </div>
   </div>
-</div>
+</section>
 
-<div class="pg-wrap">
-  <section class="pg-section">
-    <div class="pg-section-head">
+<section style="border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.012);padding:clamp(28px,4vw,40px) 0">
+  <div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#8f8f98;margin-bottom:22px">// TŘI KANÁLY, JEDEN CHAOS</div>
+    <div style="display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:8px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:#0e0e10">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path></svg>
+          <span style="font-size:13.5px;color:#d4d4d8">OTA rezervace (Booking, Airbnb)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:#0e0e10">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <span style="font-size:13.5px;color:#d4d4d8">Telefonát na recepci</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:#0e0e10">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="m22 6-10 7L2 6"></path></svg>
+          <span style="font-size:13.5px;color:#d4d4d8">E-mailová poptávka</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center">
+        <svg width="60" height="90" viewBox="0 0 60 90">
+          <path d="M2 8 C 30 8, 30 45, 58 45" stroke="rgba(255,255,255,.18)" fill="none" stroke-width="1.5"></path>
+          <path d="M2 45 L 58 45" stroke="rgba(255,255,255,.18)" fill="none" stroke-width="1.5"></path>
+          <path d="M2 82 C 30 82, 30 45, 58 45" stroke="rgba(255,255,255,.18)" fill="none" stroke-width="1.5"></path>
+          <path d="M50 39 L 58 45 L 50 51" stroke="{{ accentColor }}" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+      <div style="padding:22px 20px;border:1px solid {{ accentColor }}55;border-radius:8px;background:{{ accentColor }}0d">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ accentColor }}" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="m9 16 2 2 4-4"></path></svg>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};font-weight:700;letter-spacing:.04em">JEDEN KALENDÁŘ</span>
+        </div>
+        <p style="font-size:13.5px;color:#d4d4d8;line-height:1.6;margin:0">{{ hospPage.channelNote }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:1px solid rgba(255,255,255,.08);padding:clamp(48px,6vw,64px) 0">
+  <div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:{{ accentColor }};margin-bottom:16px">// CO JDE NASADIT HNED</div>
+    <h2 style="font-family:'Unbounded',sans-serif;font-size:clamp(22px,2.8vw,26px);font-weight:800;letter-spacing:-.02em;margin:0 0 30px;max-width:560px">Typický rozsah nasazení u hotelu nebo restaurace</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:1px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden">
+      <sc-for list="{{ hospPage.matrix }}" as="row" hint-placeholder-count="6">
+        <div style="background:#0e0e10;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <span style="font-size:13.5px;color:#fafafa;font-weight:500">{{ row.name }}</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:{{ row.labelColor }};white-space:nowrap">
+            <span style="width:6px;height:6px;border-radius:50%;display:inline-block;{{ row.dotStyle }}"></span>{{ row.statusLabel }}
+          </span>
+        </div>
+      </sc-for>
+    </div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#52525b;margin:16px 0 0">{{ hospPage.matrixNote }}</p>
+  </div>
+</section>
+
+<section id="hosp-pristup" style="border-bottom:1px solid rgba(255,255,255,.08);padding:clamp(48px,6vw,76px) 0">
+  <div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+    <div style="max-width:620px;margin-bottom:48px">
       <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgApproachEyebrow }}</div>
-      <h2>{{ t.pgApproachTitle }}</h2>
-      <p>{{ t.pgApproachSub }}</p>
+      <h2 style="font-family:'Unbounded',sans-serif;font-size:clamp(24px,3vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1.25;margin:14px 0 14px">{{ t.pgApproachTitle }}</h2>
+      <p style="font-size:14.5px;color:#8f8f98;line-height:1.6;margin:0">{{ t.pgApproachSub }}</p>
     </div>
-    <div class="pg-pillars">
-      <sc-for list="{{ hospPage.pillars }}" as="p" hint-placeholder-count="3">
-        <div class="pg-pillar">
-          <div class="tag">{{ p.tag }}</div>
-          <h3>{{ p.title }}</h3>
-          <p>{{ p.desc }}</p>
-          <div class="pg-pillar-list">
-            <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="3">
-              <div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div>
-            </sc-for>
-          </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:0;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden">
+      <div class="pg-pillar" style="border-right:1px solid rgba(255,255,255,.08)">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="{{ accentColor }}" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><rect x="7" y="14" width="4" height="4" fill="{{ accentColor }}" stroke="none"></rect></svg>
+        <div class="tag">{{ hospPage.pillars.0.tag }}</div>
+        <h3>{{ hospPage.pillars.0.title }}</h3>
+        <p>{{ hospPage.pillars.0.desc }}</p>
+        <div class="pg-pillar-list">
+          <sc-for list="{{ hospPage.pillars.0.items }}" as="it" hint-placeholder-count="3"><div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div></sc-for>
         </div>
-      </sc-for>
+      </div>
+      <div class="pg-pillar" style="border-right:1px solid rgba(255,255,255,.08)">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="{{ accentColor }}" stroke-width="1.8"><path d="M3 3v18h18"></path><path d="M7 15l3-4 3 3 5-6"></path></svg>
+        <div class="tag">{{ hospPage.pillars.1.tag }}</div>
+        <h3>{{ hospPage.pillars.1.title }}</h3>
+        <p>{{ hospPage.pillars.1.desc }}</p>
+        <div class="pg-pillar-list">
+          <sc-for list="{{ hospPage.pillars.1.items }}" as="it" hint-placeholder-count="3"><div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div></sc-for>
+        </div>
+      </div>
+      <div class="pg-pillar">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="{{ accentColor }}" stroke-width="1.8"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 18 5.5 21.5 7 14.5 2 9.5 9 9"></polygon></svg>
+        <div class="tag">{{ hospPage.pillars.2.tag }}</div>
+        <h3>{{ hospPage.pillars.2.title }}</h3>
+        <p>{{ hospPage.pillars.2.desc }}</p>
+        <div class="pg-pillar-list">
+          <sc-for list="{{ hospPage.pillars.2.items }}" as="it" hint-placeholder-count="3"><div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div></sc-for>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="pg-section">
-    <div class="pg-section-head">
-      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgProcessEyebrow }}</div>
-      <h2>{{ t.pgProcessTitle }}</h2>
-    </div>
-    <div class="pg-process">
+<section style="border-bottom:1px solid rgba(255,255,255,.08);padding:clamp(48px,6vw,76px) 0">
+  <div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+    <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgProcessEyebrow }}</div>
+    <h2 style="font-family:'Unbounded',sans-serif;font-size:clamp(24px,3vw,30px);font-weight:800;letter-spacing:-.02em;margin:14px 0 52px">{{ t.pgProcessTitle }}</h2>
+    <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:32px">
+      <div style="position:absolute;top:11px;left:6%;right:6%;height:1px;background:repeating-linear-gradient(to right,rgba(255,255,255,.2) 0,rgba(255,255,255,.2) 6px,transparent 6px,transparent 12px)"></div>
       <sc-for list="{{ hospPage.process }}" as="step" hint-placeholder-count="3">
-        <div class="pg-pstep">
-          <div><div class="ph">{{ step.phase }}</div><div class="ph" style="color:{{ accentColor }};margin-top:4px">{{ step.time }}</div></div>
-          <div><h3>{{ step.title }}</h3><p>{{ step.desc }}</p></div>
-          <div class="pill">{{ step.pill }}</div>
+        <div>
+          <div style="width:22px;height:22px;border-radius:50%;background:{{ step.dotBg }};border:{{ step.dotBorder }};margin-bottom:22px;position:relative;z-index:1;box-shadow:0 0 0 5px #0a0a0b"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8f8f98;letter-spacing:.05em">{{ step.phase }} · {{ step.time }}</div>
+          <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:700;margin:6px 0 10px">{{ step.title }}</h3>
+          <p style="font-size:13.5px;color:#a1a1aa;line-height:1.6;margin:0">{{ step.desc }}</p>
         </div>
       </sc-for>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="pg-section">
+<div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+  <section class="pg-section" style="border-top:none;padding-top:0">
     <div class="pg-section-head">
       <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgDelivEyebrow }}</div>
       <h2>{{ t.pgDelivTitle }}</h2>
@@ -1039,68 +1140,169 @@ body{animation:pageFadeIn .35s ease both}
 </sc-if>
 
 <sc-if value="{{ isRealestate }}" hint-placeholder-val="{{ false }}">
-<div class="pg-wrap">
-  <section class="pg-hero">
-    <div class="pg-eyebrow" style="color:{{ accentColor }}">// ODVĚTVÍ · DEVELOPEŘI A REALITY</div>
-    <h1>{{ realTitle }}</h1>
-    <p>{{ realPage.heroSub }}</p>
-    <div class="pg-hero-ctas">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
-    </div>
-  </section>
-</div>
 
-<div class="pg-strip">
-  <div class="pg-strip-inner">
-    <sc-for list="{{ realPage.strip }}" as="item" hint-placeholder-count="3">
-      <div class="pg-strip-item">
-        <div class="k">{{ item.k }}</div>
-        <div class="v">{{ item.pre }}<span class="bold">{{ item.bold }}</span></div>
+<section style="position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.08)">
+  <svg width="100%" height="100%" style="position:absolute;inset:0;opacity:.5">
+    <defs>
+      <pattern id="bp-grid-real" width="28" height="28" patternUnits="userSpaceOnUse">
+        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(255,255,255,.045)" stroke-width="1"></path>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bp-grid-real)"></rect>
+  </svg>
+  <div style="position:relative;max-width:1180px;margin:0 auto;padding:clamp(56px,8vw,84px) clamp(20px,4vw,48px) clamp(56px,7vw,76px);display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;border:1px solid {{ accentColor }}55;color:{{ accentColor }};border-radius:4px;padding:6px 12px">
+        <span style="width:6px;height:6px;background:{{ accentColor }};display:inline-block"></span>
+        ODVĚTVÍ · DEVELOPEŘI &amp; REALITY
       </div>
-    </sc-for>
-  </div>
-</div>
-
-<div class="pg-wrap">
-  <section class="pg-section">
-    <div class="pg-section-head">
-      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgApproachEyebrow }}</div>
-      <h2>{{ t.pgApproachTitle }}</h2>
-      <p>{{ t.pgApproachSub }}</p>
+      <h1 style="font-family:'Unbounded',sans-serif;font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.025em;line-height:1.08;margin:22px 0 22px">{{ realPage.heroLine1 }}<br>{{ realPage.heroLine2 }}</h1>
+      <p style="font-size:16px;line-height:1.7;color:#a1a1aa;max-width:480px;margin:0 0 34px">{{ realPage.heroSub }}</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:8px;padding:15px 26px;background:{{ accentColor }};color:#04140d;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;transition:transform .2s">
+          {{ t.navAudit }}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a href="#real-pristup" style="display:inline-flex;align-items:center;padding:15px 26px;border:1px solid rgba(255,255,255,.16);border-radius:6px;font-weight:700;font-size:14px;color:#fafafa;text-decoration:none">Jak to řešíme</a>
+      </div>
     </div>
-    <div class="pg-pillars">
-      <sc-for list="{{ realPage.pillars }}" as="p" hint-placeholder-count="3">
-        <div class="pg-pillar">
-          <div class="tag">{{ p.tag }}</div>
-          <h3>{{ p.title }}</h3>
-          <p>{{ p.desc }}</p>
-          <div class="pg-pillar-list">
-            <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="3">
-              <div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div>
-            </sc-for>
+
+    <div style="position:relative;display:flex;align-items:flex-end;justify-content:center;height:min(420px,86vw)">
+      <div style="position:relative;width:220px;display:flex;flex-direction:column-reverse;border:1px solid rgba(255,255,255,.14);border-radius:4px 4px 0 0;overflow:hidden">
+        <div style="height:22px;background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 6px,transparent 6px 12px)"></div>
+        <sc-for list="{{ realPage.building }}" as="floor" hint-placeholder-count="4">
+          <div style="height:44px;border-top:1px solid rgba(255,255,255,.1);background:{{ floor.rowBg }};display:flex;align-items:center;justify-content:space-between;padding:0 14px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#d4d4d8">{{ floor.label }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:{{ floor.statusColor }}">{{ floor.status }}</span>
           </div>
+        </sc-for>
+        <div style="height:30px;background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 6px,transparent 6px 12px);border-top:1px solid rgba(255,255,255,.1)"></div>
+      </div>
+      <div style="position:absolute;right:10px;top:30px;bottom:30px;width:1px;background:rgba(255,255,255,.15)"></div>
+      <div style="position:absolute;right:4px;top:24px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#52525b;writing-mode:vertical-rl">{{ realPage.buildingNote }}</div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.012);padding:clamp(28px,4vw,40px) 0">
+  <div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#8f8f98;margin-bottom:22px">// TŘI MÍSTA, KDE SE ZTRÁCÍ PŘEHLED</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:0;border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden">
+      <sc-for list="{{ realPage.strip }}" as="item" hint-placeholder-count="3">
+        <div style="padding:22px 24px;background:#0e0e10;border-right:1px solid rgba(255,255,255,.08)">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#8f8f98">{{ item.k }}</span>
+          </div>
+          <p style="font-size:13px;color:#d4d4d8;line-height:1.55;margin:0">{{ item.pre }}<b style="color:#fafafa">{{ item.bold }}</b></p>
         </div>
       </sc-for>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="pg-section">
-    <div class="pg-section-head">
-      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgProcessEyebrow }}</div>
-      <h2>{{ t.pgProcessTitle }}</h2>
+<section style="border-bottom:1px solid rgba(255,255,255,.08);padding:clamp(48px,6vw,64px) 0">
+  <div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:{{ accentColor }};margin-bottom:16px">// JAK TO FUNGUJE V PRAXI</div>
+    <h2 style="font-family:'Unbounded',sans-serif;font-size:clamp(22px,2.8vw,26px);font-weight:800;letter-spacing:-.02em;margin:0 0 36px;max-width:560px">Od poptávky k makléři, bez ztraceného zájemce</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:0;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;margin-bottom:28px">
+      <div style="padding:26px 24px;background:#0e0e10;border-right:1px solid rgba(255,255,255,.08)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#8f8f98;margin-bottom:10px">{{ realPage.flowSteps.0.num }}</div>
+        <p style="font-size:13.5px;color:#d4d4d8;line-height:1.55;margin:0">{{ realPage.flowSteps.0.desc }}</p>
+      </div>
+      <div style="padding:26px 24px;background:{{ accentColor }}0d;border-right:1px solid rgba(255,255,255,.08)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:{{ accentColor }};margin-bottom:10px">{{ realPage.flowSteps.1.num }}</div>
+        <p style="font-size:13.5px;color:#d4d4d8;line-height:1.55;margin:0">{{ realPage.flowSteps.1.desc }}</p>
+      </div>
+      <div style="padding:26px 24px;background:#0e0e10">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#8f8f98;margin-bottom:10px">{{ realPage.flowSteps.2.num }}</div>
+        <p style="font-size:13.5px;color:#d4d4d8;line-height:1.55;margin:0">{{ realPage.flowSteps.2.desc }}</p>
+      </div>
     </div>
-    <div class="pg-process">
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:1px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden">
+      <div style="background:#0e0e10;padding:22px 26px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#f87171;margin-bottom:8px">{{ realPage.beforeLabel }}</div>
+        <p style="font-size:14px;color:#d4d4d8;margin:0">{{ realPage.beforeText }}</p>
+      </div>
+      <div style="background:#0e0e10;padding:22px 26px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:{{ accentColor }};margin-bottom:8px">{{ realPage.afterLabel }}</div>
+        <p style="font-size:14px;color:#d4d4d8;margin:0">{{ realPage.afterText }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="real-pristup" style="border-bottom:1px solid rgba(255,255,255,.08);padding:clamp(48px,6vw,76px) 0">
+  <div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+    <div style="max-width:620px;margin-bottom:48px">
+      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgApproachEyebrow }}</div>
+      <h2 style="font-family:'Unbounded',sans-serif;font-size:clamp(24px,3vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1.25;margin:14px 0 14px">{{ t.pgApproachTitle }}</h2>
+      <p style="font-size:14.5px;color:#8f8f98;line-height:1.6;margin:0">{{ t.pgApproachSub }}</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:0;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden">
+      <div class="pg-pillar" style="border-right:1px solid rgba(255,255,255,.08)">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="{{ accentColor }}" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        <div class="tag">{{ realPage.pillars.0.tag }}</div>
+        <h3>{{ realPage.pillars.0.title }}</h3>
+        <p>{{ realPage.pillars.0.desc }}</p>
+        <div class="pg-pillar-list">
+          <sc-for list="{{ realPage.pillars.0.items }}" as="it" hint-placeholder-count="3"><div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div></sc-for>
+        </div>
+      </div>
+
+      <div class="pg-pillar" style="border-right:1px solid rgba(255,255,255,.08)">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="{{ accentColor }}" stroke-width="1.8"><path d="M3 3v18h18"></path><rect x="7" y="12" width="3" height="6" fill="{{ accentColor }}" stroke="none"></rect><rect x="12" y="8" width="3" height="10" fill="{{ accentColor }}" stroke="none"></rect><rect x="17" y="5" width="3" height="13" fill="{{ accentColor }}" stroke="none" opacity=".5"></rect></svg>
+        <div class="tag">{{ realPage.pillars.1.tag }}</div>
+        <h3>{{ realPage.pillars.1.title }}</h3>
+        <p style="margin-bottom:14px">{{ realPage.pillars.1.desc }}</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+          <sc-for list="{{ realPage.dashboardProjects }}" as="proj" hint-placeholder-count="2">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#8f8f98;margin-bottom:4px"><span>{{ proj.name }}</span><span>{{ proj.pct }}&nbsp;%</span></div>
+              <div style="height:5px;border-radius:3px;background:rgba(255,255,255,.08)"><div style="width:{{ proj.pct }}%;height:100%;border-radius:3px;background:{{ accentColor }}"></div></div>
+            </div>
+          </sc-for>
+        </div>
+        <div class="pg-pillar-list">
+          <sc-for list="{{ realPage.pillars.1.items }}" as="it" hint-placeholder-count="3"><div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div></sc-for>
+        </div>
+      </div>
+
+      <div class="pg-pillar">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="{{ accentColor }}" stroke-width="1.8"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><path d="M14 2v6h6"></path><line x1="9" y1="14" x2="15" y2="14"></line><line x1="9" y1="18" x2="15" y2="18"></line></svg>
+        <div class="tag">{{ realPage.pillars.2.tag }}</div>
+        <h3>{{ realPage.pillars.2.title }}</h3>
+        <p>{{ realPage.pillars.2.desc }}</p>
+        <div class="pg-pillar-list">
+          <sc-for list="{{ realPage.pillars.2.items }}" as="it" hint-placeholder-count="3"><div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div></sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:1px solid rgba(255,255,255,.08);padding:clamp(48px,6vw,76px) 0">
+  <div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+    <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgProcessEyebrow }}</div>
+    <h2 style="font-family:'Unbounded',sans-serif;font-size:clamp(24px,3vw,30px);font-weight:800;letter-spacing:-.02em;margin:14px 0 52px">{{ t.pgProcessTitle }}</h2>
+    <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:32px">
+      <div style="position:absolute;top:11px;left:6%;right:6%;height:1px;background:repeating-linear-gradient(to right,rgba(255,255,255,.2) 0,rgba(255,255,255,.2) 6px,transparent 6px,transparent 12px)"></div>
       <sc-for list="{{ realPage.process }}" as="step" hint-placeholder-count="3">
-        <div class="pg-pstep">
-          <div><div class="ph">{{ step.phase }}</div><div class="ph" style="color:{{ accentColor }};margin-top:4px">{{ step.time }}</div></div>
-          <div><h3>{{ step.title }}</h3><p>{{ step.desc }}</p></div>
-          <div class="pill">{{ step.pill }}</div>
+        <div>
+          <div style="width:22px;height:22px;border-radius:50%;background:{{ step.dotBg }};border:{{ step.dotBorder }};margin-bottom:22px;position:relative;z-index:1;box-shadow:0 0 0 5px #0a0a0b"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8f8f98;letter-spacing:.05em">{{ step.phase }} · {{ step.time }}</div>
+          <h3 style="font-family:'Unbounded',sans-serif;font-size:16px;font-weight:700;margin:6px 0 10px">{{ step.title }}</h3>
+          <p style="font-size:13.5px;color:#a1a1aa;line-height:1.6;margin:0">{{ step.desc }}</p>
         </div>
       </sc-for>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="pg-section">
+<div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)">
+  <section class="pg-section" style="border-top:none;padding-top:0">
     <div class="pg-section-head">
       <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgDelivEyebrow }}</div>
       <h2>{{ t.pgDelivTitle }}</h2>
@@ -2483,7 +2685,19 @@ class Component extends DCLogic {
     const hospitalityTitle = s.lang === 'cs' ? (cms.hospTitleCs || 'Hotelnictví a gastro') : (cms.hospTitleEn || 'Hotels & Hospitality');
     const hospitalityText = s.lang === 'cs' ? (cms.hospTextCs || 'Zde se nachází popis řešení pro Hotelnictví a gastro.') : (cms.hospTextEn || 'This is the description page for Hotels & Hospitality services.');
     const hospPage = s.lang === 'cs' ? {
+      heroLine1: 'Recepce, co spí.', heroLine2: 'Provoz, co nespí.',
       heroSub: 'Stavíme AI agenty a interní nástroje, které zvládnou rezervace ze všech kanálů, objednávky mezi kuchyní a obsluhou i sledování spokojenosti hostů — bez nového PMS systému na míru za milion.',
+      clock: { p1: '22:00 — pozdní check-in', p2: '06:00 — časná otázka', p3: '19:30 — večerní špička', p4: '08:00 — ranní recepce' },
+      channelNote: 'AI agent sjednotí rezervace ze všech kanálů do jednoho PMS — recepce vidí realitu, ne tři otevřené karty v prohlížeči.',
+      matrix: [
+        { name: 'Rezervace & dotazy hostů', statusLabel: 'SPUŠTĚNO', dotStyle: `background:${accent}`, labelColor: accent },
+        { name: 'Sjednocení recenzí', statusLabel: 'SPUŠTĚNO', dotStyle: `background:${accent}`, labelColor: accent },
+        { name: 'Objednávky kuchyň/obsluha', statusLabel: 'PŘIPRAVENO', dotStyle: 'border:1.5px solid #a8a8b0', labelColor: '#a8a8b0' },
+        { name: 'Sklad & objednávky dodavatelům', statusLabel: 'PŘIPRAVENO', dotStyle: 'border:1.5px solid #a8a8b0', labelColor: '#a8a8b0' },
+        { name: 'Fakturace & účetnictví', statusLabel: 'ČEKÁ NA DATA', dotStyle: 'background:#3f3f46', labelColor: '#52525b' },
+        { name: 'Docházka personálu', statusLabel: 'ČEKÁ NA DATA', dotStyle: 'background:#3f3f46', labelColor: '#52525b' }
+      ],
+      matrixNote: 'Ilustrativní rozsah — konkrétní stav vašeho provozu probereme na auditu, ne obecný odhad.',
       strip: [
         { k: 'Rezervace', pre: 'OTA, telefon, e-mail → ', bold: 'ruční přepis do PMS' },
         { k: 'Objednávky', pre: 'Kuchyně a obsluha → ', bold: 'nekompatibilní systémy' },
@@ -2495,9 +2709,9 @@ class Component extends DCLogic {
         { tag: 'Spokojenost hostů', title: 'Dashboard spokojenosti napříč kanály', desc: 'Recenze a zpětná vazba z Googlu, Bookingu i TripAdvisoru na jednom místě — problém zachytíte dřív, než se stane veřejnou jednohvězdičkovou recenzí.', items: ['Sjednocené recenze ze všech platforem', 'Upozornění na negativní zpětnou vazbu ihned', 'Trendy spokojenosti hostů v čase'] }
       ],
       process: [
-        { phase: 'FÁZE 01', time: '2–6 týdnů (dle velikosti)', title: 'Audit toku rezervace → pobyt → zpětná vazba', desc: 'Zmapujeme, kde hosté i personál ztrácí čas — v duplicitním zadávání, nedostupné recepci, nebo přehlédnuté recenzi.', pill: 'Bez závazku' },
-        { phase: 'FÁZE 02', time: '2–6 týdnů', title: 'Pilotní nasazení jedné věci naostro', desc: 'Jeden AI agent nebo dashboard nasazený na reálný provoz — ne demo na schůzce, ale nástroj, který recepce použije hned v pondělí.', pill: 'Funkční pilot' },
-        { phase: 'FÁZE 03', time: 'Podle rozsahu', title: 'Škálování a předání týmu', desc: 'Napojení na zbytek procesů, dokumentace a předání tak, aby to provozovna dál zvládala i bez nás.', pill: 'Dokumentace v ceně' }
+        { phase: 'FÁZE 01', time: '2–6 týdnů (dle velikosti)', title: 'Audit toku rezervace → pobyt → zpětná vazba', desc: 'Zmapujeme, kde hosté i personál ztrácí čas — v duplicitním zadávání, nedostupné recepci, nebo přehlédnuté recenzi.', pill: 'Bez závazku', dotBg: accent, dotBorder: 'none' },
+        { phase: 'FÁZE 02', time: '2–6 týdnů', title: 'Pilotní nasazení jedné věci naostro', desc: 'Jeden AI agent nebo dashboard nasazený na reálný provoz — ne demo na schůzce, ale nástroj, který recepce použije hned v pondělí.', pill: 'Funkční pilot', dotBg: '#0e0e10', dotBorder: `2px solid ${accent}` },
+        { phase: 'FÁZE 03', time: 'Podle rozsahu', title: 'Škálování a předání týmu', desc: 'Napojení na zbytek procesů, dokumentace a předání tak, aby to provozovna dál zvládala i bez nás.', pill: 'Dokumentace v ceně', dotBg: '#0e0e10', dotBorder: '2px solid rgba(255,255,255,.25)' }
       ],
       deliverables: [
         { title: 'Funkční AI agent na rezervace nebo dotazy hostů', desc: 'Nasazený na váš skutečný ceník a dostupnost, ne obecné demo.' },
@@ -2512,7 +2726,19 @@ class Component extends DCLogic {
         { q: 'Jak dlouho trvá, než uvidíme první výsledek?', a: 'Audit 2–6 týdnů podle velikosti provozu, první funkční pilot na reálném provozu podobně. Pokud pilot v prvních týdnech nefunguje, řekneme vám to na rovinu.' }
       ]
     } : {
+      heroLine1: 'A front desk that sleeps.', heroLine2: 'Operations that don’t.',
       heroSub: "We build AI agents and internal tools that handle reservations across every channel, kitchen-to-service order flow, and guest satisfaction tracking — without a bespoke six-figure PMS build.",
+      clock: { p1: '10pm — late check-in', p2: '6am — early question', p3: '7:30pm — dinner rush', p4: '8am — morning desk' },
+      channelNote: 'An AI agent consolidates bookings from every channel into one PMS — the front desk sees reality, not three open browser tabs.',
+      matrix: [
+        { name: 'Bookings & guest questions', statusLabel: 'RUNNING', dotStyle: `background:${accent}`, labelColor: accent },
+        { name: 'Unified reviews', statusLabel: 'RUNNING', dotStyle: `background:${accent}`, labelColor: accent },
+        { name: 'Kitchen/service orders', statusLabel: 'READY', dotStyle: 'border:1.5px solid #a8a8b0', labelColor: '#a8a8b0' },
+        { name: 'Stock & supplier orders', statusLabel: 'READY', dotStyle: 'border:1.5px solid #a8a8b0', labelColor: '#a8a8b0' },
+        { name: 'Invoicing & accounting', statusLabel: 'NEEDS DATA', dotStyle: 'background:#3f3f46', labelColor: '#52525b' },
+        { name: 'Staff scheduling', statusLabel: 'NEEDS DATA', dotStyle: 'background:#3f3f46', labelColor: '#52525b' }
+      ],
+      matrixNote: "Illustrative scope — we'll map your operation's actual state during the audit, not a generic guess.",
       strip: [
         { k: 'Reservations', pre: 'OTA, phone, email → ', bold: 'manually re-typed into the PMS' },
         { k: 'Orders', pre: 'Kitchen and service → ', bold: 'incompatible systems' },
@@ -2524,9 +2750,9 @@ class Component extends DCLogic {
         { tag: 'Guest satisfaction', title: 'A cross-channel satisfaction dashboard', desc: 'Reviews and feedback from Google, Booking, and TripAdvisor in one place — you catch a problem before it becomes a public one-star review.', items: ['Unified reviews across every platform', 'Instant alerts on negative feedback', 'Satisfaction trends over time'] }
       ],
       process: [
-        { phase: 'PHASE 01', time: '2–6 weeks (depending on size)', title: 'Audit of booking → stay → feedback flow', desc: 'We map where guests and staff actually lose time — duplicate data entry, an unreachable front desk, or a missed review.', pill: 'No commitment' },
-        { phase: 'PHASE 02', time: '2–6 weeks', title: 'One pilot, deployed for real', desc: 'One AI agent or dashboard deployed on real operations — not a demo, a tool the front desk actually uses on Monday.', pill: 'Working pilot' },
-        { phase: 'PHASE 03', time: 'Scope-dependent', title: 'Scaling and handover', desc: 'Connecting the rest of your processes, documentation, and handover so your team can run it without us.', pill: 'Docs included' }
+        { phase: 'PHASE 01', time: '2–6 weeks (depending on size)', title: 'Audit of booking → stay → feedback flow', desc: 'We map where guests and staff actually lose time — duplicate data entry, an unreachable front desk, or a missed review.', pill: 'No commitment', dotBg: accent, dotBorder: 'none' },
+        { phase: 'PHASE 02', time: '2–6 weeks', title: 'One pilot, deployed for real', desc: 'One AI agent or dashboard deployed on real operations — not a demo, a tool the front desk actually uses on Monday.', pill: 'Working pilot', dotBg: '#0e0e10', dotBorder: `2px solid ${accent}` },
+        { phase: 'PHASE 03', time: 'Scope-dependent', title: 'Scaling and handover', desc: 'Connecting the rest of your processes, documentation, and handover so your team can run it without us.', pill: 'Docs included', dotBg: '#0e0e10', dotBorder: '2px solid rgba(255,255,255,.25)' }
       ],
       deliverables: [
         { title: 'A working AI agent for bookings or guest questions', desc: 'Deployed on your real pricing and availability, not a generic demo.' },
@@ -2546,7 +2772,26 @@ class Component extends DCLogic {
     const realestateTitle = s.lang === 'cs' ? (cms.realTitleCs || 'Developeři & Reality') : (cms.realTitleEn || 'Real Estate Developers');
     const realestateText = s.lang === 'cs' ? (cms.realTextCs || 'Zde se nachází popis řešení pro developery a realitní trh.') : (cms.realTextEn || 'This is the description page for Real Estate Developers.');
     const realPage = s.lang === 'cs' ? {
+      heroLine1: 'Rozestavěnost v hlavě.', heroLine2: 'Přehled na papíře.',
       heroSub: 'Stavíme AI agenty a interní nástroje, které zvládnou poptávky od zájemců, přehled rozestavěnosti projektů i předávání dokumentace mezi prodejem, projektem a právním — bez nového interního CRM na míru za milion.',
+      building: [
+        { label: '4. NP', status: 'PRODÁNO', rowBg: `${accent}22`, statusColor: accent },
+        { label: '3. NP', status: 'PRODÁNO', rowBg: `${accent}22`, statusColor: accent },
+        { label: '2. NP', status: 'V PRODEJI', rowBg: 'rgba(255,255,255,.03)', statusColor: '#8f8f98' },
+        { label: '1. NP', status: 'VE VÝSTAVBĚ', rowBg: 'rgba(255,255,255,.02)', statusColor: '#52525b' }
+      ],
+      buildingNote: '62 % OBSAZENO',
+      flowSteps: [
+        { num: '01 · POPTÁVKA', desc: 'Zájemce napíše e-mail nebo vyplní formulář — kdykoliv, i mimo pracovní dobu.' },
+        { num: '02 · AI KVALIFIKACE', desc: 'Agent odpoví na dostupnost a cenu, zjistí rozpočet a termín — okamžitě.' },
+        { num: '03 · MAKLÉŘ', desc: 'Dostane jen kvalifikované zájemce, co reálně chtějí koupit — ne každý dotaz na cenu.' }
+      ],
+      beforeLabel: 'PŘED', beforeText: 'E-mail nebo telefon → odpověď za den i déle',
+      afterLabel: 'PO', afterText: 'AI agent → odpověď okamžitě, makléř řeší jen kvalifikované',
+      dashboardProjects: [
+        { name: 'Rezidence Vinohrady', pct: 82 },
+        { name: 'Park Living Brno', pct: 41 }
+      ],
       strip: [
         { k: 'Poptávky zájemců', pre: 'E-mail a telefon → odpověď ', bold: 'za den i déle' },
         { k: 'Stav projektů', pre: 'Excel na projekt → vedení ', bold: 'nevidí přehled napříč' },
@@ -2558,9 +2803,9 @@ class Component extends DCLogic {
         { tag: 'Dokumentace a právo', title: 'AI agent nad projektovou a právní dokumentací', desc: 'RAG nad smlouvami, stavebním povolením a technickou dokumentací jednotek — právní i prodejní tým najde odpověď bez telefonátu projektovému manažerovi.', items: ['Vyhledávání ve smlouvách a povoleních', 'Technické listy jednotek na jednom místě', 'Historie změn a dodatků'] }
       ],
       process: [
-        { phase: 'FÁZE 01', time: '2–6 týdnů (dle velikosti)', title: 'Audit toku poptávka → prodej → dokumentace', desc: 'Zmapujeme, kde se ztrácí zájemci, kde vedení nemá přehled a kde dokumentace žije jen v hlavě jednoho člověka.', pill: 'Bez závazku' },
-        { phase: 'FÁZE 02', time: '2–6 týdnů', title: 'Pilotní nasazení jedné věci naostro', desc: 'Jeden AI agent nebo dashboard nasazený na reálný provoz — ne demo na schůzce, ale nástroj, který prodejní tým použije hned v pondělí.', pill: 'Funkční pilot' },
-        { phase: 'FÁZE 03', time: 'Podle rozsahu', title: 'Škálování a předání týmu', desc: 'Napojení na zbytek procesů, dokumentace a předání tak, aby to firma dál provozovala i bez nás.', pill: 'Dokumentace v ceně' }
+        { phase: 'FÁZE 01', time: '2–6 týdnů (dle velikosti)', title: 'Audit toku poptávka → prodej → dokumentace', desc: 'Zmapujeme, kde se ztrácí zájemci, kde vedení nemá přehled a kde dokumentace žije jen v hlavě jednoho člověka.', pill: 'Bez závazku', dotBg: accent, dotBorder: 'none' },
+        { phase: 'FÁZE 02', time: '2–6 týdnů', title: 'Pilotní nasazení jedné věci naostro', desc: 'Jeden AI agent nebo dashboard nasazený na reálný provoz — ne demo na schůzce, ale nástroj, který prodejní tým použije hned v pondělí.', pill: 'Funkční pilot', dotBg: '#0e0e10', dotBorder: `2px solid ${accent}` },
+        { phase: 'FÁZE 03', time: 'Podle rozsahu', title: 'Škálování a předání týmu', desc: 'Napojení na zbytek procesů, dokumentace a předání tak, aby to firma dál provozovala i bez nás.', pill: 'Dokumentace v ceně', dotBg: '#0e0e10', dotBorder: '2px solid rgba(255,255,255,.25)' }
       ],
       deliverables: [
         { title: 'Funkční AI agent na zpracování poptávek', desc: 'Nasazený na váš skutečný projekt a ceník, ne obecné demo.' },
@@ -2575,7 +2820,26 @@ class Component extends DCLogic {
         { q: 'Co se stane s citlivými smlouvami a osobními údaji zájemců?', a: 'Zůstávají ve vaší infrastruktuře nebo v izolovaném cloudovém prostředí, které si vybíráte — nepoužíváme je k trénování žádných veřejných modelů.' }
       ]
     } : {
+      heroLine1: 'Construction status in one head.', heroLine2: 'Overview stuck on paper.',
       heroSub: "We build AI agents and internal tools that handle buyer inquiries, cross-project construction status, and documentation handover between sales, project management, and legal — without a bespoke CRM build costing a fortune.",
+      building: [
+        { label: 'Floor 4', status: 'SOLD', rowBg: `${accent}22`, statusColor: accent },
+        { label: 'Floor 3', status: 'SOLD', rowBg: `${accent}22`, statusColor: accent },
+        { label: 'Floor 2', status: 'ON SALE', rowBg: 'rgba(255,255,255,.03)', statusColor: '#8f8f98' },
+        { label: 'Floor 1', status: 'UNDER CONSTRUCTION', rowBg: 'rgba(255,255,255,.02)', statusColor: '#52525b' }
+      ],
+      buildingNote: '62% OCCUPIED',
+      flowSteps: [
+        { num: '01 · INQUIRY', desc: 'A buyer emails or fills out a form — any time, even after hours.' },
+        { num: '02 · AI QUALIFICATION', desc: 'The agent answers on price and availability, checks budget and timeline — instantly.' },
+        { num: '03 · AGENT', desc: 'Gets only qualified leads who actually want to buy — not every price inquiry.' }
+      ],
+      beforeLabel: 'BEFORE', beforeText: 'Email or phone → response takes a day or more',
+      afterLabel: 'AFTER', afterText: 'AI agent → instant response, the agent only handles qualified leads',
+      dashboardProjects: [
+        { name: 'Vinohrady Residence', pct: 82 },
+        { name: 'Park Living Brno', pct: 41 }
+      ],
       strip: [
         { k: 'Buyer inquiries', pre: 'Email and phone → response takes ', bold: 'a day or more' },
         { k: 'Project status', pre: 'One spreadsheet per project → ', bold: 'no cross-project view' },
@@ -2587,9 +2851,9 @@ class Component extends DCLogic {
         { tag: 'Docs & legal', title: 'AI agent over project and legal documentation', desc: 'RAG over contracts, building permits, and unit technical documentation — legal and sales find an answer without calling the project manager.', items: ['Search across contracts and permits', 'Unit technical sheets in one place', 'Amendment and revision history'] }
       ],
       process: [
-        { phase: 'PHASE 01', time: '2–6 weeks (depending on size)', title: 'Audit of inquiry → sale → documentation flow', desc: 'We map where buyers fall through, where leadership lacks visibility, and where documentation lives only in one person’s head.', pill: 'No commitment' },
-        { phase: 'PHASE 02', time: '2–6 weeks', title: 'One pilot, deployed for real', desc: 'One AI agent or dashboard deployed on real operations — not a demo, a tool your sales team actually uses on Monday.', pill: 'Working pilot' },
-        { phase: 'PHASE 03', time: 'Scope-dependent', title: 'Scaling and handover', desc: 'Connecting the rest of your processes, documentation, and handover so your team can run it without us.', pill: 'Docs included' }
+        { phase: 'PHASE 01', time: '2–6 weeks (depending on size)', title: 'Audit of inquiry → sale → documentation flow', desc: 'We map where buyers fall through, where leadership lacks visibility, and where documentation lives only in one person’s head.', pill: 'No commitment', dotBg: accent, dotBorder: 'none' },
+        { phase: 'PHASE 02', time: '2–6 weeks', title: 'One pilot, deployed for real', desc: 'One AI agent or dashboard deployed on real operations — not a demo, a tool your sales team actually uses on Monday.', pill: 'Working pilot', dotBg: '#0e0e10', dotBorder: `2px solid ${accent}` },
+        { phase: 'PHASE 03', time: 'Scope-dependent', title: 'Scaling and handover', desc: 'Connecting the rest of your processes, documentation, and handover so your team can run it without us.', pill: 'Docs included', dotBg: '#0e0e10', dotBorder: '2px solid rgba(255,255,255,.25)' }
       ],
       deliverables: [
         { title: 'A working AI agent for inquiry handling', desc: 'Deployed on your real project and price list, not a generic demo.' },
