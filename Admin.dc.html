@@ -327,8 +327,77 @@
               <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;margin-bottom:4px">BANER AUDITU DOSTUPNOSTI (SCARCITY)</label>
               <input value="{{ auditScarcity }}" onChange="{{ setAuditScarcity }}" style="{{ inputStyle }};width:100%" />
             </div>
+            <div style="margin-top:20px;border-top:1px solid rgba(255,255,255,.08);padding-top:20px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#34d399;margin-bottom:14px">// TEXTY PODSTRÁNEK PODLE ODVĚTVÍ (SECTORS)</div>
+              
+              <!-- Sector 1 -->
+              <div style="margin-bottom:20px;padding:12px;background:#050505;border:1px solid rgba(255,255,255,.04);border-radius:4px">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#71717a;margin-bottom:6px">1. HOTELNICTVÍ A GASTRO (HOSPITALITY)</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+                  <input value="{{ hospTitleCs }}" onChange="{{ setHospTitleCs }}" placeholder="Titulek (CS)" style="{{ inputStyle }};width:100%" />
+                  <input value="{{ hospTitleEn }}" onChange="{{ setHospTitleEn }}" placeholder="Titulek (EN)" style="{{ inputStyle }};width:100%" />
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <textarea value="{{ hospTextCs }}" onChange="{{ setHospTextCs }}" placeholder="Popis řešení a služeb (CS)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                  <textarea value="{{ hospTextEn }}" onChange="{{ setHospTextEn }}" placeholder="Popis řešení a služeb (EN)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                </div>
+              </div>
+
+              <!-- Sector 2 -->
+              <div style="margin-bottom:20px;padding:12px;background:#050505;border:1px solid rgba(255,255,255,.04);border-radius:4px">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#71717a;margin-bottom:6px">2. REALIZACE & STAVBY (CONSTRUCTION)</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+                  <input value="{{ constTitleCs }}" onChange="{{ setConstTitleCs }}" placeholder="Titulek (CS)" style="{{ inputStyle }};width:100%" />
+                  <input value="{{ constTitleEn }}" onChange="{{ setConstTitleEn }}" placeholder="Titulek (EN)" style="{{ inputStyle }};width:100%" />
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <textarea value="{{ constTextCs }}" onChange="{{ setConstTextCs }}" placeholder="Popis řešení a služeb (CS)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                  <textarea value="{{ constTextEn }}" onChange="{{ setConstTextEn }}" placeholder="Popis řešení a služeb (EN)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                </div>
+              </div>
+
+              <!-- Sector 3 -->
+              <div style="margin-bottom:20px;padding:12px;background:#050505;border:1px solid rgba(255,255,255,.04);border-radius:4px">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#71717a;margin-bottom:6px">3. DEVELOPEŘI & REALITY (REAL ESTATE)</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+                  <input value="{{ realTitleCs }}" onChange="{{ setRealTitleCs }}" placeholder="Titulek (CS)" style="{{ inputStyle }};width:100%" />
+                  <input value="{{ realTitleEn }}" onChange="{{ setRealTitleEn }}" placeholder="Titulek (EN)" style="{{ inputStyle }};width:100%" />
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <textarea value="{{ realTextCs }}" onChange="{{ setRealTextCs }}" placeholder="Popis řešení a služeb (CS)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                  <textarea value="{{ realTextEn }}" onChange="{{ setRealTextEn }}" placeholder="Popis řešení a služeb (EN)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                </div>
+              </div>
+
+              <!-- Sector 4 -->
+              <div style="margin-bottom:20px;padding:12px;background:#050505;border:1px solid rgba(255,255,255,.04);border-radius:4px">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#71717a;margin-bottom:6px">4. STROJÍRENSTVÍ & VÝROBA (MANUFACTURING)</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+                  <input value="{{ mfgTitleCs }}" onChange="{{ setMfgTitleCs }}" placeholder="Titulek (CS)" style="{{ inputStyle }};width:100%" />
+                  <input value="{{ mfgTitleEn }}" onChange="{{ setMfgTitleEn }}" placeholder="Titulek (EN)" style="{{ inputStyle }};width:100%" />
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <textarea value="{{ mfgTextCs }}" onChange="{{ setMfgTextCs }}" placeholder="Popis řešení a služeb (CS)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                  <textarea value="{{ mfgTextEn }}" onChange="{{ setMfgTextEn }}" placeholder="Popis řešení a služeb (EN)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                </div>
+              </div>
+
+              <!-- Sector 5 -->
+              <div style="margin-bottom:20px;padding:12px;background:#050505;border:1px solid rgba(255,255,255,.04);border-radius:4px">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#71717a;margin-bottom:6px">5. E-COMMERCE & LOGISTIKA (E-COMMERCE)</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+                  <input value="{{ ecomTitleCs }}" onChange="{{ setEcomTitleCs }}" placeholder="Titulek (CS)" style="{{ inputStyle }};width:100%" />
+                  <input value="{{ ecomTitleEn }}" onChange="{{ setEcomTitleEn }}" placeholder="Titulek (EN)" style="{{ inputStyle }};width:100%" />
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <textarea value="{{ ecomTextCs }}" onChange="{{ setEcomTextCs }}" placeholder="Popis řešení a služeb (CS)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                  <textarea value="{{ ecomTextEn }}" onChange="{{ setEcomTextEn }}" placeholder="Popis řešení a služeb (EN)" rows="3" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                </div>
+              </div>
+
+            </div>
             <div style="display:flex;align-items:center;gap:14px;margin-top:6px">
-              <button onClick="{{ saveCmsChanges }}" style="{{ primaryBtnStyle }}">Uložit základní texty</button>
+              <button onClick="{{ saveCmsChanges }}" style="{{ primaryBtnStyle }}">Uložit všechny texty</button>
               <sc-if value="{{ cmsSaved }}" hint-placeholder-val="{{ false }}">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">✓ Uloženo</span>
               </sc-if>
@@ -453,7 +522,10 @@
             <option value="viewer">Viewer (Pouze čtení)</option>
           </select>
         </div>
-        <button onClick="{{ createUserAccount }}" disabled="{{ newUserCannotSubmit }}" style="{{ primaryBtnStyle }}">Vytvořit účet uživatele</button>
+        <button onClick="{{ createUserAccount }}" disabled="{{ newUserCannotSubmit }}" style="{{ primaryBtnStyle }}">{{ newUserBtnLabel }}</button>
+        <sc-if value="{{ newUserError }}" hint-placeholder-val="{{ false }}">
+          <p style="color:#f87171;font-size:12px;font-family:'JetBrains Mono',monospace;margin:10px 0 0">{{ newUserError }}</p>
+        </sc-if>
       </div>
 
       <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
@@ -506,6 +578,26 @@ class Component extends DCLogic {
     openWorkHiring: false,
     openWorkTitle: "We're not hiring right now — but we're always looking.",
     openWorkDesc: "No open roles at the moment. If you're a strong Python, TypeScript, or AI-systems engineer, send us your work — we keep good people on file for when a seat opens.",
+    hospTitleCs: 'Hotelnictví a gastro',
+    hospTextCs: 'Zde se nachází popis řešení pro Hotelnictví a gastro.',
+    hospTitleEn: 'Hotels & Hospitality',
+    hospTextEn: 'This is the description page for Hotels & Hospitality services.',
+    constTitleCs: 'Realizace & Stavby',
+    constTextCs: 'Zde se nachází popis řešení pro Realizace a stavby.',
+    constTitleEn: 'Construction & Delivery',
+    constTextEn: 'This is the description page for Construction & Delivery services.',
+    realTitleCs: 'Developeři & Reality',
+    realTextCs: 'Zde se nachází popis řešení pro developery a realitní trh.',
+    realTitleEn: 'Real Estate Developers',
+    realTextEn: 'This is the description page for Real Estate Developers.',
+    mfgTitleCs: 'Strojírenství & Výroba',
+    mfgTextCs: 'Zde se nachází popis řešení pro strojírenství a výrobu.',
+    mfgTitleEn: 'Mechanical & Manufacturing',
+    mfgTextEn: 'This is the description page for Mechanical & Manufacturing services.',
+    ecomTitleCs: 'E-commerce & Logistika',
+    ecomTextCs: 'Zde se nachází popis řešení pro e-commerce a logistiku.',
+    ecomTitleEn: 'E-commerce & Logistics',
+    ecomTextEn: 'This is the description page for E-commerce & Logistics.',
     cmsSaved: false,
 
     blogPosts: [], newBlogTitle: '', newBlogExcerpt: '', newBlogContent: '',
@@ -519,7 +611,7 @@ class Component extends DCLogic {
     ],
     newRoleTitle: '', newRoleStack: '', newRoleDesc: '',
 
-    teamMembers: [], newUserFullName: '', newUserEmail: '', newUserPassword: '', newUserRole: 'admin'
+    teamMembers: [], newUserFullName: '', newUserEmail: '', newUserPassword: '', newUserRole: 'admin', newUserError: '', newUserBusy: false
   };
 
   componentDidMount() {
@@ -599,7 +691,7 @@ class Component extends DCLogic {
   };
 
   loadAll = async (session) => {
-    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs, blog, cases, roles, team] = await Promise.all([
+    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs, blog, cases, roles, team, settingsRows] = await Promise.all([
       this.fetchTable('audit_requests', session, '&order=created_at.desc'),
       this.fetchTable('newsletter_subscribers', session, '&order=created_at.desc'),
       this.fetchTable('applications', session, '&order=created_at.desc'),
@@ -611,16 +703,51 @@ class Component extends DCLogic {
       this.fetchTable('blog_posts', session, '&order=created_at.desc'),
       this.fetchTable('case_studies', session, '&order=created_at.desc'),
       this.fetchTable('job_roles', session, '&order=created_at.desc'),
-      this.fetchTable('team_members', session, '&order=created_at.desc')
+      this.fetchTable('team_members', session, '&order=created_at.desc'),
+      this.fetchTable('site_settings', session, '&id=eq.main')
     ]);
     const milestonesByProject = {};
     milestones.forEach(m => { (milestonesByProject[m.project_id] = milestonesByProject[m.project_id] || []).push(m); });
     const invoicesByProject = {};
     invoices.forEach(i => { (invoicesByProject[i.project_id] = invoicesByProject[i.project_id] || []).push(i); });
+    
+    let cmsData = {};
+    if (settingsRows && settingsRows.length > 0 && settingsRows[0].settings) {
+      cmsData = settingsRows[0].settings;
+    }
+
     this.setState({
       auditRequests: audit, newsletterSubs: newsletter, applications: apps,
       clients, projects, milestonesByProject, invoicesByProject, documents: docs,
-      blogPosts: blog, caseStudiesList: cases, jobRoles: roles.length > 0 ? roles : this.state.jobRoles, teamMembers: team
+      blogPosts: blog, caseStudiesList: cases, jobRoles: roles.length > 0 ? roles : this.state.jobRoles, teamMembers: team,
+      heroTitleEn: cmsData.heroTitleEn || this.state.heroTitleEn,
+      heroSubEn: cmsData.heroSubEn || this.state.heroSubEn,
+      heroTitleCs: cmsData.heroTitleCs || this.state.heroTitleCs,
+      heroSubCs: cmsData.heroSubCs || this.state.heroSubCs,
+      auditScarcity: cmsData.auditScarcity || this.state.auditScarcity,
+      openWorkHiring: cmsData.openWorkHiring !== undefined ? cmsData.openWorkHiring : this.state.openWorkHiring,
+      openWorkTitle: cmsData.openWorkTitle || this.state.openWorkTitle,
+      openWorkDesc: cmsData.openWorkDesc || this.state.openWorkDesc,
+      hospTitleCs: cmsData.hospTitleCs || this.state.hospTitleCs,
+      hospTextCs: cmsData.hospTextCs || this.state.hospTextCs,
+      hospTitleEn: cmsData.hospTitleEn || this.state.hospTitleEn,
+      hospTextEn: cmsData.hospTextEn || this.state.hospTextEn,
+      constTitleCs: cmsData.constTitleCs || this.state.constTitleCs,
+      constTextCs: cmsData.constTextCs || this.state.constTextCs,
+      constTitleEn: cmsData.constTitleEn || this.state.constTitleEn,
+      constTextEn: cmsData.constTextEn || this.state.constTextEn,
+      realTitleCs: cmsData.realTitleCs || this.state.realTitleCs,
+      realTextCs: cmsData.realTextCs || this.state.realTextCs,
+      realTitleEn: cmsData.realTitleEn || this.state.realTitleEn,
+      realTextEn: cmsData.realTextEn || this.state.realTextEn,
+      mfgTitleCs: cmsData.mfgTitleCs || this.state.mfgTitleCs,
+      mfgTextCs: cmsData.mfgTextCs || this.state.mfgTextCs,
+      mfgTitleEn: cmsData.mfgTitleEn || this.state.mfgTitleEn,
+      mfgTextEn: cmsData.mfgTextEn || this.state.mfgTextEn,
+      ecomTitleCs: cmsData.ecomTitleCs || this.state.ecomTitleCs,
+      ecomTextCs: cmsData.ecomTextCs || this.state.ecomTextCs,
+      ecomTitleEn: cmsData.ecomTitleEn || this.state.ecomTitleEn,
+      ecomTextEn: cmsData.ecomTextEn || this.state.ecomTextEn
     });
   };
 
@@ -631,13 +758,27 @@ class Component extends DCLogic {
 
   createUserAccount = async () => {
     const s = this.state;
-    if (!s.newUserEmail.trim() || !s.newUserFullName.trim()) return;
-    await fetch(`${SUPABASE_URL}/rest/v1/team_members`, {
-      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ full_name: s.newUserFullName, email: s.newUserEmail, role: s.newUserRole })
-    });
-    this.setState({ newUserFullName: '', newUserEmail: '', newUserPassword: '', newUserRole: 'admin' });
-    this.loadAll(s.session);
+    if (!s.newUserEmail.trim() || !s.newUserFullName.trim() || s.newUserPassword.length < 8) {
+      this.setState({ newUserError: 'Full name, email, and a password of at least 8 characters are required.' });
+      return;
+    }
+    this.setState({ newUserBusy: true, newUserError: '' });
+    try {
+      const res = await fetch('/api/admin-create-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${s.session?.access_token || ''}` },
+        body: JSON.stringify({ fullName: s.newUserFullName, email: s.newUserEmail, password: s.newUserPassword, role: s.newUserRole })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        this.setState({ newUserBusy: false, newUserError: data.message || data.error || 'Failed to create user.' });
+        return;
+      }
+      this.setState({ newUserFullName: '', newUserEmail: '', newUserPassword: '', newUserRole: 'admin', newUserBusy: false, newUserError: '' });
+      this.loadAll(s.session);
+    } catch (e) {
+      this.setState({ newUserBusy: false, newUserError: 'Connection error. Please try again.' });
+    }
   };
 
   updateUserRole = async (id, role) => {
@@ -839,6 +980,27 @@ class Component extends DCLogic {
   setOpenWorkTitle = (e) => this.setState({ openWorkTitle: e.target.value, cmsSaved: false });
   setOpenWorkDesc = (e) => this.setState({ openWorkDesc: e.target.value, cmsSaved: false });
 
+  setHospTitleCs = (e) => this.setState({ hospTitleCs: e.target.value, cmsSaved: false });
+  setHospTextCs = (e) => this.setState({ hospTextCs: e.target.value, cmsSaved: false });
+  setHospTitleEn = (e) => this.setState({ hospTitleEn: e.target.value, cmsSaved: false });
+  setHospTextEn = (e) => this.setState({ hospTextEn: e.target.value, cmsSaved: false });
+  setConstTitleCs = (e) => this.setState({ constTitleCs: e.target.value, cmsSaved: false });
+  setConstTextCs = (e) => this.setState({ constTextCs: e.target.value, cmsSaved: false });
+  setConstTitleEn = (e) => this.setState({ constTitleEn: e.target.value, cmsSaved: false });
+  setConstTextEn = (e) => this.setState({ constTextEn: e.target.value, cmsSaved: false });
+  setRealTitleCs = (e) => this.setState({ realTitleCs: e.target.value, cmsSaved: false });
+  setRealTextCs = (e) => this.setState({ realTextCs: e.target.value, cmsSaved: false });
+  setRealTitleEn = (e) => this.setState({ realTitleEn: e.target.value, cmsSaved: false });
+  setRealTextEn = (e) => this.setState({ realTextEn: e.target.value, cmsSaved: false });
+  setMfgTitleCs = (e) => this.setState({ mfgTitleCs: e.target.value, cmsSaved: false });
+  setMfgTextCs = (e) => this.setState({ mfgTextCs: e.target.value, cmsSaved: false });
+  setMfgTitleEn = (e) => this.setState({ mfgTitleEn: e.target.value, cmsSaved: false });
+  setMfgTextEn = (e) => this.setState({ mfgTextEn: e.target.value, cmsSaved: false });
+  setEcomTitleCs = (e) => this.setState({ ecomTitleCs: e.target.value, cmsSaved: false });
+  setEcomTextCs = (e) => this.setState({ ecomTextCs: e.target.value, cmsSaved: false });
+  setEcomTitleEn = (e) => this.setState({ ecomTitleEn: e.target.value, cmsSaved: false });
+  setEcomTextEn = (e) => this.setState({ ecomTextEn: e.target.value, cmsSaved: false });
+
   saveCmsChanges = async () => {
     const payload = {
       heroTitleEn: this.state.heroTitleEn,
@@ -848,7 +1010,27 @@ class Component extends DCLogic {
       auditScarcity: this.state.auditScarcity,
       openWorkHiring: this.state.openWorkHiring,
       openWorkTitle: this.state.openWorkTitle,
-      openWorkDesc: this.state.openWorkDesc
+      openWorkDesc: this.state.openWorkDesc,
+      hospTitleCs: this.state.hospTitleCs,
+      hospTextCs: this.state.hospTextCs,
+      hospTitleEn: this.state.hospTitleEn,
+      hospTextEn: this.state.hospTextEn,
+      constTitleCs: this.state.constTitleCs,
+      constTextCs: this.state.constTextCs,
+      constTitleEn: this.state.constTitleEn,
+      constTextEn: this.state.constTextEn,
+      realTitleCs: this.state.realTitleCs,
+      realTextCs: this.state.realTextCs,
+      realTitleEn: this.state.realTitleEn,
+      realTextEn: this.state.realTextEn,
+      mfgTitleCs: this.state.mfgTitleCs,
+      mfgTextCs: this.state.mfgTextCs,
+      mfgTitleEn: this.state.mfgTitleEn,
+      mfgTextEn: this.state.mfgTextEn,
+      ecomTitleCs: this.state.ecomTitleCs,
+      ecomTextCs: this.state.ecomTextCs,
+      ecomTitleEn: this.state.ecomTitleEn,
+      ecomTextEn: this.state.ecomTextEn
     };
     localStorage.setItem('aerisq_custom_cms', JSON.stringify(payload));
     try {
@@ -936,6 +1118,26 @@ class Component extends DCLogic {
       openWorkHiring: s.openWorkHiring, toggleOpenWorkHiring: this.toggleOpenWorkHiring,
       openWorkTitle: s.openWorkTitle, setOpenWorkTitle: this.setOpenWorkTitle,
       openWorkDesc: s.openWorkDesc, setOpenWorkDesc: this.setOpenWorkDesc,
+      hospTitleCs: s.hospTitleCs, setHospTitleCs: this.setHospTitleCs,
+      hospTextCs: s.hospTextCs, setHospTextCs: this.setHospTextCs,
+      hospTitleEn: s.hospTitleEn, setHospTitleEn: this.setHospTitleEn,
+      hospTextEn: s.appNotesDrafts.hospTextEn || s.hospTextEn, setHospTextEn: this.setHospTextEn,
+      constTitleCs: s.constTitleCs, setConstTitleCs: this.setConstTitleCs,
+      constTextCs: s.constTextCs, setConstTextCs: this.setConstTextCs,
+      constTitleEn: s.constTitleEn, setConstTitleEn: this.setConstTitleEn,
+      constTextEn: s.constTextEn, setConstTextEn: this.setConstTextEn,
+      realTitleCs: s.realTitleCs, setRealTitleCs: this.setRealTitleCs,
+      realTextCs: s.realTextCs, setRealTextCs: this.setRealTextCs,
+      realTitleEn: s.realTitleEn, setRealTitleEn: this.setRealTitleEn,
+      realTextEn: s.realTextEn, setRealTextEn: this.setRealTextEn,
+      mfgTitleCs: s.mfgTitleCs, setMfgTitleCs: this.setMfgTitleCs,
+      mfgTextCs: s.mfgTextCs, setMfgTextCs: this.setMfgTextCs,
+      mfgTitleEn: s.mfgTitleEn, setMfgTitleEn: this.setMfgTitleEn,
+      mfgTextEn: s.mfgTextEn, setMfgTextEn: this.setMfgTextEn,
+      ecomTitleCs: s.ecomTitleCs, setEcomTitleCs: this.setEcomTitleCs,
+      ecomTextCs: s.ecomTextCs, setEcomTextCs: this.setEcomTextCs,
+      ecomTitleEn: s.ecomTitleEn, setEcomTitleEn: this.setEcomTitleEn,
+      ecomTextEn: s.ecomTextEn, setEcomTextEn: this.setEcomTextEn,
       saveCmsChanges: this.saveCmsChanges, cmsSaved: s.cmsSaved,
 
       blogPosts: s.blogPosts.map(p => ({ ...p, onDelete: () => this.deleteBlogPost(p.id) })),
@@ -956,7 +1158,8 @@ class Component extends DCLogic {
       teamMembers: s.teamMembers.map(m => ({ ...m, onDelete: () => this.deleteTeamMember(m.id), onRoleChange: (e) => this.updateUserRole(m.id, e.target.value) })),
       newUserFullName: s.newUserFullName, newUserEmail: s.newUserEmail, newUserPassword: s.newUserPassword, newUserRole: s.newUserRole,
       setNewUserFullName: this.setNewUserFullName, setNewUserEmail: this.setNewUserEmail, setNewUserPassword: this.setNewUserPassword, setNewUserRole: this.setNewUserRole,
-      createUserAccount: this.createUserAccount, newUserCannotSubmit: !(s.newUserFullName.trim() && s.newUserEmail.trim()),
+      createUserAccount: this.createUserAccount, newUserCannotSubmit: s.newUserBusy || !(s.newUserFullName.trim() && s.newUserEmail.trim() && s.newUserPassword.length >= 8),
+      newUserError: s.newUserError, newUserBtnLabel: s.newUserBusy ? 'Vytvářím…' : 'Vytvořit účet uživatele',
       auditRequests: s.auditRequests, newsletterSubs: s.newsletterSubs,
       applications: s.applications.map(a => {
         const notesValue = (s.appNotesDrafts[a.id] !== undefined) ? s.appNotesDrafts[a.id] : (a.notes || '');

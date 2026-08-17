@@ -6,7 +6,7 @@
       "destination": "/admin.html"
     },
     {
-      "source": "/((?!admin|api|assets|_vercel).*)$",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
