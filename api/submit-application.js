@@ -1,4 +1,3 @@
-const { verifyTurnstile, clientIp } = require('./_lib/turnstile');
 const { insertRow } = require('./_lib/supabaseAdmin');
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
@@ -29,12 +28,6 @@ module.exports = async (req, res) => {
     // both are already free-text-ish, so just cap the length defensively.
     if (cvLink.length > 2000) {
       res.status(400).json({ error: 'invalid_input' });
-      return;
-    }
-
-    const verify = await verifyTurnstile(body.turnstileToken, clientIp(req));
-    if (!verify.success) {
-      res.status(403).json({ error: 'bot_check_failed' });
       return;
     }
 

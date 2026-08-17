@@ -25,24 +25,18 @@ V nastavení Vercel projektu → **Settings → Environment Variables** přidejt
 | `SUPABASE_URL` | Supabase dashboard → Project Settings → API | `https://multgoxlzarxexeeapuo.supabase.co` |
 | `SUPABASE_ANON_KEY` | Supabase dashboard → Project Settings → API | stejný jako v kódu dnes (veřejný, není to tajemství) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase dashboard → Project Settings → API → `service_role` | **TAJNÉ.** Nikdy ho nedávejte do žádného `.html` souboru ani mi ho neposílejte do chatu. Jen vložte do Vercel env vars. |
-| `TURNSTILE_SECRET_KEY` | Cloudflare dashboard → Turnstile (viz krok 2) | **TAJNÉ**, jen do Vercel env vars |
 
-Bez `SUPABASE_SERVICE_ROLE_KEY` nové `/api/*` endpointy vrátí chybu. Bez `TURNSTILE_SECRET_KEY` ověření Turnstile potichu projde (vypíše warning do server logu) — formuláře fungují, ale bez bot ochrany, takže tohle je vlastně priorita č. 1.
+Bez `SUPABASE_SERVICE_ROLE_KEY` nové `/api/*` endpointy vrátí chybu.
 
 Po přidání proměnných je potřeba **redeploy** (Vercel je nenačte do běžících instancí automaticky).
 
-## 2. Cloudflare Turnstile (anti-spam na formulářích)
+## 2. ~~Cloudflare Turnstile~~ — odstraněno na žádost majitele webu
 
-1. Jděte na [dash.cloudflare.com](https://dash.cloudflare.com) → **Turnstile** → **Add site**.
-2. Doména: `aerisq.tech`.
-3. Zkopírujte **Site Key** a **Secret Key**.
-4. **Secret Key** → Vercel env var `TURNSTILE_SECRET_KEY` (krok 1).
-5. **Site Key** → nahraďte placeholder v [index.html:916](index.html#L916) (a stejně v `AerisQ.dc.html`):
-   ```js
-   const TURNSTILE_SITE_KEY = 'VÁŠ_SITE_KEY_ZDE';
-   ```
-   Momentálně tam je Cloudflare oficiální **testovací** klíč (`1x00000000000000000000AA`), který vždy projde — web funguje, ale reálně nechrání proti botům, dokud klíč nevyměníte.
-6. Po nasazení **ručně vyzkoušejte** všechny tři formuláře (Audit, Newsletter, Kariéra) — widget jsem naimplementoval v „implicit render" režimu, který je nejjednodušší a nejodolnější vůči tomu, jak tenhle vlastní šablonovací engine (`support.js`) přerenderovává DOM. Nemám tu ale prohlížeč, ve kterém bych to mohl reálně otestovat, takže první test po nasazení má na starosti prosím někdo lidský.
+Turnstile (widget i server-side ověření v `/api/*`) byl z webu kompletně odstraněný — viditelný testovací
+banner byl matoucí a bez nastaveného `TURNSTILE_SECRET_KEY` beztak nic reálně neověřoval. Formuláře (Audit,
+Newsletter, Kariéra) teď mají jen honeypot pole (`website_hp` / `auditHp` / `appHp` / `newsletterHp`) —
+skryté pole, které vyplní jen bot. Pokud budete chtít bot ochranu zpátky, `api/_lib/turnstile.js` bylo
+smazané, ale vzorec (widget + `verifyTurnstile()` volání před insertem) je zachovaný v gitové historii.
 
 ## 3. Supabase — Row Level Security checklist
 
@@ -96,5 +90,5 @@ renderu. I to je teď opravené a ověřené (`console --errors` čisté na home
 
 - **Privacy Policy** má pořád placeholder text (`[DATABASE PROVIDER, e.g. Supabase...]`) — potřebuju od vás konkrétní fakta (název firmy, adresa, kontakt na zpracování údajů), abych to mohl dopsat správně.
 - **Self-hosting Google Fonts** — funkční, ale nechal jsem na později, ať se dnešní dávka nerozroste ještě víc.
-- **Reálné rate-limiting** (přes IP/čas) na `/api/*` endpointech — bez Vercel KV/Upstash Redis nejde spolehlivě udělat ve stateless serverless funkci. Turnstile + honeypot je dnešní obrana; rate-limit můžeme přidat, pokud se ukáže potřeba.
+- **Reálné rate-limiting** (přes IP/čas) na `/api/*` endpointech — bez Vercel KV/Upstash Redis nejde spolehlivě udělat ve stateless serverless funkci. Honeypot je teď jediná obrana proti spamu (Turnstile byl odstraněn, viz sekce 2); rate-limit můžeme přidat, pokud se ukáže potřeba.
 - **Vlastní Open Graph obrázek** (1200×630) — teď se pro `og:image`/`twitter:image` používá `favicon.png`, což není ideální poměr stran pro social share karty.

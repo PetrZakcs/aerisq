@@ -80,7 +80,6 @@
   pdfjsLib.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.min.mjs';
   window.pdfjsLib = pdfjsLib;
 </script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <style>
 html{scroll-behavior:smooth}
 body{margin:0;background:#0a0a0b}
@@ -665,7 +664,6 @@ body{animation:pageFadeIn .35s ease both}
           <textarea placeholder="{{ t.problemPlaceholder }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="4" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
         </div>
         <input type="text" tabindex="-1" autocomplete="off" aria-hidden="true" value="{{ auditHp }}" onChange="{{ setAuditHp }}" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
-        <div id="cf-turnstile-audit" style="margin:4px 0"></div>
         <div style="display:flex;justify-content:space-between">
           <button onClick="{{ goBack }}" style="padding:12px 22px;background:transparent;color:#a1a1aa;border:1px solid rgba(255,255,255,.12);border-radius:4px;font-weight:600;font-size:13px;cursor:pointer">{{ t.backBtn }}</button>
           <button onClick="{{ handleSubmit }}" disabled="{{ cannotSubmit }}" style="{{ submitBtnStyle }}">{{ t.submitBtn }}</button>
@@ -730,7 +728,6 @@ body{animation:pageFadeIn .35s ease both}
     <input type="text" tabindex="-1" autocomplete="off" aria-hidden="true" value="{{ newsletterHp }}" onChange="{{ setNewsletterHp }}" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
     <button onClick="{{ subscribeNewsletter }}" disabled="{{ newsletterCannotSubmit }}" style="{{ newsletterBtnStyle }}">{{ t.newsletterCta }}</button>
   </div>
-  <div id="cf-turnstile-newsletter" style="display:flex;justify-content:center;margin-bottom:12px"></div>
   <sc-if value="{{ newsletterSubmitted }}" hint-placeholder-val="{{ false }}">
     <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }}">{{ t.newsletterConfirmed }}</div>
   </sc-if>
@@ -803,7 +800,6 @@ body{animation:pageFadeIn .35s ease both}
       </div>
       <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#52525b;margin:0 0 20px">{{ t.carCvLinkHint }}</p>
       <input type="text" tabindex="-1" autocomplete="off" aria-hidden="true" value="{{ appHp }}" onChange="{{ setAppHp }}" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
-      <div id="cf-turnstile-application" style="margin:0 0 16px"></div>
       <button onClick="{{ submitApplication }}" disabled="{{ appCannotSubmit }}" style="{{ appSubmitBtnStyle }}">{{ t.carAppSubmitBtn }}</button>
     </div>
   </sc-if>
@@ -1750,11 +1746,6 @@ body{animation:pageFadeIn .35s ease both}
 <script type="text/x-dc" data-dc-script>
 const SUPABASE_URL = 'https://multgoxlzarxexeeapuo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11bHRnb3hsemFyeGV4ZWVhcHVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMjc0MDQsImV4cCI6MjEwMTcwMzQwNH0.ItQ4C6Z3MDdpOPqFjsDQ7roCN0rjDn1wsSz3Vu5a-XE';
-// TODO: replace with your real Cloudflare Turnstile site key (dash.cloudflare.com → Turnstile).
-// This value is public by design (it identifies the widget, not a secret) — the matching
-// TURNSTILE_SECRET_KEY lives server-side only, in the Vercel project's env vars. See SETUP.md.
-const TURNSTILE_SITE_KEY = '1x00000000000000000000AA';
-
 // URL slugs for the /obory (sectors) and /nabidka (offering) subpages — keeps the internal page
 // keys (used everywhere else: state.page, CMS field names, sc-if bindings) unchanged while giving
 // nested, human-readable URLs. Add a new key here + a title/text pair in renderVals() to add a page.
@@ -1791,31 +1782,6 @@ function pathToPage(pathname) {
   return parts[0];
 }
 
-function readTurnstileToken(containerId) {
-  const el = document.getElementById(containerId);
-  const input = el ? el.querySelector('input[name="cf-turnstile-response"]') : null;
-  return input ? input.value : '';
-}
-
-// We render Turnstile widgets explicitly (script loaded with ?render=explicit) instead of letting
-// it auto-scan data-sitekey divs: the auto-scan can run before this template engine has replaced
-// {{ }} placeholders, which would hand Turnstile the literal string "{{ turnstileSiteKey }}".
-const _turnstileRenderedIds = new Set();
-function renderTurnstileWidgets(containerIds) {
-  if (!window.turnstile || typeof window.turnstile.render !== 'function') return;
-  for (const id of containerIds) {
-    if (_turnstileRenderedIds.has(id)) continue;
-    const el = document.getElementById(id);
-    if (!el) continue; // not on this page (yet) — try again on a later render
-    _turnstileRenderedIds.add(id);
-    try {
-      window.turnstile.render(`#${id}`, { sitekey: TURNSTILE_SITE_KEY });
-    } catch (e) {
-      _turnstileRenderedIds.delete(id);
-      console.error('Turnstile render failed for', id, e);
-    }
-  }
-}
 
 async function postToApi(path, payload) {
   try {
@@ -2354,8 +2320,7 @@ class Component extends DCLogic {
     this.setState({ newsletterSubmitted: true });
     await postToApi('/api/subscribe-newsletter', {
       email: this.state.newsletterEmail, lang: this.state.lang,
-      website_hp: this.state.newsletterHp,
-      turnstileToken: readTurnstileToken('cf-turnstile-newsletter')
+      website_hp: this.state.newsletterHp
     });
   };
   handleMouseMove = (e) => {
@@ -2377,8 +2342,7 @@ class Component extends DCLogic {
       name: this.state.name, email: this.state.email, company: this.state.company, phone: this.state.phone,
       website: this.state.website, teamSize: this.state.teamSize, problem: this.state.problem,
       focus: this.state.focus, budget: this.state.budget, lang: this.state.lang,
-      website_hp: this.state.auditHp,
-      turnstileToken: readTurnstileToken('cf-turnstile-audit')
+      website_hp: this.state.auditHp
     });
   };
 
@@ -2494,8 +2458,7 @@ class Component extends DCLogic {
     await postToApi('/api/submit-application', {
       name: s.appName, email: s.appEmail, linkedin: s.appLinkedin, cvLink: cvUrl,
       roleInterest: s.roleInterest, compExpectation: s.appComp, whyUs: s.appWhyUs, message: s.appMessage, lang: s.lang,
-      website_hp: s.appHp,
-      turnstileToken: readTurnstileToken('cf-turnstile-application')
+      website_hp: s.appHp
     });
   };
 
@@ -3041,7 +3004,6 @@ class Component extends DCLogic {
       setMeta('dc-meta-twitter-image', 'content', ogImageUrl);
       setMeta('dc-meta-canonical', 'href', metaCanonical);
       setMeta('dc-meta-robots', 'content', robotsContent);
-      renderTurnstileWidgets(['cf-turnstile-audit', 'cf-turnstile-newsletter', 'cf-turnstile-application']);
     }
 
     return {
@@ -3131,7 +3093,7 @@ class Component extends DCLogic {
       focusOptions, budgetOptions, noFocus, noBudget, cannotSubmit, nextBtnStyle, submitBtnStyle,
       goNext: this.goNext, goBack: this.goBack, name: s.name, email: s.email, setName: this.setName, setEmail: this.setEmail,
       handleSubmit: this.handleSubmit, summaryLine: `${focusLabelMap[s.focus] || '—'} · ${s.budget || '—'} · ${s.name}`,
-      auditHp: s.auditHp, setAuditHp: this.setAuditHp, turnstileSiteKey: TURNSTILE_SITE_KEY,
+      auditHp: s.auditHp, setAuditHp: this.setAuditHp,
 
       tracks, roleOptions,
       appName: s.appName, appEmail: s.appEmail, appLinkedin: s.appLinkedin, appCvLink: s.appCvLink, appMessage: s.appMessage, appComp: s.appComp, appWhyUs: s.appWhyUs,
