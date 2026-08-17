@@ -909,16 +909,120 @@ body{animation:pageFadeIn .35s ease both}
 </sc-if>
 
 <sc-if value="{{ isHospitality }}" hint-placeholder-val="{{ false }}">
-<section style="max-width:640px;margin:0 auto;padding:clamp(72px,10vw,120px) clamp(20px,4vw,48px) clamp(88px,10vw,120px)">
-  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:16px">// ODVĚTVÍ</div>
-  <div style="display:inline-flex;align-items:center;padding:4px 10px;background:{{ accentColor }};color:#000;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;letter-spacing:.05em;margin-bottom:20px">{{ t.sectorLockedBadge }}</div>
-  <h1 style="font-family:'Unbounded',sans-serif;font-size:clamp(26px,3.6vw,42px);font-weight:800;letter-spacing:-.02em;margin:0 0 20px;line-height:1.15">{{ hospTitle }}</h1>
-  <p style="color:#a1a1aa;font-size:15.5px;line-height:1.75;font-family:'Geist',sans-serif;margin:0 0 36px;max-width:520px">{{ t.sectorLockedText }}</p>
-  <div style="display:flex;gap:14px;flex-wrap:wrap">
-    <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
-    <a onClick="{{ goObory }}" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid rgba(255,255,255,.16);color:#fafafa;border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;cursor:pointer">{{ t.sectorLockedBrowse }}</a>
+<div class="pg-wrap">
+  <section class="pg-hero">
+    <div class="pg-eyebrow" style="color:{{ accentColor }}">// ODVĚTVÍ · HOTELNICTVÍ A GASTRO</div>
+    <h1>{{ hospTitle }}</h1>
+    <p>{{ hospPage.heroSub }}</p>
+    <div class="pg-hero-ctas">
+      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
+    </div>
+  </section>
+</div>
+
+<div class="pg-strip">
+  <div class="pg-strip-inner">
+    <sc-for list="{{ hospPage.strip }}" as="item" hint-placeholder-count="3">
+      <div class="pg-strip-item">
+        <div class="k">{{ item.k }}</div>
+        <div class="v">{{ item.pre }}<span class="bold">{{ item.bold }}</span></div>
+      </div>
+    </sc-for>
   </div>
-</section>
+</div>
+
+<div class="pg-wrap">
+  <section class="pg-section">
+    <div class="pg-section-head">
+      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgApproachEyebrow }}</div>
+      <h2>{{ t.pgApproachTitle }}</h2>
+      <p>{{ t.pgApproachSub }}</p>
+    </div>
+    <div class="pg-pillars">
+      <sc-for list="{{ hospPage.pillars }}" as="p" hint-placeholder-count="3">
+        <div class="pg-pillar">
+          <div class="tag">{{ p.tag }}</div>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.desc }}</p>
+          <div class="pg-pillar-list">
+            <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="3">
+              <div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="pg-section">
+    <div class="pg-section-head">
+      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgProcessEyebrow }}</div>
+      <h2>{{ t.pgProcessTitle }}</h2>
+    </div>
+    <div class="pg-process">
+      <sc-for list="{{ hospPage.process }}" as="step" hint-placeholder-count="3">
+        <div class="pg-pstep">
+          <div><div class="ph">{{ step.phase }}</div><div class="ph" style="color:{{ accentColor }};margin-top:4px">{{ step.time }}</div></div>
+          <div><h3>{{ step.title }}</h3><p>{{ step.desc }}</p></div>
+          <div class="pill">{{ step.pill }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="pg-section">
+    <div class="pg-section-head">
+      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgDelivEyebrow }}</div>
+      <h2>{{ t.pgDelivTitle }}</h2>
+    </div>
+    <div class="pg-deliv">
+      <div class="pg-deliv-grid">
+        <sc-for list="{{ hospPage.deliverables }}" as="d" hint-placeholder-count="4">
+          <div class="pg-deliv-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div><b>{{ d.title }}</b><span>{{ d.desc }}</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section class="pg-section">
+    <div class="pg-section-head">
+      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgFaqEyebrow }}</div>
+      <h2>{{ t.pgFaqTitle }}</h2>
+    </div>
+    <div>
+      <sc-for list="{{ hospPage.faq }}" as="item" hint-placeholder-count="4">
+        <details class="pg-faq-item">
+          <summary>{{ item.q }}<span class="plus">+</span></summary>
+          <p>{{ item.a }}</p>
+        </details>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="pg-section">
+    <div class="pg-closing">
+      <div>
+        <h2>{{ t.pgClosingTitle }}</h2>
+        <p>{{ t.pgClosingSub }}</p>
+      </div>
+      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.navAudit }}</a>
+    </div>
+  </section>
+
+  <section class="pg-section" style="padding-top:0">
+    <div class="pg-section-head" style="margin-bottom:20px">
+      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgRelatedEyebrow }}</div>
+    </div>
+    <div class="pg-related">
+      <sc-for list="{{ relatedSectorLinks }}" as="l" hint-placeholder-count="4">
+        <a onClick="{{ l.onClick }}"><span class="pg-related-eyebrow">{{ t.navSectors }}</span><span class="pg-related-label">{{ l.label }}</span></a>
+      </sc-for>
+    </div>
+  </section>
+</div>
 </sc-if>
 
 <sc-if value="{{ isConstruction }}" hint-placeholder-val="{{ false }}">
@@ -1052,120 +1156,16 @@ body{animation:pageFadeIn .35s ease both}
 </sc-if>
 
 <sc-if value="{{ isManufacturing }}" hint-placeholder-val="{{ false }}">
-<div class="pg-wrap">
-  <section class="pg-hero">
-    <div class="pg-eyebrow" style="color:{{ accentColor }}">// ODVĚTVÍ · STROJÍRENSTVÍ A VÝROBA</div>
-    <h1>{{ mfgTitle }}</h1>
-    <p>{{ mfgPage.heroSub }}</p>
-    <div class="pg-hero-ctas">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
-    </div>
-  </section>
-</div>
-
-<div class="pg-strip">
-  <div class="pg-strip-inner">
-    <sc-for list="{{ mfgPage.strip }}" as="item" hint-placeholder-count="3">
-      <div class="pg-strip-item">
-        <div class="k">{{ item.k }}</div>
-        <div class="v">{{ item.pre }}<span class="bold">{{ item.bold }}</span></div>
-      </div>
-    </sc-for>
+<section style="max-width:640px;margin:0 auto;padding:clamp(72px,10vw,120px) clamp(20px,4vw,48px) clamp(88px,10vw,120px)">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ accentColor }};letter-spacing:.06em;margin-bottom:16px">// ODVĚTVÍ</div>
+  <div style="display:inline-flex;align-items:center;padding:4px 10px;background:{{ accentColor }};color:#000;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;letter-spacing:.05em;margin-bottom:20px">{{ t.sectorLockedBadge }}</div>
+  <h1 style="font-family:'Unbounded',sans-serif;font-size:clamp(26px,3.6vw,42px);font-weight:800;letter-spacing:-.02em;margin:0 0 20px;line-height:1.15">{{ mfgTitle }}</h1>
+  <p style="color:#a1a1aa;font-size:15.5px;line-height:1.75;font-family:'Geist',sans-serif;margin:0 0 36px;max-width:520px">{{ t.sectorLockedText }}</p>
+  <div style="display:flex;gap:14px;flex-wrap:wrap">
+    <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
+    <a onClick="{{ goObory }}" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid rgba(255,255,255,.16);color:#fafafa;border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;cursor:pointer">{{ t.sectorLockedBrowse }}</a>
   </div>
-</div>
-
-<div class="pg-wrap">
-  <section class="pg-section">
-    <div class="pg-section-head">
-      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgApproachEyebrow }}</div>
-      <h2>{{ t.pgApproachTitle }}</h2>
-      <p>{{ t.pgApproachSub }}</p>
-    </div>
-    <div class="pg-pillars">
-      <sc-for list="{{ mfgPage.pillars }}" as="p" hint-placeholder-count="3">
-        <div class="pg-pillar">
-          <div class="tag">{{ p.tag }}</div>
-          <h3>{{ p.title }}</h3>
-          <p>{{ p.desc }}</p>
-          <div class="pg-pillar-list">
-            <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="3">
-              <div><span style="color:{{ accentColor }}">▸</span>{{ it }}</div>
-            </sc-for>
-          </div>
-        </div>
-      </sc-for>
-    </div>
-  </section>
-
-  <section class="pg-section">
-    <div class="pg-section-head">
-      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgProcessEyebrow }}</div>
-      <h2>{{ t.pgProcessTitle }}</h2>
-    </div>
-    <div class="pg-process">
-      <sc-for list="{{ mfgPage.process }}" as="step" hint-placeholder-count="3">
-        <div class="pg-pstep">
-          <div><div class="ph">{{ step.phase }}</div><div class="ph" style="color:{{ accentColor }};margin-top:4px">{{ step.time }}</div></div>
-          <div><h3>{{ step.title }}</h3><p>{{ step.desc }}</p></div>
-          <div class="pill">{{ step.pill }}</div>
-        </div>
-      </sc-for>
-    </div>
-  </section>
-
-  <section class="pg-section">
-    <div class="pg-section-head">
-      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgDelivEyebrow }}</div>
-      <h2>{{ t.pgDelivTitle }}</h2>
-    </div>
-    <div class="pg-deliv">
-      <div class="pg-deliv-grid">
-        <sc-for list="{{ mfgPage.deliverables }}" as="d" hint-placeholder-count="4">
-          <div class="pg-deliv-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <div><b>{{ d.title }}</b><span>{{ d.desc }}</span></div>
-          </div>
-        </sc-for>
-      </div>
-    </div>
-  </section>
-
-  <section class="pg-section">
-    <div class="pg-section-head">
-      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgFaqEyebrow }}</div>
-      <h2>{{ t.pgFaqTitle }}</h2>
-    </div>
-    <div>
-      <sc-for list="{{ mfgPage.faq }}" as="item" hint-placeholder-count="4">
-        <details class="pg-faq-item">
-          <summary>{{ item.q }}<span class="plus">+</span></summary>
-          <p>{{ item.a }}</p>
-        </details>
-      </sc-for>
-    </div>
-  </section>
-
-  <section class="pg-section">
-    <div class="pg-closing">
-      <div>
-        <h2>{{ t.pgClosingTitle }}</h2>
-        <p>{{ t.pgClosingSub }}</p>
-      </div>
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.navAudit }}</a>
-    </div>
-  </section>
-
-  <section class="pg-section" style="padding-top:0">
-    <div class="pg-section-head" style="margin-bottom:20px">
-      <div class="pg-eyebrow" style="color:{{ accentColor }}">{{ t.pgRelatedEyebrow }}</div>
-    </div>
-    <div class="pg-related">
-      <sc-for list="{{ relatedSectorLinks }}" as="l" hint-placeholder-count="4">
-        <a onClick="{{ l.onClick }}"><span class="pg-related-eyebrow">{{ t.navSectors }}</span><span class="pg-related-label">{{ l.label }}</span></a>
-      </sc-for>
-    </div>
-  </section>
-</div>
+</section>
 </sc-if>
 
 <sc-if value="{{ isEcommerce }}" hint-placeholder-val="{{ false }}">
@@ -1756,7 +1756,7 @@ const OFFERING_SLUGS = { ai: 'ai-integrace', mvp: 'mvp-engineering', enterprise:
 // for anyone who already has the URL) but render a short "coming soon" state instead of thin
 // placeholder copy, and are marked noindex + dropped from sitemap.xml so Google doesn't index
 // unfinished pages. Move a key here to the "unlocked" side once its full page content is built.
-const LOCKED_SECTORS = ['hospitality', 'construction', 'ecommerce'];
+const LOCKED_SECTORS = ['manufacturing', 'construction', 'ecommerce'];
 
 // All primary CTAs ("Zahájit audit", "Chci audit zdarma", hero/ROI buttons) open Calendly directly
 // instead of the internal multi-step audit form. The internal form (isHome + 'audit' anchor,
@@ -2482,6 +2482,65 @@ class Component extends DCLogic {
 
     const hospitalityTitle = s.lang === 'cs' ? (cms.hospTitleCs || 'Hotelnictví a gastro') : (cms.hospTitleEn || 'Hotels & Hospitality');
     const hospitalityText = s.lang === 'cs' ? (cms.hospTextCs || 'Zde se nachází popis řešení pro Hotelnictví a gastro.') : (cms.hospTextEn || 'This is the description page for Hotels & Hospitality services.');
+    const hospPage = s.lang === 'cs' ? {
+      heroSub: 'Stavíme AI agenty a interní nástroje, které zvládnou rezervace ze všech kanálů, objednávky mezi kuchyní a obsluhou i sledování spokojenosti hostů — bez nového PMS systému na míru za milion.',
+      strip: [
+        { k: 'Rezervace', pre: 'OTA, telefon, e-mail → ', bold: 'ruční přepis do PMS' },
+        { k: 'Objednávky', pre: 'Kuchyně a obsluha → ', bold: 'nekompatibilní systémy' },
+        { k: 'Recenze', pre: 'Roztříštěné napříč platformami → ', bold: 'nikdo je nesleduje' }
+      ],
+      pillars: [
+        { tag: 'Rezervace', title: 'AI agent na rezervace a dotazy hostů', desc: 'RAG nad ceníkem pokojů, službami a dostupností. Odpoví hostovi na běžný dotaz (check-in, parkování, wifi) i ve tři ráno, recepce se věnuje jen tomu, co skutečně potřebuje člověka.', items: ['Odpovědi na dotazy hostů 24/7', 'Sjednocení rezervací z OTA, telefonu i webu', 'Návrh ceny podle aktuální obsazenosti'] },
+        { tag: 'Provoz', title: 'Propojení kuchyně, obsluhy a skladu', desc: 'n8n a vlastní integrace spojí POS, sklad a kuchyňský systém do jednoho toku dat — objednávka se nezadává ručně dvakrát.', items: ['Napojení na existující POS/PMS', 'Sklad a objednávky dodavatelům v reálném čase', 'Menu podle skutečné prodejnosti'] },
+        { tag: 'Spokojenost hostů', title: 'Dashboard spokojenosti napříč kanály', desc: 'Recenze a zpětná vazba z Googlu, Bookingu i TripAdvisoru na jednom místě — problém zachytíte dřív, než se stane veřejnou jednohvězdičkovou recenzí.', items: ['Sjednocené recenze ze všech platforem', 'Upozornění na negativní zpětnou vazbu ihned', 'Trendy spokojenosti hostů v čase'] }
+      ],
+      process: [
+        { phase: 'FÁZE 01', time: '2–6 týdnů (dle velikosti)', title: 'Audit toku rezervace → pobyt → zpětná vazba', desc: 'Zmapujeme, kde hosté i personál ztrácí čas — v duplicitním zadávání, nedostupné recepci, nebo přehlédnuté recenzi.', pill: 'Bez závazku' },
+        { phase: 'FÁZE 02', time: '2–6 týdnů', title: 'Pilotní nasazení jedné věci naostro', desc: 'Jeden AI agent nebo dashboard nasazený na reálný provoz — ne demo na schůzce, ale nástroj, který recepce použije hned v pondělí.', pill: 'Funkční pilot' },
+        { phase: 'FÁZE 03', time: 'Podle rozsahu', title: 'Škálování a předání týmu', desc: 'Napojení na zbytek procesů, dokumentace a předání tak, aby to provozovna dál zvládala i bez nás.', pill: 'Dokumentace v ceně' }
+      ],
+      deliverables: [
+        { title: 'Funkční AI agent na rezervace nebo dotazy hostů', desc: 'Nasazený na váš skutečný ceník a dostupnost, ne obecné demo.' },
+        { title: 'Přehledový dashboard pro vedení provozu', desc: 'Rezervace, obsazenost nebo recenze na jednom místě.' },
+        { title: 'Odhad reálné úspory hodin', desc: 'Měřeno na vašich datech z pilotu, ne generický ROI slajd.' },
+        { title: 'Technická dokumentace a předání', desc: 'Váš tým (nebo my dál) umí nástroj provozovat a rozšiřovat.' }
+      ],
+      faq: [
+        { q: 'Musíme mít vlastní IT oddělení?', a: 'Ne. Většina hotelů a restaurací, se kterými mluvíme, žádné interní IT nemá — počítáme s tím a nástroje stavíme tak, aby je provozovala recepce nebo provozní manažer, ne programátor.' },
+        { q: 'Co když už máme PMS nebo POS systém?', a: 'To je běžný stav, ne překážka. Napojujeme se na existující systém (např. Mews, Previo, Storyous) přes jeho API nebo export — nenahrazujeme ho, doplňujeme kus, který mu dnes chybí.' },
+        { q: 'Jak je to s GDPR a osobními údaji hostů?', a: 'Data hostů zůstávají ve vaší infrastruktuře nebo v izolovaném cloudovém prostředí, které si vybíráte — nepoužíváme je k trénování žádných veřejných modelů, a zpracování odpovídá GDPR.' },
+        { q: 'Jak dlouho trvá, než uvidíme první výsledek?', a: 'Audit 2–6 týdnů podle velikosti provozu, první funkční pilot na reálném provozu podobně. Pokud pilot v prvních týdnech nefunguje, řekneme vám to na rovinu.' }
+      ]
+    } : {
+      heroSub: "We build AI agents and internal tools that handle reservations across every channel, kitchen-to-service order flow, and guest satisfaction tracking — without a bespoke six-figure PMS build.",
+      strip: [
+        { k: 'Reservations', pre: 'OTA, phone, email → ', bold: 'manually re-typed into the PMS' },
+        { k: 'Orders', pre: 'Kitchen and service → ', bold: 'incompatible systems' },
+        { k: 'Reviews', pre: 'Scattered across platforms → ', bold: 'nobody tracks them' }
+      ],
+      pillars: [
+        { tag: 'Reservations', title: 'AI agent for bookings and guest questions', desc: 'RAG over room pricing, services, and availability. Answers a guest at 3am just as well as at 3pm, so the front desk only handles what actually needs a human.', items: ['24/7 answers to guest questions', 'Unified bookings from OTAs, phone, and web', 'Dynamic pricing suggestions based on occupancy'] },
+        { tag: 'Operations', title: 'Connecting kitchen, service, and stock', desc: "n8n and custom integrations tie your POS, stock, and kitchen system into one data flow — no order gets typed in twice.", items: ['Integration with your existing POS/PMS', 'Real-time stock and supplier ordering', 'Menu decisions based on real sell-through data'] },
+        { tag: 'Guest satisfaction', title: 'A cross-channel satisfaction dashboard', desc: 'Reviews and feedback from Google, Booking, and TripAdvisor in one place — you catch a problem before it becomes a public one-star review.', items: ['Unified reviews across every platform', 'Instant alerts on negative feedback', 'Satisfaction trends over time'] }
+      ],
+      process: [
+        { phase: 'PHASE 01', time: '2–6 weeks (depending on size)', title: 'Audit of booking → stay → feedback flow', desc: 'We map where guests and staff actually lose time — duplicate data entry, an unreachable front desk, or a missed review.', pill: 'No commitment' },
+        { phase: 'PHASE 02', time: '2–6 weeks', title: 'One pilot, deployed for real', desc: 'One AI agent or dashboard deployed on real operations — not a demo, a tool the front desk actually uses on Monday.', pill: 'Working pilot' },
+        { phase: 'PHASE 03', time: 'Scope-dependent', title: 'Scaling and handover', desc: 'Connecting the rest of your processes, documentation, and handover so your team can run it without us.', pill: 'Docs included' }
+      ],
+      deliverables: [
+        { title: 'A working AI agent for bookings or guest questions', desc: 'Deployed on your real pricing and availability, not a generic demo.' },
+        { title: 'An operations overview dashboard', desc: 'Bookings, occupancy, or reviews in one place.' },
+        { title: 'A real hours-saved estimate', desc: 'Measured on your own pilot data, not a generic ROI slide.' },
+        { title: 'Technical documentation and handover', desc: 'Your team (or us, ongoing) can run and extend the tool.' }
+      ],
+      faq: [
+        { q: 'Do we need our own IT department?', a: 'No. Most hotels and restaurants we talk to have no internal IT — we plan for that and build tools the front desk or ops manager can run, not a developer.' },
+        { q: 'What if we already have a PMS or POS system?', a: "That's the normal case, not a blocker. We integrate with your existing system (e.g. Mews, Previo, Storyous) via its API or exports — we don't replace it, we fill the gap it currently has." },
+        { q: 'What about GDPR and guest personal data?', a: "Guest data stays inside your own infrastructure or an isolated cloud environment you choose — we never use it to train any public model, and processing is GDPR-compliant." },
+        { q: 'How long until we see a first result?', a: "Audit takes 2–6 weeks depending on your operation's size, a working pilot similarly. If a pilot isn't working in the first weeks, we'll tell you directly." }
+      ]
+    };
     const constructionTitle = s.lang === 'cs' ? (cms.constTitleCs || 'Realizace & Stavby') : (cms.constTitleEn || 'Construction & Delivery');
     const constructionText = s.lang === 'cs' ? (cms.constTextCs || 'Zde se nachází popis řešení pro Realizace a stavby.') : (cms.constTextEn || 'This is the description page for Construction & Delivery services.');
     const realestateTitle = s.lang === 'cs' ? (cms.realTitleCs || 'Developeři & Reality') : (cms.realTitleEn || 'Real Estate Developers');
@@ -3022,7 +3081,7 @@ class Component extends DCLogic {
       isOfferingTraining: s.page === 'training',
       offeringAiTitle, offeringAiText, offeringMvpTitle, offeringMvpText, offeringEnterpriseTitle, offeringEnterpriseText,
       offeringTrainingTitle, offeringTrainingText,
-      mfgPage, realPage, offAiPage, offMvpPage, offEnterprisePage, offTrainingPage,
+      mfgPage, realPage, hospPage, offAiPage, offMvpPage, offEnterprisePage, offTrainingPage,
       relatedSectorLinks: this.sectorMenuItems.filter(i => i.key !== s.page),
       relatedOfferingLinks: this.offeringMenuItems.filter(i => i.key !== s.page),
       oboryCards: [
