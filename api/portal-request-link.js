@@ -5,7 +5,7 @@
 const { sendMagicLink } = require('./_lib/supabaseAdmin');
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
-const PORTAL_URL = process.env.PORTAL_URL || 'https://portal.aerisq.tech/';
+const PORTAL_URL = process.env.PORTAL_URL || 'https://aerisq.tech/clients';
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {

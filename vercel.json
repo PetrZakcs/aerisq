@@ -9,6 +9,22 @@
       "destination": "/admin.html"
     },
     {
+      "source": "/clients",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/clients/(.*)",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/portal",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/portal/(.*)",
+      "destination": "/portal.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
