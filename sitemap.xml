@@ -10,13 +10,6 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://aerisq.tech/case-studies</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://aerisq.tech/case-studies"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://aerisq.tech/case-studies?lang=en"/>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://aerisq.tech/blog</loc>
     <xhtml:link rel="alternate" hreflang="cs" href="https://aerisq.tech/blog"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://aerisq.tech/blog?lang=en"/>

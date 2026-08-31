@@ -19,7 +19,6 @@
 
 ## Pages
 - Homepage: https://aerisq.tech/
-- Case Studies: https://aerisq.tech/case-studies
 - Blog: https://aerisq.tech/blog
 - Careers: https://aerisq.tech/careers
 

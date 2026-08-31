@@ -1,5 +1,257 @@
 # Setup checklist — po dnešních změnách
 
+## 🆕 31. 8. 2026 — klientský portál (portal.aerisq.tech)
+
+Nový klientský portál — magic-link přihlášení, přehled projektu (nabídka/fáze/milníky/faktury/
+dokumenty), zprávy s jednosměrnou Slack notifikací. Kód je hotový a nasazený v repozitáři, ale
+**bez kroků níže portál nepůjde reálně použít** — bez SQL migrace klientům chybí sloupce k
+přihlášení, bez domény v Vercelu `portal.aerisq.tech` nikam nevede, bez `SLACK_WEBHOOK_URL` prostě
+jen tiše nepřijdou notifikace (odeslání zprávy samo o sobě neselže).
+
+### 1. Supabase SQL Editor — spustit jednorázově
+
+**Update:** ukázalo se, že `clients`/`projects`/`milestones`/`invoices`/`documents` v Supabase
+vůbec neexistovaly — proto Clients/Projects/Documents záložky v adminu vždycky tiše ukazovaly
+prázdné seznamy (`fetchTable` chybu polyká a vrací `[]`). Skript níže je teď kompletní: založí
+celé CRM schéma (ne jen sloupce navíc pro portál) a rovnou i RLS pro tým, ne jen pro klienty —
+jakmile se na tabulce zapne RLS a nemá žádnou policy, i admin z ní přestane cokoliv vidět. Bezpečné
+spustit celé najednou i opakovaně (`if not exists` všude, `create policy` bez `if not exists` —
+pokud SQL Editor ohlásí `policy already exists` u konkrétního řádku, ten řádek jen smažte a zbytek
+spusťte znovu).
+
+```sql
+-- === Základní CRM schéma (dosud neexistovalo) ===
+create table if not exists clients (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name text not null,
+  company text,
+  email text not null,
+  auth_user_id uuid unique references auth.users(id),  -- napojení na portálový magic-link účet
+  status text not null default 'active'                -- 'active' | 'archived'
+);
+
+create table if not exists projects (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name text not null,
+  client_id uuid not null references clients(id) on delete cascade,
+  phase integer not null default 1,
+  target_date date,
+  phase_0_visible boolean not null default false,  -- klient smí vidět projekt už jako nabídku, před fází 1
+  offer_summary text
+);
+
+create table if not exists milestones (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  project_id uuid not null references projects(id) on delete cascade,
+  title text not null,
+  due_date date
+);
+
+create table if not exists invoices (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  project_id uuid not null references projects(id) on delete cascade,
+  amount numeric not null,
+  currency text not null default 'EUR',
+  status text not null default 'draft',  -- 'draft' | 'sent' | 'paid'
+  due_date date
+);
+
+create table if not exists documents (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  project_id uuid not null references projects(id) on delete cascade,
+  title text not null,
+  file_url text,               -- starý sloupec, nepovinný, nový kód ho už nepoužívá
+  category text not null default 'general',  -- 'offer' | 'contract' | 'deliverable' | 'general'
+  storage_path text             -- cesta v privátním Storage bucketu 'documents', podepisuje ji portal-document-url.js
+);
+
+-- Zprávy klient <-> tým (jednosměrně zrcadlené do Slacku při vzniku zprávy od klienta)
+create table if not exists messages (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  project_id uuid not null references projects(id) on delete cascade,
+  sender text not null check (sender in ('client', 'team')),
+  body text not null
+);
+
+-- Bezpečnostní síť: kdyby náhodou chyběl i team_members (admin.html na něj spoléhá už dnes, takže
+-- pokud existuje, tenhle řádek nic neudělá — sloupce musí sedět s tím, co admin.html čte/píše).
+create table if not exists team_members (
+  id uuid primary key references auth.users(id),
+  created_at timestamptz not null default now(),
+  full_name text not null,
+  email text not null,
+  role text not null default 'admin'
+);
+
+-- Kdyby některá z tabulek nahoře už dřív existovala v neúplné podobě, doplní jen chybějící sloupce:
+alter table clients add column if not exists auth_user_id uuid unique references auth.users(id);
+alter table clients add column if not exists status text not null default 'active';
+alter table projects add column if not exists phase_0_visible boolean not null default false;
+alter table projects add column if not exists offer_summary text;
+alter table documents add column if not exists category text not null default 'general';
+alter table documents add column if not exists storage_path text;
+alter table documents alter column file_url drop not null;
+
+-- === RLS ===
+alter table clients enable row level security;
+alter table projects enable row level security;
+alter table milestones enable row level security;
+alter table invoices enable row level security;
+alter table documents enable row level security;
+alter table messages enable row level security;
+
+-- Tým: kdokoliv s řádkem v team_members smí číst/psát celé CRM schéma — stejná důvěra, jakou
+-- admin.html dnes dává "je to prostě přihlášený Supabase uživatel" (viz poznámka o team_members
+-- RLS v sekci 3 níže, o roli 'admin' konkrétně).
+create policy staff_full_access_clients on clients for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+create policy staff_full_access_projects on projects for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+create policy staff_full_access_milestones on milestones for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+create policy staff_full_access_invoices on invoices for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+create policy staff_full_access_documents on documents for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+create policy staff_full_access_messages on messages for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+
+-- Klient: jen čtení, jen svá vlastní data (přes clients.auth_user_id = auth.uid()).
+create policy client_read_own_self on clients for select
+  using (auth_user_id = auth.uid());
+create policy client_read_own_projects on projects for select
+  using (client_id in (select id from clients where auth_user_id = auth.uid()));
+create policy client_read_own_milestones on milestones for select
+  using (project_id in (select p.id from projects p join clients c on c.id = p.client_id where c.auth_user_id = auth.uid()));
+create policy client_read_own_invoices on invoices for select
+  using (project_id in (select p.id from projects p join clients c on c.id = p.client_id where c.auth_user_id = auth.uid()));
+create policy client_read_own_documents on documents for select
+  using (project_id in (select p.id from projects p join clients c on c.id = p.client_id where c.auth_user_id = auth.uid()));
+create policy client_read_own_messages on messages for select
+  using (project_id in (select p.id from projects p join clients c on c.id = p.client_id where c.auth_user_id = auth.uid()));
+-- Klient nikdy nepíše do messages přímo (žádná INSERT policy pro klienty) — jde to výhradně přes
+-- /api/portal-send-message.js (service_role), protože ten endpoint zároveň volá Slack webhook.
+```
+
+Pozn.: `team_members` RLS se tímto skriptem záměrně nedotýkám (jen ho z ostatních politik čtu) —
+pokud už dnes existuje s vlastní RLS a Team & Permissions v adminu vám normálně funguje, nechte ho
+být. Kdyby SQL Editor nahlásil chybu i na `team_members` (tzn. že ani ten dosud neexistoval),
+napište mi a doladím schéma podle toho, co se v Supabase skutečně vytvořilo.
+
+Bez tohoto kroku: portál se přihlásí, ale `clients`/`projects` dotazy vrátí prázdno (RLS default je
+"nic", dokud není explicitní policy) a `/api/invite-client` selže na chybějící sloupec.
+
+### 2. Vercel — doména portálu
+
+**Settings → Domains** → přidat `portal.aerisq.tech`. Vercel zobrazí CNAME cíl — ten nastavte u
+registrátora domény pro subdoménu `portal`. Routing (`vercel.json`) na to už reaguje: request s
+hlavičkou `Host: portal.aerisq.tech` se přepíše na `/portal.html`, nezávisle na `/admin` a hlavním
+catch-all pravidle pro `aerisq.tech`. Ověřte po nasazení `vercel dev` nebo přímo produkci — stejná
+opatrnost jako u routing bugu z 21. 8.
+
+### 3. Supabase Storage — bucket `documents` na privátní
+
+Dokumenty teď portál i admin čtou přes krátkodobě podepsané URL (`/api/portal-document-url`), ne
+přes přímý veřejný odkaz. V Supabase dashboardu → Storage → bucket `documents` **vypněte "Public
+bucket"**, pokud je zapnuté. Nové nahrané soubory (přes upravený `uploadDocument` v `admin.html`)
+už ukládají `storage_path` místo starého `file_url`; staré řádky (pokud nějaké existují) zůstanou
+bez podepsaného odkazu funkční — `storage_path` je `null`, dokument v portálu/adminu jen nepůjde
+otevřít, dokud ho někdo znovu nenahraje.
+
+### 4. Vercel — nová env proměnná
+
+| Klíč | Kde ho vzít | Poznámka |
+|---|---|---|
+| `SLACK_WEBHOOK_URL` | Slack → Apps → Incoming Webhooks, vytvořit webhook pro kanál, kam mají chodit zprávy z portálu | Volitelné — bez něj zprávy z portálu fungují dál, jen bez Slack notifikace (viz `portal-send-message.js`, fail-soft). |
+| `PORTAL_URL` | `https://portal.aerisq.tech/` | Volitelné, jinak se použije tento default přímo v kódu (`portal-request-link.js`, `invite-client.js`). |
+
+Po přidání proměnné je potřeba redeploy (stejně jako u ostatních `/api/*` proměnných výše).
+
+### 5. Co portál (vědomě) neumí v této verzi
+
+- Odpovědi ze Slacku se nepropisují zpět do portálu — komunikace je jednosměrná (portál → Slack),
+  odpovídá se v `admin.html` → karta projektu → Messages.
+- Statistiky (`admin.html` → Stats) jsou jen pro tým, klient je nevidí.
+- `messages` nemá anonymní/authenticated INSERT policy záměrně — klientský zápis jde vždy přes
+  `/api/portal-send-message.js`, aby šlo současně ověřit vlastnictví projektu a spustit Slack
+  notifikaci na jednom místě.
+
+## 🆕 21. 8. 2026 — konverzní blueprint: interní audit formulář znovu zapojen + demo pro hotelnictví
+
+**Fáze 0 (routing, žádný manuální krok):** Hlavní CTA („Nasadit AI systém", „Postavit MVP", audit
+tlačítka, ROI kalkulačka) už neotevírají Calendly rovnou v novém okně — vedou do stávajícího
+3-krokového audit formuláře; Calendly se zobrazí inline až po odeslání, předvyplněné jménem a
+e-mailem. ROI čísla a `utm_source/medium/campaign` se teď propisují do uloženého leadu (zapsáno do
+pole `problem`, žádný nový sloupec v Supabase potřeba). Nic z tohohle nevyžaduje zásah mimo kód.
+
+**Fáze 1 (nové demo, vyžaduje jeden SQL krok):** Na stránce Hotelnictví a gastro
+(`/obory/hotelnictvi-gastro`) přibyla interaktivní sekce „vyzkoušej si agenta" — návštěvník zadá
+název svého podniku, vybere jednu ze 4 situací (pozdní check-in, špatná recenze, storno, technický
+problém) a uvidí naskriptovanou (ne živě volanou LLM) odpověď agenta, personalizovanou svým jménem.
+Používá dvě nové tabulky a jednu Postgres funkci — **spusťte v Supabase dashboardu → SQL Editor**:
+
+```sql
+create table if not exists demo_stats (
+  sector text primary key,
+  completions integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists demo_leads (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name text not null,
+  email text not null,
+  phone text,
+  company text,
+  sector text,
+  scenario text,
+  lang text,
+  utm_source text,
+  utm_medium text,
+  utm_campaign text
+);
+
+-- Atomic increment (avoids losing counts to a read-then-write race under ad traffic).
+create or replace function increment_demo_stat(p_sector text)
+returns integer
+language plpgsql
+security definer
+as $$
+declare
+  new_count integer;
+begin
+  insert into demo_stats (sector, completions, updated_at)
+  values (p_sector, 1, now())
+  on conflict (sector) do update
+    set completions = demo_stats.completions + 1, updated_at = now()
+  returning completions into new_count;
+  return new_count;
+end;
+$$;
+
+alter table demo_stats enable row level security;
+alter table demo_leads enable row level security;
+-- No public policies needed: both tables are only ever read/written via the service_role key in
+-- /api/demo-stat.js and /api/submit-demo-lead.js (same pattern as audit_requests), never directly
+-- from the browser with the anon key.
+```
+
+Bez tohoto kroku demo dál funguje (formulář se odešle, Calendly se zobrazí), jen živý čítač
+zůstane na 0 a `/api/submit-demo-lead` bude vracet chybu 500, dokud tabulka `demo_leads` neexistuje.
+
 ## 🔴 Nejdůležitější nález dneška: `/careers`, `/blog`, `/case-studies` vracely 404 v produkci
 
 Otestoval jsem živý web (`aerisq.tech` → přesměruje na `www.aerisq.tech`) a **čisté URL vracely 404** —

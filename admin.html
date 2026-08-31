@@ -172,14 +172,27 @@
         </div>
         <button onClick="{{ createClient }}" disabled="{{ newClientCannotSubmit }}" style="{{ primaryBtnStyle }}">Add Client</button>
       </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <sc-for list="{{ clientFilterTabs }}" as="cf" hint-placeholder-count="2">
+          <button onClick="{{ cf.onClick }}" style="{{ cf.style }}">{{ cf.label }}</button>
+        </sc-for>
+      </div>
+
       <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
         <sc-for list="{{ clients }}" as="client" hint-placeholder-count="3">
           <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
             <div>
               <strong style="color:#fafafa;font-size:14px">{{ client.name }}</strong>
+              <span style="{{ client.statusBadgeStyle }}">{{ client.statusBadgeLabel }}</span>
               <div style="color:#71717a;font-size:12px;font-family:'JetBrains Mono',monospace">{{ client.company }} · {{ client.email }}</div>
             </div>
-            <button onClick="{{ client.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Delete</button>
+            <div style="display:flex;align-items:center;gap:8px">
+              <sc-if value="{{ client.canInvite }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ client.onInvite }}" disabled="{{ client.inviteBusy }}" style="{{ client.inviteBtnStyle }}">{{ client.inviteBtnLabel }}</button>
+              </sc-if>
+              <button onClick="{{ client.onToggleArchive }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">{{ client.archiveBtnLabel }}</button>
+            </div>
           </div>
         </sc-for>
       </div>
@@ -225,6 +238,17 @@
             </div>
 
             <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;margin-bottom:14px">
+              <label style="display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#a1a1aa;margin-bottom:10px;cursor:pointer">
+                <input type="checkbox" checked="{{ project.offerVisible }}" onChange="{{ project.onOfferVisibleChange }}" />
+                Viditelné klientovi jako nabídka (fáze 0, před podpisem)
+              </label>
+              <div style="display:flex;gap:8px">
+                <textarea placeholder="Text nabídky zobrazený klientovi v portálu…" value="{{ project.offerSummaryDraft }}" onChange="{{ project.onOfferSummaryChange }}" rows="2" style="{{ inputStyle }};flex:1;resize:vertical"></textarea>
+                <button onClick="{{ project.onSaveOffer }}" style="{{ primaryBtnStyle }}">Uložit</button>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;margin-bottom:14px">
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#52525b;letter-spacing:.04em;margin-bottom:8px">MILESTONES</div>
               <sc-for list="{{ project.milestones }}" as="m" hint-placeholder-count="2">
                 <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#a1a1aa">
@@ -258,6 +282,22 @@
                 <button onClick="{{ project.onAddInvoice }}" style="background:#34d399;color:#000;border:none;border-radius:4px;padding:0 14px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;font-weight:700">+</button>
               </div>
             </div>
+
+            <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#52525b;letter-spacing:.04em;margin-bottom:8px">MESSAGES</div>
+              <div style="max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:8px">
+                <sc-for list="{{ project.messages }}" as="msg" hint-placeholder-count="2">
+                  <div style="{{ msg.bubbleStyle }}">
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#52525b;margin-bottom:2px">{{ msg.senderLabel }} · {{ msg.timeLabel }}</div>
+                    <div style="font-size:13px;color:#d4d4d8;white-space:pre-wrap">{{ msg.body }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:8px">
+                <textarea placeholder="Odpovědět klientovi…" value="{{ project.newMessageText }}" onChange="{{ project.onMessageTextChange }}" rows="2" style="{{ inputStyle }};flex:1;resize:vertical"></textarea>
+                <button onClick="{{ project.onSendMessage }}" style="{{ primaryBtnStyle }}">Odeslat</button>
+              </div>
+            </div>
           </div>
         </sc-for>
       </div>
@@ -274,6 +314,12 @@
             </sc-for>
           </select>
           <input placeholder="Title" value="{{ newDocTitle }}" onChange="{{ setNewDocTitle }}" style="{{ inputStyle }}" />
+          <select value="{{ newDocCategory }}" onChange="{{ setNewDocCategory }}" style="{{ inputStyle }}">
+            <option value="general">Obecný dokument</option>
+            <option value="offer">Nabídka</option>
+            <option value="contract">Smlouva</option>
+            <option value="deliverable">Výstup</option>
+          </select>
           <label style="display:flex;align-items:center;justify-content:center;padding:11px;background:#000;border:1px dashed rgba(255,255,255,.2);border-radius:4px;cursor:pointer;color:#a1a1aa;font-size:13px">
             <span>{{ newDocFileLabel }}</span>
             <input type="file" onChange="{{ handleDocFile }}" style="display:none" />
@@ -286,10 +332,10 @@
           <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
             <div>
               <strong style="color:#fafafa;font-size:14px">{{ doc.title }}</strong>
-              <div style="color:#71717a;font-size:12px;font-family:'JetBrains Mono',monospace">{{ doc.projectName }}</div>
+              <div style="color:#71717a;font-size:12px;font-family:'JetBrains Mono',monospace">{{ doc.projectName }} · {{ doc.categoryLabel }}</div>
             </div>
             <div style="display:flex;gap:10px;align-items:center">
-              <a href="{{ doc.file_url }}" target="_blank" style="color:#34d399;font-family:'JetBrains Mono',monospace;font-size:11px;text-decoration:none">Open →</a>
+              <button onClick="{{ doc.onOpen }}" style="background:transparent;border:none;color:#34d399;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Open →</button>
               <button onClick="{{ doc.onDelete }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">Delete</button>
             </div>
           </div>
@@ -549,6 +595,39 @@
       </div>
     </sc-if>
 
+    <sc-if value="{{ isStatsTab }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px">
+        <sc-for list="{{ statTiles }}" as="tile" hint-placeholder-count="4">
+          <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:20px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#71717a;letter-spacing:.04em;margin-bottom:8px">{{ tile.label }}</div>
+            <div style="font-size:26px;font-weight:800;color:#fafafa">{{ tile.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:20px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:14px">PROJEKTY PODLE FÁZE</div>
+          <sc-for list="{{ phaseBreakdown }}" as="pb" hint-placeholder-count="3">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px">
+              <span style="color:#d4d4d8">{{ pb.label }}</span>
+              <span style="color:#71717a;font-family:'JetBrains Mono',monospace">{{ pb.count }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:20px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:14px">FAKTUROVÁNO PODLE STAVU</div>
+          <sc-for list="{{ invoiceBreakdown }}" as="ib" hint-placeholder-count="3">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px">
+              <span style="color:#d4d4d8">{{ ib.label }}</span>
+              <span style="color:#71717a;font-family:'JetBrains Mono',monospace">{{ ib.total }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
   </div>
 </sc-if>
 
@@ -565,10 +644,11 @@ class Component extends DCLogic {
     loginEmail: '', loginPassword: '', loginError: '',
     activeTab: 'leads',
     auditRequests: [], newsletterSubs: [], applications: [], appNotesDrafts: {},
-    clients: [], projects: [], milestonesByProject: {}, invoicesByProject: {}, documents: [],
+    clients: [], projects: [], milestonesByProject: {}, invoicesByProject: {}, documents: [], messagesByProject: {},
     newClientName: '', newClientCompany: '', newClientEmail: '',
+    clientFilter: 'active', inviteBusyByClient: {},
     newProjectName: '', newProjectClientId: '', newProjectPhase: '1', newProjectTargetDate: '',
-    newDocProjectId: '', newDocTitle: '', newDocFile: null,
+    newDocProjectId: '', newDocTitle: '', newDocCategory: 'general', newDocFile: null,
     projectDrafts: {},
     heroTitleEn: 'We replace your manual workflows with AI agents that run in production.',
     heroSubEn: 'Not a chatbot demo. We map your actual bottleneck — invoices, tickets, back-office data entry — build the pipeline that replaces it, deploy it into your existing stack, and stay until your team runs it without us.',
@@ -691,7 +771,7 @@ class Component extends DCLogic {
   };
 
   loadAll = async (session) => {
-    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs, blog, cases, roles, team, settingsRows] = await Promise.all([
+    const [audit, newsletter, apps, clients, projects, milestones, invoices, docs, msgs, blog, cases, roles, team, settingsRows] = await Promise.all([
       this.fetchTable('audit_requests', session, '&order=created_at.desc'),
       this.fetchTable('newsletter_subscribers', session, '&order=created_at.desc'),
       this.fetchTable('applications', session, '&order=created_at.desc'),
@@ -700,6 +780,7 @@ class Component extends DCLogic {
       this.fetchTable('milestones', session),
       this.fetchTable('invoices', session),
       this.fetchTable('documents', session, '&order=created_at.desc'),
+      this.fetchTable('messages', session, '&order=created_at.asc'),
       this.fetchTable('blog_posts', session, '&order=created_at.desc'),
       this.fetchTable('case_studies', session, '&order=created_at.desc'),
       this.fetchTable('job_roles', session, '&order=created_at.desc'),
@@ -710,7 +791,9 @@ class Component extends DCLogic {
     milestones.forEach(m => { (milestonesByProject[m.project_id] = milestonesByProject[m.project_id] || []).push(m); });
     const invoicesByProject = {};
     invoices.forEach(i => { (invoicesByProject[i.project_id] = invoicesByProject[i.project_id] || []).push(i); });
-    
+    const messagesByProject = {};
+    msgs.forEach(m => { (messagesByProject[m.project_id] = messagesByProject[m.project_id] || []).push(m); });
+
     let cmsData = {};
     if (settingsRows && settingsRows.length > 0 && settingsRows[0].settings) {
       cmsData = settingsRows[0].settings;
@@ -718,7 +801,7 @@ class Component extends DCLogic {
 
     this.setState({
       auditRequests: audit, newsletterSubs: newsletter, applications: apps,
-      clients, projects, milestonesByProject, invoicesByProject, documents: docs,
+      clients, projects, milestonesByProject, invoicesByProject, documents: docs, messagesByProject,
       blogPosts: blog, caseStudiesList: cases, jobRoles: roles.length > 0 ? roles : this.state.jobRoles, teamMembers: team,
       heroTitleEn: cmsData.heroTitleEn || this.state.heroTitleEn,
       heroSubEn: cmsData.heroSubEn || this.state.heroSubEn,
@@ -874,8 +957,34 @@ class Component extends DCLogic {
     this.loadAll(s.session);
   };
 
-  deleteClient = async (id) => {
-    await fetch(`${SUPABASE_URL}/rest/v1/clients?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
+  setClientFilter = (filter) => this.setState({ clientFilter: filter });
+
+  // Clients are archived, never hard-deleted — their projects/invoices/documents/messages must
+  // stay intact for history even after the engagement ends (see SETUP.md).
+  toggleClientArchive = async (id, currentStatus) => {
+    const nextStatus = currentStatus === 'archived' ? 'active' : 'archived';
+    await fetch(`${SUPABASE_URL}/rest/v1/clients?id=eq.${id}`, {
+      method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ status: nextStatus })
+    });
+    this.loadAll(this.state.session);
+  };
+
+  // Creates (or, if already invited, just resends a link for) the client's portal login via
+  // /api/invite-client — see that file for why this can't be a direct Supabase call (needs the
+  // service_role key to create an Auth user).
+  inviteClient = async (id) => {
+    this.setState(s => ({ inviteBusyByClient: { ...s.inviteBusyByClient, [id]: true } }));
+    try {
+      await fetch('/api/invite-client', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.state.session.access_token}` },
+        body: JSON.stringify({ clientId: id })
+      });
+    } catch (e) {
+      console.error('inviteClient failed', e);
+    }
+    this.setState(s => ({ inviteBusyByClient: { ...s.inviteBusyByClient, [id]: false } }));
     this.loadAll(this.state.session);
   };
 
@@ -904,8 +1013,23 @@ class Component extends DCLogic {
     this.loadAll(this.state.session);
   };
 
+  // Local-only edits to a project's offer fields, applied optimistically to state.projects so the
+  // checkbox/textarea feel immediate; onSaveOffer (below) is what actually persists them.
+  setProjectOfferField = (projectId, field, value) => {
+    this.setState(s => ({ projects: s.projects.map(p => p.id === projectId ? { ...p, [field]: value } : p) }));
+  };
+
+  saveProjectOffer = async (projectId) => {
+    const p = this.state.projects.find(x => x.id === projectId);
+    if (!p) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/projects?id=eq.${projectId}`, {
+      method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ phase_0_visible: !!p.phase_0_visible, offer_summary: p.offer_summary || null })
+    });
+  };
+
   getDraft(projectId) {
-    return this.state.projectDrafts[projectId] || { milestoneTitle: '', milestoneDate: '', invoiceAmount: '', invoiceStatus: 'draft', invoiceDueDate: '' };
+    return this.state.projectDrafts[projectId] || { milestoneTitle: '', milestoneDate: '', invoiceAmount: '', invoiceStatus: 'draft', invoiceDueDate: '', messageText: '' };
   }
   setDraft(projectId, patch) {
     this.setState(s => ({ projectDrafts: { ...s.projectDrafts, [projectId]: { ...this.getDraft(projectId), ...patch } } }));
@@ -943,8 +1067,23 @@ class Component extends DCLogic {
     this.loadAll(this.state.session);
   };
 
+  // Staff replies go straight to Supabase (same trust level as milestones/invoices above) — only
+  // the client's own side (portal-send-message.js) needs the server-role proxy, for the Slack ping.
+  sendTeamMessage = async (projectId) => {
+    const draft = this.getDraft(projectId);
+    const text = (draft.messageText || '').trim();
+    if (!text) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
+      method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ project_id: projectId, sender: 'team', body: text })
+    });
+    this.setDraft(projectId, { messageText: '' });
+    this.loadAll(this.state.session);
+  };
+
   setNewDocProjectId = (e) => this.setState({ newDocProjectId: e.target.value });
   setNewDocTitle = (e) => this.setState({ newDocTitle: e.target.value });
+  setNewDocCategory = (e) => this.setState({ newDocCategory: e.target.value });
   handleDocFile = (e) => this.setState({ newDocFile: e.target.files[0] || null });
 
   uploadDocument = async () => {
@@ -957,18 +1096,31 @@ class Component extends DCLogic {
       body: s.newDocFile
     });
     if (!upRes.ok) return;
-    const fileUrl = `${SUPABASE_URL}/storage/v1/object/public/documents/${path}`;
+    // `documents` is a private bucket — storage_path is what portal-document-url.js signs on
+    // request; no public URL is stored anymore (see SETUP.md).
     await fetch(`${SUPABASE_URL}/rest/v1/documents`, {
       method: 'POST', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ project_id: s.newDocProjectId, title: s.newDocTitle, file_url: fileUrl })
+      body: JSON.stringify({ project_id: s.newDocProjectId, title: s.newDocTitle, category: s.newDocCategory, storage_path: path })
     });
-    this.setState({ newDocTitle: '', newDocFile: null, newDocProjectId: '' });
+    this.setState({ newDocTitle: '', newDocFile: null, newDocProjectId: '', newDocCategory: 'general' });
     this.loadAll(s.session);
   };
 
   deleteDocument = async (id) => {
     await fetch(`${SUPABASE_URL}/rest/v1/documents?id=eq.${id}`, { method: 'DELETE', headers: this.authHeaders() });
     this.loadAll(this.state.session);
+  };
+
+  openDocument = async (doc) => {
+    try {
+      const res = await fetch(`/api/portal-document-url?documentId=${encodeURIComponent(doc.id)}`, {
+        headers: { Authorization: `Bearer ${this.state.session.access_token}` }
+      });
+      const data = await res.json().catch(() => ({}));
+      if (data.url) window.open(data.url, '_blank', 'noopener');
+    } catch (e) {
+      console.error('openDocument failed', e);
+    }
   };
 
   setHeroTitleEn = (e) => this.setState({ heroTitleEn: e.target.value, cmsSaved: false });
@@ -1053,6 +1205,7 @@ class Component extends DCLogic {
       { key: 'clients', label: 'Clients' },
       { key: 'projects', label: 'Projects' },
       { key: 'documents', label: 'Documents' },
+      { key: 'stats', label: 'Stats' },
       { key: 'site_content', label: 'Website CMS' },
       { key: 'users', label: 'Team & Permissions' }
     ];
@@ -1062,11 +1215,45 @@ class Component extends DCLogic {
       style: `padding:14px 18px;background:transparent;border:none;border-bottom:2px solid ${s.activeTab===td.key?'#34d399':'transparent'};color:${s.activeTab===td.key?'#fafafa':'#71717a'};font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;white-space:nowrap`
     }));
 
-    const clientsWithDelete = s.clients.map(c => ({ ...c, onDelete: () => this.deleteClient(c.id) }));
+    const clientFilterDefs = [
+      { key: 'active', label: 'Aktivní' },
+      { key: 'archived', label: 'Archivovaní' },
+      { key: 'all', label: 'Vše' }
+    ];
+    const clientFilterTabs = clientFilterDefs.map(cf => ({
+      label: cf.label,
+      onClick: () => this.setClientFilter(cf.key),
+      style: `padding:7px 14px;background:${s.clientFilter===cf.key?'rgba(52,211,153,.1)':'transparent'};border:1px solid ${s.clientFilter===cf.key?'rgba(52,211,153,.35)':'rgba(255,255,255,.14)'};color:${s.clientFilter===cf.key?'#34d399':'#a1a1aa'};border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer`
+    }));
+
+    const visibleClients = s.clients.filter(c => s.clientFilter === 'all' || (c.status || 'active') === s.clientFilter);
+    const clientsWithActions = visibleClients.map(c => {
+      const status = c.status || 'active';
+      const invited = !!c.auth_user_id;
+      const busy = !!s.inviteBusyByClient[c.id];
+      return {
+        ...c,
+        statusBadgeLabel: status === 'archived' ? 'Archivováno' : (invited ? 'V portálu' : 'Nepozvaný'),
+        statusBadgeStyle: `margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 8px;border-radius:10px;background:${status === 'archived' ? 'rgba(255,255,255,.06)' : invited ? 'rgba(52,211,153,.12)' : 'rgba(251,191,36,.12)'};color:${status === 'archived' ? '#71717a' : invited ? '#34d399' : '#fbbf24'}`,
+        canInvite: status === 'active',
+        inviteBusy: busy,
+        inviteBtnLabel: busy ? 'Odesílám…' : (invited ? 'Poslat znovu' : 'Pozvat do portálu'),
+        inviteBtnStyle: `background:transparent;border:1px solid rgba(52,211,153,.35);color:#34d399;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;opacity:${busy?0.5:1}`,
+        onInvite: () => this.inviteClient(c.id),
+        archiveBtnLabel: status === 'archived' ? 'Obnovit' : 'Archivovat',
+        onToggleArchive: () => this.toggleClientArchive(c.id, status)
+      };
+    });
     const clientNameById = Object.fromEntries(s.clients.map(c => [c.id, c.name]));
 
     const projects = s.projects.map(p => {
       const draft = this.getDraft(p.id);
+      const messages = (s.messagesByProject[p.id] || []).map(msg => ({
+        ...msg,
+        senderLabel: msg.sender === 'client' ? 'Klient' : 'Tým',
+        timeLabel: msg.created_at ? new Date(msg.created_at).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
+        bubbleStyle: `background:${msg.sender === 'client' ? 'rgba(251,191,36,.06)' : 'rgba(52,211,153,.06)'};border:1px solid ${msg.sender === 'client' ? 'rgba(251,191,36,.18)' : 'rgba(52,211,153,.18)'};border-radius:6px;padding:8px 10px`
+      }));
       return {
         ...p,
         clientName: clientNameById[p.client_id] || '—',
@@ -1074,6 +1261,15 @@ class Component extends DCLogic {
         invoices: (s.invoicesByProject[p.id] || []).map(i => ({ ...i, onDelete: () => this.deleteInvoice(i.id) })),
         onPhaseChange: (e) => this.updateProjectPhase(p.id, e.target.value),
         onDelete: () => this.deleteProject(p.id),
+        offerVisible: !!p.phase_0_visible,
+        offerSummaryDraft: p.offer_summary || '',
+        onOfferVisibleChange: (e) => this.setProjectOfferField(p.id, 'phase_0_visible', e.target.checked),
+        onOfferSummaryChange: (e) => this.setProjectOfferField(p.id, 'offer_summary', e.target.value),
+        onSaveOffer: () => this.saveProjectOffer(p.id),
+        messages,
+        newMessageText: draft.messageText,
+        onMessageTextChange: (e) => this.setDraft(p.id, { messageText: e.target.value }),
+        onSendMessage: () => this.sendTeamMessage(p.id),
         newMilestoneTitle: draft.milestoneTitle,
         newMilestoneDate: draft.milestoneDate,
         onMilestoneTitleChange: (e) => this.setDraft(p.id, { milestoneTitle: e.target.value }),
@@ -1090,7 +1286,46 @@ class Component extends DCLogic {
     });
 
     const projectNameById = Object.fromEntries(s.projects.map(p => [p.id, p.name]));
-    const documents = s.documents.map(d => ({ ...d, projectName: projectNameById[d.project_id] || '—', onDelete: () => this.deleteDocument(d.id) }));
+    const docCategoryLabels = { offer: 'Nabídka', contract: 'Smlouva', deliverable: 'Výstup', general: 'Obecný dokument' };
+    const documents = s.documents.map(d => ({
+      ...d,
+      projectName: projectNameById[d.project_id] || '—',
+      categoryLabel: docCategoryLabels[d.category] || 'Obecný dokument',
+      onOpen: () => this.openDocument(d),
+      onDelete: () => this.deleteDocument(d.id)
+    }));
+
+    // Stats tab — computed client-side from data already loaded for the other tabs, no extra
+    // endpoint/query needed.
+    const now = new Date();
+    const activeClientCount = s.clients.filter(c => (c.status || 'active') === 'active').length;
+    const archivedClientCount = s.clients.filter(c => c.status === 'archived').length;
+    const newClientsThisMonth = s.clients.filter(c => {
+      if (!c.created_at) return false;
+      const d = new Date(c.created_at);
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    }).length;
+    const statTiles = [
+      { label: 'AKTIVNÍ KLIENTI', value: activeClientCount },
+      { label: 'ARCHIVOVANÍ KLIENTI', value: archivedClientCount },
+      { label: 'NOVÍ KLIENTI TENTO MĚSÍC', value: newClientsThisMonth },
+      { label: 'PROJEKTY CELKEM', value: s.projects.length }
+    ];
+    const phaseCounts = { 0: 0, 1: 0, 2: 0, 3: 0 };
+    s.projects.forEach(p => { const k = p.phase_0_visible ? 0 : Number(p.phase) || 1; phaseCounts[k] = (phaseCounts[k] || 0) + 1; });
+    const phaseBreakdown = [
+      { label: 'Nabídka (fáze 0)', count: phaseCounts[0] },
+      { label: 'Fáze 1 — Discovery', count: phaseCounts[1] },
+      { label: 'Fáze 2 — Engineering', count: phaseCounts[2] },
+      { label: 'Fáze 3 — Deployment', count: phaseCounts[3] }
+    ];
+    const allInvoices = Object.values(s.invoicesByProject).flat();
+    const sumInvoicesByStatus = (status) => allInvoices.filter(i => i.status === status).reduce((sum, i) => sum + Number(i.amount || 0), 0);
+    const invoiceBreakdown = [
+      { label: 'Koncept', total: `${sumInvoicesByStatus('draft')} EUR` },
+      { label: 'Odesláno', total: `${sumInvoicesByStatus('sent')} EUR` },
+      { label: 'Zaplaceno', total: `${sumInvoicesByStatus('paid')} EUR` }
+    ];
 
     const loginCanSubmit = s.loginEmail.trim().length > 0 && s.loginPassword.length > 0;
 
@@ -1108,8 +1343,10 @@ class Component extends DCLogic {
       tabs,
       isLeadsTab: s.activeTab === 'leads', isClientsTab: s.activeTab === 'clients',
       isProjectsTab: s.activeTab === 'projects', isDocumentsTab: s.activeTab === 'documents',
+      isStatsTab: s.activeTab === 'stats',
       isCmsTab: s.activeTab === 'site_content',
       isUsersTab: s.activeTab === 'users',
+      statTiles, phaseBreakdown, invoiceBreakdown,
       heroTitleEn: s.heroTitleEn, setHeroTitleEn: this.setHeroTitleEn,
       heroSubEn: s.heroSubEn, setHeroSubEn: this.setHeroSubEn,
       heroTitleCs: s.heroTitleCs, setHeroTitleCs: this.setHeroTitleCs,
@@ -1182,7 +1419,7 @@ class Component extends DCLogic {
           onSaveNotes: () => this.updateAppNotes(a.id, notesValue)
         };
       }),
-      clients: clientsWithDelete,
+      clients: clientsWithActions, clientFilterTabs,
       newClientName: s.newClientName, newClientCompany: s.newClientCompany, newClientEmail: s.newClientEmail,
       setNewClientName: this.setNewClientName, setNewClientCompany: this.setNewClientCompany, setNewClientEmail: this.setNewClientEmail,
       createClient: this.createClient, newClientCannotSubmit: !s.newClientName.trim(),
@@ -1191,8 +1428,8 @@ class Component extends DCLogic {
       setNewProjectName: this.setNewProjectName, setNewProjectClientId: this.setNewProjectClientId, setNewProjectPhase: this.setNewProjectPhase, setNewProjectTargetDate: this.setNewProjectTargetDate,
       createProject: this.createProject, newProjectCannotSubmit: !(s.newProjectName.trim() && s.newProjectClientId),
       documents,
-      newDocProjectId: s.newDocProjectId, newDocTitle: s.newDocTitle,
-      setNewDocProjectId: this.setNewDocProjectId, setNewDocTitle: this.setNewDocTitle,
+      newDocProjectId: s.newDocProjectId, newDocTitle: s.newDocTitle, newDocCategory: s.newDocCategory,
+      setNewDocProjectId: this.setNewDocProjectId, setNewDocTitle: this.setNewDocTitle, setNewDocCategory: this.setNewDocCategory,
       newDocFileLabel: s.newDocFile?.name || 'Choose file',
       handleDocFile: this.handleDocFile, uploadDocument: this.uploadDocument,
       newDocCannotSubmit: !(s.newDocFile && s.newDocProjectId && s.newDocTitle.trim()),

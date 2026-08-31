@@ -1,5 +1,8 @@
 {
   "cleanUrls": true,
+  "proxy": {
+    "entrypoint": "proxy.js"
+  },
   "rewrites": [
     {
       "source": "/admin",
