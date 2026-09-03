@@ -42,7 +42,14 @@ module.exports = async (req, res) => {
       await updateRow('clients', `id=eq.${encodeURIComponent(clientId)}`, { auth_user_id: created.id });
     }
 
-    await sendMagicLink(client.email, PORTAL_URL);
+    const emailSent = await sendMagicLink(client.email, PORTAL_URL);
+    if (!emailSent) {
+      // The account exists at this point even if the email failed (rate limit, no SMTP
+      // configured, etc.) — say so plainly instead of a blanket ok:true so admin.html can show a
+      // real error instead of pretending the invite went out.
+      res.status(502).json({ error: 'email_send_failed' });
+      return;
+    }
     res.status(200).json({ ok: true });
   } catch (e) {
     console.error('[invite-client] failed', e);
