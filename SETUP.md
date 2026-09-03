@@ -1,5 +1,56 @@
 # Setup checklist — po dnešních změnách
 
+## 🆕 3. 9. 2026 (2) — rezervace z Calendly viditelné v adminu, s poznámkami
+
+Tlačítka „Rezervovat hovor" na nabídkových a oborových stránkách teď otevírají Calendly rovnou
+(viz sekce níže). Aby se dokončená rezervace propsala i do administrace — se jménem, e-mailem,
+tím, ze které stránky/služby přišla, a polem na vaše poznámky — potřeba udělat dva kroky, oba mimo
+tenhle repozitář (nemám přístup ani do Calendly, ani do Vercel dashboardu):
+
+### 1. Supabase SQL Editor — nová tabulka `bookings`
+
+```sql
+create table if not exists bookings (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  invitee_name text,
+  invitee_email text,
+  service text,                    -- 'hospitality' | 'realestate' | 'offering_ai' | 'offering_mvp' | 'offering_enterprise' | 'offering_training'
+  calendly_event_uri text,
+  calendly_invitee_uri text,
+  notes text
+);
+
+alter table bookings enable row level security;
+
+create policy staff_full_access_bookings on bookings for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+```
+
+### 2. Calendly — webhook subscription (vyžaduje placený tarif; na Free Calendly webhooky nenabízí)
+
+1. Calendly → Integrations → **Webhooks** → **Create Webhook Subscription**.
+2. **URL**: `https://www.aerisq.tech/api/calendly-webhook`
+3. **Events**: zaškrtněte jen **invitee.created** (ostatní se ignorují, není potřeba je posílat).
+4. **Scope**: podle toho, jestli je to jeden uživatelský účet, nebo organizace.
+5. Po vytvoření vám Calendly ukáže **signing secret** — zkopírujte ho.
+
+### 3. Vercel — nová proměnná prostředí
+
+Project Settings → Environment Variables → přidat pro **Production**:
+```
+CALENDLY_WEBHOOK_SIGNING_KEY = <signing secret z kroku 2>
+```
+a redeploy (stejně jako u `SUPABASE_SERVICE_ROLE_KEY` výše).
+
+**Jak ověřit, že to funguje:** zarezervujte si sami testovací hovor přes některé z tlačítek
+„Rezervovat hovor" na webu → mělo by se to objevit v adminu pod Leads → „REZERVACE HOVORŮ Z
+CALENDLY" během pár vteřin, se správně přiřazenou službou. Pokud ne, zkontrolujte ve Vercel
+dashboardu → Deployments → poslední produkční deployment → Functions/Logs u
+`/api/calendly-webhook`, jestli tam nepadá `invalid_signature` (špatný/chybějící signing key) nebo
+jiná chyba.
+
 ## 🆕 3. 9. 2026 — opraveno: poptávky a přihlášky se nepropisovaly
 
 Nahlášený problém: poptávky z auditního formuláře a přihlášky uchazečů se neobjevovaly v adminu.
