@@ -912,9 +912,16 @@ body{animation:pageFadeIn .35s ease both}
           <textarea placeholder="{{ t.problemPlaceholder }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="4" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
         </div>
         <input type="text" tabindex="-1" autocomplete="off" aria-hidden="true" value="{{ auditHp }}" onChange="{{ setAuditHp }}" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
+        <sc-if value="{{ submitError }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px solid #f87171;border-radius:6px;background:rgba(248,113,113,.08);padding:18px 20px;margin-bottom:4px">
+            <p style="margin:0 0 4px;font-size:14px;color:#fca5a5;font-weight:600">{{ t.submitErrorTitle }}</p>
+            <p style="margin:0 0 14px;font-size:13.5px;color:#e5b8b8;line-height:1.55">{{ t.submitErrorMsg }}</p>
+            <div class="calendly-inline-widget" data-url="{{ calendlyEmbedUrl }}" style="min-width:280px;height:520px"></div>
+          </div>
+        </sc-if>
         <div style="display:flex;justify-content:space-between">
           <button onClick="{{ goBack }}" style="padding:12px 22px;background:transparent;color:#a1a1aa;border:1px solid rgba(255,255,255,.12);border-radius:4px;font-weight:600;font-size:13px;cursor:pointer">{{ t.backBtn }}</button>
-          <button onClick="{{ handleSubmit }}" disabled="{{ cannotSubmit }}" style="{{ submitBtnStyle }}">{{ t.submitBtn }}</button>
+          <button onClick="{{ handleSubmit }}" disabled="{{ cannotSubmit }}" style="{{ submitBtnStyle }}">{{ submitBtnLabel }}</button>
         </div>
       </sc-if>
     </sc-if>
@@ -1052,7 +1059,13 @@ body{animation:pageFadeIn .35s ease both}
       </div>
       <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#52525b;margin:0 0 20px">{{ t.carCvLinkHint }}</p>
       <input type="text" tabindex="-1" autocomplete="off" aria-hidden="true" value="{{ appHp }}" onChange="{{ setAppHp }}" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
-      <button onClick="{{ submitApplication }}" disabled="{{ appCannotSubmit }}" style="{{ appSubmitBtnStyle }}">{{ t.carAppSubmitBtn }}</button>
+      <sc-if value="{{ appSubmitError }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px solid #f87171;border-radius:4px;background:rgba(248,113,113,.08);padding:14px 16px;margin-bottom:16px">
+          <p style="margin:0 0 8px;font-size:13.5px;color:#fca5a5;line-height:1.5">{{ t.appSubmitErrorMsg }}</p>
+          <a href="mailto:petr@aerisq.tech" style="color:{{ accentColor }};font-size:13px;font-weight:600;text-decoration:underline">petr@aerisq.tech</a>
+        </div>
+      </sc-if>
+      <button onClick="{{ submitApplication }}" disabled="{{ appCannotSubmit }}" style="{{ appSubmitBtnStyle }}">{{ appSubmitBtnLabel }}</button>
     </div>
   </sc-if>
 </section>
@@ -2529,6 +2542,9 @@ const DICT = {
     auditEyebrow: '// SYSTEM AUDIT', auditTitle: 'Initiate your infrastructure audit', auditScarcity: '◆ Only 3 audit slots open this quarter',
     stepLabel: 'STEP', step1Title: 'Select Infrastructure Focus', step2Title: 'Target Budget / Scope', step3Title: 'Technical Specification',
     continueBtn: 'Continue →', backBtn: '← Back', submitBtn: 'Submit Technical Specification',
+    submitBtnLoading: 'Sending…',
+    submitErrorTitle: "That didn't go through",
+    submitErrorMsg: "We couldn't save your request — sorry about that. Try again in a moment, or just grab a slot below and tell us in the call instead:",
     namePlaceholder: 'Full name', emailPlaceholder: 'Business email',
     companyPlaceholder: 'Company name', phonePlaceholder: 'Phone', websitePlaceholder: 'Company website',
     teamSizePlaceholder: 'Team / company size',
@@ -2562,6 +2578,8 @@ const DICT = {
     carCvLinkHint: "Upload a PDF and we'll pre-fill a few fields, or paste a link to your CV/portfolio instead.",
     carWhyUsPlaceholder: 'Why do you want to work at AerisQ?', carCompExpectationPlaceholder: 'Expected compensation',
     carAppMessagePlaceholder: 'Anything else you want us to know', carAppSubmitBtn: 'Submit Application', carAppConfirmed: "Thanks — we'll keep your profile on file.",
+    carSubmitBtnLoading: 'Sending…',
+    appSubmitErrorMsg: "That didn't go through — sorry about that. Try again in a moment, or just email us your CV directly:",
 
     blogEyebrow: '// BLOG', blogTitle: 'Notes from the build.',
     blogSub: 'Engineering opinions from the studio floor. No thought-leadership filler.',
@@ -2742,6 +2760,9 @@ const DICT = {
     testimonialCaseIn: 'PŘÍPADOVÁ STUDIE V',
     stepLabel: 'KROK', step1Title: 'Vyberte oblast zaměření', step2Title: 'Cílový rozpočet / rozsah', step3Title: 'Technická specifikace',
     continueBtn: 'Pokračovat →', backBtn: '← Zpět', submitBtn: 'Odeslat specifikaci auditu',
+    submitBtnLoading: 'Odesílám…',
+    submitErrorTitle: 'Odeslání se nepovedlo',
+    submitErrorMsg: 'Nepodařilo se nám uložit vaši žádost — omlouváme se. Zkuste to prosím znovu za chvíli, nebo si rovnou vyberte termín níže a řekněte nám vše na hovoru:',
     namePlaceholder: 'Celé jméno', emailPlaceholder: 'Firemní e-mail',
     companyPlaceholder: 'Název firmy', phonePlaceholder: 'Telefon', websitePlaceholder: 'Webová stránka',
     teamSizePlaceholder: 'Velikost týmu / firmy',
@@ -2775,6 +2796,8 @@ const DICT = {
     carCvLinkHint: 'Nahrajte PDF a některá pole se automaticky předvyplní, nebo vložte odkaz na CV/portfolio.',
     carWhyUsPlaceholder: 'Proč chcete pracovat u nás?', carCompExpectationPlaceholder: 'Očekávaná finanční odměna',
     carAppMessagePlaceholder: 'Cokoliv dalšího, co nám chcete sdělit', carAppSubmitBtn: 'Odeslat přihlášku', carAppConfirmed: 'Děkujeme — necháme si váš profil v evidenci.',
+    carSubmitBtnLoading: 'Odesílám…',
+    appSubmitErrorMsg: 'Odeslání se nepovedlo — omlouváme se. Zkuste to prosím znovu za chvíli, nebo nám rovnou pošlete životopis na e-mail:',
 
     blogEyebrow: '// BLOG', blogTitle: 'Poznámky ze stavby.',
     blogSub: 'Inženýrské názory přímo z dílny studia. Žádné plkání pro plkání.',
@@ -3333,7 +3356,7 @@ class Component extends DCLogic {
     lang: (new URLSearchParams(window.location.search).get('lang') === 'en') ? 'en' : 'cs',
     step: 1, focus: null, budget: null,
     name: '', email: '', company: '', phone: '', website: '', teamSize: '', problem: '',
-    submitted: false, auditHp: '',
+    submitted: false, submitting: false, submitError: false, auditHp: '',
     accentColor: '#34d399', animatePipeline: true, compact: false,
     employees: 15, hoursPerDay: 10,
     mouseX: 50, mouseY: 50,
@@ -3342,7 +3365,7 @@ class Component extends DCLogic {
 
     roleInterest: null,
     appName: '', appEmail: '', appLinkedin: '', appCvLink: '', appMessage: '', appComp: '', appWhyUs: '', appHp: '',
-    appCvFile: null, appCvFileName: '', cvParsing: false, cvParsed: false, appCvError: '', appSubmitted: false,
+    appCvFile: null, appCvFileName: '', cvParsing: false, cvParsed: false, appCvError: '', appSubmitted: false, appSubmitting: false, appSubmitError: false,
 
     csActive: 'all',
     liveBlogPosts: [],
@@ -3947,9 +3970,14 @@ class Component extends DCLogic {
     const s = this.state;
     const valid = s.name.trim().length > 0 && /\S+@\S+\.\S+/.test(s.email);
     if (!valid) return;
-    this.setState({ submitted: true });
+    // Bug fixed 2026-09-03: this used to flip `submitted` to true (and fire the "lead submitted"
+    // tracking event) BEFORE the API call below even ran — so a failed insert (missing env var,
+    // Supabase outage, etc.) still showed the visitor a success screen while the lead silently
+    // never reached Supabase. Now we wait for the real result and only celebrate on an actual 2xx;
+    // on failure the form stays up with a visible error + a direct Calendly fallback (see
+    // `submitError` below) so a lead is never lost without the visitor knowing.
+    this.setState({ submitting: true, submitError: false });
     ensureCalendlyScript();
-    trackEvent('audit_lead_submitted', { focus: s.focus, budget: s.budget });
 
     // audit_requests has no dedicated ROI/UTM columns yet (adding them is a Supabase dashboard
     // step, not a code change) — so until that migration happens, fold both into the free-text
@@ -3971,12 +3999,20 @@ class Component extends DCLogic {
 
     const enrichedProblem = [roiNote, utmNote, s.problem.trim()].filter(Boolean).join('\n');
 
-    await postToApi('/api/submit-audit', {
+    const result = await postToApi('/api/submit-audit', {
       name: s.name, email: s.email, company: s.company, phone: s.phone,
       website: s.website, teamSize: s.teamSize, problem: enrichedProblem,
       focus: s.focus, budget: s.budget, lang: s.lang,
       website_hp: s.auditHp
     });
+
+    if (result.ok) {
+      trackEvent('audit_lead_submitted', { focus: s.focus, budget: s.budget });
+      this.setState({ submitted: true, submitting: false, submitError: false });
+    } else {
+      console.error('[submit-audit] request failed', result.status, result.data);
+      this.setState({ submitting: false, submitError: true });
+    }
   };
 
   heroDeployAI = () => { trackEvent('audit_cta_click', { source: 'hero_deploy_ai' }); this.goTo('home', 'roi'); };
@@ -4277,7 +4313,10 @@ class Component extends DCLogic {
     const s = this.state;
     const valid = s.appName.trim().length > 0 && /\S+@\S+\.\S+/.test(s.appEmail) && (s.appCvLink.trim().length > 0 || s.appCvFile);
     if (!valid) return;
-    this.setState({ appSubmitted: true });
+    // Same bug class fixed here as in handleSubmit (2026-09-03): don't declare success before the
+    // API call has actually resolved — otherwise a failed insert leaves the applicant thinking
+    // their application went through while nothing reached Supabase.
+    this.setState({ appSubmitting: true, appSubmitError: false });
     let cvUrl = s.appCvLink;
     if (s.appCvFile) {
       const cleanFileName = s.appCvFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -4285,11 +4324,17 @@ class Component extends DCLogic {
       const uploadedUrl = await this.uploadCvFile(path, s.appCvFile);
       if (uploadedUrl) cvUrl = uploadedUrl;
     }
-    await postToApi('/api/submit-application', {
+    const result = await postToApi('/api/submit-application', {
       name: s.appName, email: s.appEmail, linkedin: s.appLinkedin, cvLink: cvUrl,
       roleInterest: s.roleInterest, compExpectation: s.appComp, whyUs: s.appWhyUs, message: s.appMessage, lang: s.lang,
       website_hp: s.appHp
     });
+    if (result.ok) {
+      this.setState({ appSubmitted: true, appSubmitting: false, appSubmitError: false });
+    } else {
+      console.error('[submit-application] request failed', result.status, result.data);
+      this.setState({ appSubmitting: false, appSubmitError: true });
+    }
   };
 
   setCsActive = (key) => this.setState({ csActive: key });
@@ -4777,9 +4822,10 @@ class Component extends DCLogic {
 
     const noFocus = !s.focus;
     const noBudget = !s.budget;
-    const cannotSubmit = !(s.name.trim().length > 0 && /\S+@\S+\.\S+/.test(s.email) && s.company.trim().length > 0 && s.phone.trim().length > 0 && s.website.trim().length > 0 && s.teamSize.trim().length > 0 && s.problem.trim().length > 0);
+    const cannotSubmit = s.submitting || !(s.name.trim().length > 0 && /\S+@\S+\.\S+/.test(s.email) && s.company.trim().length > 0 && s.phone.trim().length > 0 && s.website.trim().length > 0 && s.teamSize.trim().length > 0 && s.problem.trim().length > 0);
     const nextBtnStyle = `padding:12px 24px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:13px;cursor:pointer;opacity:${(s.step===1?noFocus:noBudget)?0.4:1}`;
     const submitBtnStyle = `padding:12px 24px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:13px;cursor:pointer;opacity:${cannotSubmit?0.4:1}`;
+    const submitBtnLabel = s.submitting ? t.submitBtnLoading : t.submitBtn;
     const focusLabelMap = {
       ai: t.caseFilterAi,
       mvp: t.caseFilterMvp,
@@ -4803,7 +4849,7 @@ class Component extends DCLogic {
       style: `text-align:left;padding:12px 14px;background:${s.roleInterest === role ? accent + '1a' : 'transparent'};color:${s.roleInterest === role ? '#fafafa' : '#a1a1aa'};border:1px solid ${s.roleInterest === role ? accent : 'rgba(255,255,255,.12)'};border-radius:4px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s;font-family:'Manrope',sans-serif`
     }));
     const tracks = t.carTracksData.map(track => ({ ...track, onClick: () => this.selectRole(track.title) }));
-    const canSubmitApp = s.appName.trim().length > 0 && /\S+@\S+\.\S+/.test(s.appEmail) && (s.appCvLink.trim().length > 0 || s.appCvFile);
+    const canSubmitApp = !s.appSubmitting && s.appName.trim().length > 0 && /\S+@\S+\.\S+/.test(s.appEmail) && (s.appCvLink.trim().length > 0 || s.appCvFile);
 
     const caseFilterKeys = ['all', 'ai', 'mvp', 'enterprise'];
     const caseFilterLabels = { all: t.caseFilterAll, ai: t.caseFilterAi, mvp: t.caseFilterMvp, enterprise: t.caseFilterEnterprise };
@@ -5001,7 +5047,8 @@ class Component extends DCLogic {
       heroDeployAI: this.heroDeployAI, heroBuildMVP: this.heroBuildMVP, goAuditWithRoi: this.goAuditWithRoi,
       step: s.step, isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3,
       notSubmitted: !s.submitted, submitted: s.submitted, progressPct: `${(s.step / 3) * 100}%`,
-      focusOptions, budgetOptions, noFocus, noBudget, cannotSubmit, nextBtnStyle, submitBtnStyle,
+      focusOptions, budgetOptions, noFocus, noBudget, cannotSubmit, nextBtnStyle, submitBtnStyle, submitBtnLabel,
+      submitting: s.submitting, submitError: s.submitError,
       goNext: this.goNext, goBack: this.goBack, name: s.name, email: s.email, setName: this.setName, setEmail: this.setEmail,
       handleSubmit: this.handleSubmit, summaryLine: `${focusLabelMap[s.focus] || '—'} · ${s.budget || '—'} · ${s.name}`,
       calendlyEmbedUrl: `${CALENDLY_URL}?name=${encodeURIComponent(s.name)}&email=${encodeURIComponent(s.email)}&hide_gdpr_banner=1`,
@@ -5140,8 +5187,9 @@ class Component extends DCLogic {
       appHp: s.appHp, setAppHp: this.setAppHp,
       handleCvUpload: this.handleCvUpload, cvFileLabel: s.appCvFileName || t.carCvUploadLabel,
       cvParsing: s.cvParsing, cvParsed: s.cvParsed, appCvError: s.appCvError, appSubmitted: s.appSubmitted, appNotSubmitted: !s.appSubmitted,
-      appCannotSubmit: !canSubmitApp,
+      appCannotSubmit: !canSubmitApp, appSubmitting: s.appSubmitting, appSubmitError: s.appSubmitError,
       appSubmitBtnStyle: `width:100%;padding:14px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:14px;cursor:pointer;opacity:${canSubmitApp?1:0.4}`,
+      appSubmitBtnLabel: s.appSubmitting ? t.carSubmitBtnLoading : t.carAppSubmitBtn,
       submitApplication: this.submitApplication,
 
       caseFilters, alertClientPortalComingSoon: this.alertClientPortalComingSoon,

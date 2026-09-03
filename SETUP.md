@@ -1,5 +1,53 @@
 # Setup checklist — po dnešních změnách
 
+## 🆕 3. 9. 2026 — opraveno: poptávky a přihlášky se nepropisovaly
+
+Nahlášený problém: poptávky z auditního formuláře a přihlášky uchazečů se neobjevovaly v adminu.
+Příčina měla (nejspíš) dvě vrstvy — první je jistá a opravená v kódu, druhá je potřeba ověřit ručně
+v Supabase (nemám tam přístup):
+
+**1. Potvrzený bug ve frontendu (opraveno).** `handleSubmit` (audit) a `submitApplication`
+(přihláška) v `index.html` nastavovaly `submitted`/`appSubmitted` na `true` **předtím**, než vůbec
+doběhlo `await postToApi(...)`, a výsledek volání se nikde nekontroloval. Návštěvník tak vždycky
+viděl "děkujeme" obrazovku, i kdyby `/api/submit-audit` nebo `/api/submit-application` spadly na
+500 (např. kvůli chybějící `SUPABASE_SERVICE_ROLE_KEY` na Vercelu) — lead se ztratil tiše, beze
+stopy. Teď se čeká na skutečnou odpověď; při chybě zůstane formulář otevřený s chybovou hláškou a
+možností to zkusit znovu (audit navíc rovnou nabídne Calendly widget jako zálohu, přihláška e-mail
+na `petr@aerisq.tech`).
+
+**2. Nepotvrzené, ale pravděpodobné: chybějící SELECT policy pro tým.** Admin čte `audit_requests`
+a `applications` přes `fetchTable`, který **tiše polyká chyby** (`if (!res.ok) return []`) — takže
+i kdyby vám RLS blokovalo čtení, admin by prostě jen tiše ukázal prázdný seznam, přesně jak popisujete.
+Insert teď jde přes `service_role` klíč (obchází RLS), ale to neznamená, že přihlášený admin má
+právo si ta samá data přečíst zpátky přes anon klíč + JWT — v repozitáři není žádný `create policy`
+pro SELECT na těchto třech tabulkách pro tým (na rozdíl od portálových tabulek níže, které mají
+`staff_full_access_*`). Pro jistotu spusťte v Supabase SQL editoru (bezpečné spustit i opakovaně,
+`alter table … enable row level security` nic nerozbije; jen `create policy` řádek smažte, pokud
+ohlásí "already exists", a zbytek spusťte znovu):
+
+```sql
+alter table audit_requests enable row level security;
+alter table applications enable row level security;
+alter table newsletter_subscribers enable row level security;
+
+create policy staff_full_access_audit_requests on audit_requests for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+create policy staff_full_access_applications on applications for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+create policy staff_full_access_newsletter_subscribers on newsletter_subscribers for all
+  using (exists (select 1 from team_members where id = auth.uid()))
+  with check (exists (select 1 from team_members where id = auth.uid()));
+```
+
+**Jak rychle ověřit, co se opravdu děje:** v Supabase dashboardu → Table Editor → `audit_requests`.
+Pokud tam řádky ze starších poptávek **jsou** (jen v adminu chyběly), je to čistě bod 2 — SQL výše to
+spraví. Pokud tam **nejsou vůbec žádné**, insert samotný selhává — zkontrolujte ve Vercel dashboardu
+→ Project Settings → Environment Variables, že `SUPABASE_SERVICE_ROLE_KEY` je nastavený (a že je to
+opravdu `service_role` klíč, ne `anon`), a případně → Deployments → přejít na poslední produkční
+deployment → záložka Functions/Logs u `/api/submit-audit`, jestli tam nepadá chyba.
+
 ## 🆕 31. 8. 2026 — klientský portál (portal.aerisq.tech)
 
 Nový klientský portál — magic-link přihlášení, přehled projektu (nabídka/fáze/milníky/faktury/
