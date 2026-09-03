@@ -1185,8 +1185,8 @@ body{animation:pageFadeIn .35s ease both}
     <h1 style="font-family:'Unbounded',sans-serif;font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.025em;line-height:1.08;margin:0 0 22px">{{ hospPage.heroLine1 }}<br>{{ hospPage.heroLine2 }}</h1>
     <p style="font-size:16px;line-height:1.7;color:#a1a1aa;max-width:560px;margin:0 0 34px">{{ hospPage.heroSub }}</p>
     <div style="display:flex;gap:14px;flex-wrap:wrap">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:8px;padding:15px 26px;background:{{ accentColor }};color:#04140d;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;transition:transform .2s">
-        {{ t.navAudit }}
+      <a onClick="{{ goAuditHosp }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:8px;padding:15px 26px;background:{{ accentColor }};color:#04140d;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;transition:transform .2s">
+        {{ t.bookCallBtn }}
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </a>
       <a href="#hosp-pristup" style="display:inline-flex;align-items:center;padding:15px 26px;border:1px solid rgba(255,255,255,.16);border-radius:6px;font-weight:700;font-size:14px;color:#fafafa;text-decoration:none">Jak to řešíme</a>
@@ -1401,7 +1401,7 @@ body{animation:pageFadeIn .35s ease both}
         <h2>{{ t.pgClosingTitle }}</h2>
         <p>{{ t.pgClosingSub }}</p>
       </div>
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditHosp }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 
@@ -1450,8 +1450,8 @@ body{animation:pageFadeIn .35s ease both}
     <h1 style="font-family:'Unbounded',sans-serif;font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.025em;line-height:1.08;margin:22px 0 22px">{{ realPage.heroLine1 }}<br>{{ realPage.heroLine2 }}</h1>
     <p style="font-size:16px;line-height:1.7;color:#a1a1aa;max-width:560px;margin:0 0 34px">{{ realPage.heroSub }}</p>
     <div style="display:flex;gap:14px;flex-wrap:wrap">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:8px;padding:15px 26px;background:{{ accentColor }};color:#04140d;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;transition:transform .2s">
-        {{ t.navAudit }}
+      <a onClick="{{ goAuditReal }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:8px;padding:15px 26px;background:{{ accentColor }};color:#04140d;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;transition:transform .2s">
+        {{ t.bookCallBtn }}
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </a>
       <a href="#real-pristup" style="display:inline-flex;align-items:center;padding:15px 26px;border:1px solid rgba(255,255,255,.16);border-radius:6px;font-weight:700;font-size:14px;color:#fafafa;text-decoration:none">Jak to řešíme</a>
@@ -1767,7 +1767,7 @@ body{animation:pageFadeIn .35s ease both}
         <h2>{{ t.pgClosingTitle }}</h2>
         <p>{{ t.pgClosingSub }}</p>
       </div>
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditReal }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 
@@ -1849,7 +1849,7 @@ body{animation:pageFadeIn .35s ease both}
     <h1>{{ offeringAiTitle }}</h1>
     <p>{{ offeringAiText }}</p>
     <div class="pg-hero-ctas">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditOffAi }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 </div>
@@ -1942,7 +1942,7 @@ body{animation:pageFadeIn .35s ease both}
         <h2>{{ t.pgClosingTitle }}</h2>
         <p>{{ t.pgClosingSub }}</p>
       </div>
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditOffAi }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 
@@ -1966,7 +1966,7 @@ body{animation:pageFadeIn .35s ease both}
     <h1>{{ offeringMvpTitle }}</h1>
     <p>{{ offeringMvpText }}</p>
     <div class="pg-hero-ctas">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditOffMvp }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 </div>
@@ -2059,7 +2059,7 @@ body{animation:pageFadeIn .35s ease both}
         <h2>{{ t.pgClosingTitle }}</h2>
         <p>{{ t.pgClosingSub }}</p>
       </div>
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditOffMvp }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 
@@ -2083,7 +2083,7 @@ body{animation:pageFadeIn .35s ease both}
     <h1>{{ offeringEnterpriseTitle }}</h1>
     <p>{{ offeringEnterpriseText }}</p>
     <div class="pg-hero-ctas">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditOffEnterprise }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 </div>
@@ -2176,7 +2176,7 @@ body{animation:pageFadeIn .35s ease both}
         <h2>{{ t.pgClosingTitle }}</h2>
         <p>{{ t.pgClosingSub }}</p>
       </div>
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditOffEnterprise }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 
@@ -2200,7 +2200,7 @@ body{animation:pageFadeIn .35s ease both}
     <h1>{{ offeringTrainingTitle }}</h1>
     <p>{{ offeringTrainingText }}</p>
     <div class="pg-hero-ctas">
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditOffTraining }}" class="cta-lift" style="display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border:1px solid {{ accentColor }};color:#000;background:{{ accentColor }};border-radius:4px;text-decoration:none;font-size:13.5px;font-weight:700;font-family:'Geist',sans-serif;transition:transform .2s;cursor:pointer">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 </div>
@@ -2293,7 +2293,7 @@ body{animation:pageFadeIn .35s ease both}
         <h2>{{ t.pgClosingTitle }}</h2>
         <p>{{ t.pgClosingSub }}</p>
       </div>
-      <a onClick="{{ goAudit }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.navAudit }}</a>
+      <a onClick="{{ goAuditOffTraining }}" class="cta-lift" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;background:{{ accentColor }};color:#000;border-radius:4px;font-weight:700;font-size:13.5px;text-decoration:none;transition:transform .2s;cursor:pointer;font-family:'Geist',sans-serif">{{ t.bookCallBtn }}</a>
     </div>
   </section>
 
@@ -2488,6 +2488,7 @@ async function supabaseInsert(table, payload) {
 const DICT = {
   en: {
     navSectors: 'Sectors', navSectorsAll: 'All sectors', navOffering: 'Offering', navOfferingAll: 'Full offering', navCaseStudies: 'Case Studies', navBlog: 'Blog', navCareers: 'Careers', navAudit: 'Initiate Audit →',
+    bookCallBtn: 'Book a call →',
     footerHome: 'Home', footerTagline: "We don't abandon what we deploy.",
     heroTitle: 'Cut 40+ hours of manual overhead per person. Scale operations with zero headcount bloat.',
     heroSub: "No generic chatbot templates. We eliminate repetitive copy-paste workflows and replace them with enterprise-grade autonomous AI agents. Zero data entry errors in CRM & ERP, 10x faster turnaround, and guaranteed ROI.",
@@ -2655,6 +2656,7 @@ const DICT = {
   },
   cs: {
     navSectors: 'Odvětví', navSectorsAll: 'Všechny obory', navOffering: 'Nabídka', navOfferingAll: 'Celá nabídka', navCaseStudies: 'Případové studie', navBlog: 'Blog', navCareers: 'Kariéra', navAudit: 'Zahájit audit →',
+    bookCallBtn: 'Rezervovat hovor →',
     footerHome: 'Domů', footerTagline: 'Neopouštíme, co nasadíme.',
     clientPortal: 'Klientský portál',
     clientPortalAlert: 'Klientský portál pro sledování projektů a milníků připravujeme.',
@@ -3875,6 +3877,16 @@ class Component extends DCLogic {
   goServices = () => this.goTo('home', 'services');
   goStack = () => this.goTo('home', 'stack');
   goAudit = () => { trackEvent('audit_cta_click', { source: 'nav_audit' }); this.goTo('home', 'audit'); };
+
+  // Per-service/sector CTAs skip the multi-step questionnaire entirely and open Calendly directly
+  // in a new tab — no dependency on our own /api/submit-* pipeline at all, and utm_campaign tags
+  // which page the booking came from (visible in the Calendly notification/dashboard) so whoever
+  // takes the call already has that context.
+  goToServiceCalendly = (serviceKey) => {
+    trackEvent('audit_cta_click', { source: serviceKey });
+    const url = `${CALENDLY_URL}?utm_campaign=${serviceKey}&utm_source=aerisq_site&hide_gdpr_banner=1`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
   goCareers = () => this.goTo('careers');
   goBlog = () => this.goTo('blog');
   goCaseStudies = () => this.goTo('case-studies');
@@ -5038,6 +5050,9 @@ class Component extends DCLogic {
       ecomTitle: ecommerceTitle,
       ecomText: ecommerceText,
       goHome: this.goHome, goServices: this.goServices, goStack: this.goStack, goAudit: this.goAudit,
+      goAuditHosp: () => this.goToServiceCalendly('hospitality'), goAuditReal: () => this.goToServiceCalendly('realestate'),
+      goAuditOffAi: () => this.goToServiceCalendly('offering_ai'), goAuditOffMvp: () => this.goToServiceCalendly('offering_mvp'),
+      goAuditOffEnterprise: () => this.goToServiceCalendly('offering_enterprise'), goAuditOffTraining: () => this.goToServiceCalendly('offering_training'),
       goCareers: this.goCareers, goBlog: this.goBlog, goCaseStudies: this.goCaseStudies, goPrivacy: this.goPrivacy, goTerms: this.goTerms,
       toggleSectorsMenu: this.toggleSectorsMenu, sectorsChevronTransform: this.sectorsChevronTransform,
       sectorMenuItems: this.sectorMenuItems, sectorsMenuOpenAria: this.sectorsMenuOpenAria, goObory: this.goObory,
