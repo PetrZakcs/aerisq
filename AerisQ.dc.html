@@ -859,7 +859,7 @@ body{animation:pageFadeIn .35s ease both}
 
   <div style="max-width:{{ auditCardMaxWidth }};margin:0 auto;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:#0a0a0a;padding:clamp(28px,4vw,48px)">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">{{ t.stepLabel }} 0{{ step }} / 03</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">{{ t.stepLabel }} 0{{ step }} / 04</span>
       <div style="flex:1;height:2px;background:rgba(255,255,255,.08);margin:0 16px;position:relative">
         <div style="height:100%;background:{{ accentColor }};width:{{ progressPct }};transition:width .3s"></div>
       </div>
@@ -895,21 +895,39 @@ body{animation:pageFadeIn .35s ease both}
       </sc-if>
 
       <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
-        <h3 style="font-size:19px;font-weight:700;margin:0 0 20px">{{ t.step3Title }}</h3>
+        <h3 style="font-size:19px;font-weight:700;margin:0 0 6px">{{ t.qualifyStepTitle }}</h3>
+        <p style="font-size:13px;color:#71717a;margin:0 0 24px">{{ t.qualifyStepSub }}</p>
+        <div style="display:flex;flex-direction:column;gap:22px;margin-bottom:28px">
+          <sc-for list="{{ qualifyQuestions }}" as="q" hint-placeholder-count="3">
+            <div>
+              <div style="font-size:13.5px;color:#d4d4d8;margin-bottom:10px">{{ q.question }}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ q.options }}" as="opt" hint-placeholder-count="4">
+                  <button onClick="{{ opt.onClick }}" style="{{ opt.style }}">{{ opt.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <button onClick="{{ goBack }}" style="padding:12px 22px;background:transparent;color:#a1a1aa;border:1px solid rgba(255,255,255,.12);border-radius:4px;font-weight:600;font-size:13px;cursor:pointer">{{ t.backBtn }}</button>
+          <button onClick="{{ goNext }}" disabled="{{ noQualify }}" style="{{ nextBtnStyle }}">{{ t.continueBtn }}</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+        <h3 style="font-size:19px;font-weight:700;margin:0 0 20px">{{ t.step4Title }}</h3>
         <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <input placeholder="{{ t.namePlaceholder }}" value="{{ name }}" onChange="{{ setName }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
             <input placeholder="{{ t.emailPlaceholder }}" value="{{ email }}" onChange="{{ setEmail }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <input placeholder="{{ t.companyPlaceholder }} *" value="{{ company }}" onChange="{{ setCompany }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <input placeholder="{{ t.phonePlaceholder }} *" value="{{ phone }}" onChange="{{ setPhone }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+            <input placeholder="{{ t.companyPlaceholder }}" value="{{ company }}" onChange="{{ setCompany }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+            <input placeholder="{{ t.phonePlaceholder }}" value="{{ phone }}" onChange="{{ setPhone }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <input placeholder="{{ t.websitePlaceholder }} *" value="{{ website }}" onChange="{{ setWebsite }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <input placeholder="{{ teamSizePlaceholder }} *" value="{{ teamSize }}" onChange="{{ setTeamSize }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-          </div>
-          <textarea placeholder="{{ problemPlaceholderDynamic }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="4" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
+          <input placeholder="{{ t.websitePlaceholder }}" value="{{ website }}" onChange="{{ setWebsite }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+          <textarea placeholder="{{ problemPlaceholderDynamic }}" value="{{ problem }}" onChange="{{ setProblem }}" rows="3" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
         </div>
         <input type="text" tabindex="-1" autocomplete="off" aria-hidden="true" value="{{ auditHp }}" onChange="{{ setAuditHp }}" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
         <sc-if value="{{ submitError }}" hint-placeholder-val="{{ false }}">
@@ -2549,16 +2567,15 @@ const DICT = {
     testimonialQuote: "AerisQ refined the AI-agent pipeline at the core of our product — the one that helps our clients find and get in front of their ideal customers. More reliable, production-grade, and a lot less babysitting.",
     testimonialCaseIn: 'CASE STUDY IN',
     auditEyebrow: '// SYSTEM AUDIT', auditTitle: 'Initiate your infrastructure audit', auditScarcity: '◆ Only 3 audit slots open this quarter',
-    stepLabel: 'STEP', step1Title: 'Select Infrastructure Focus', step2Title: 'Target Budget / Scope', step3Title: 'Technical Specification',
+    stepLabel: 'STEP', step1Title: 'Select Infrastructure Focus', step2Title: 'Target Budget / Scope',
+    qualifyStepTitle: "A Few Quick Questions", qualifyStepSub: 'Pick whatever fits best — this is what actually shapes the audit.',
+    step4Title: 'Contact Details',
     continueBtn: 'Continue →', backBtn: '← Back', submitBtn: 'Submit Technical Specification',
     submitBtnLoading: 'Sending…',
     submitErrorTitle: "That didn't go through",
     submitErrorMsg: "We couldn't save your request — sorry about that. Try again in a moment, or just grab a slot below and tell us in the call instead:",
     namePlaceholder: 'Full name', emailPlaceholder: 'Business email',
     companyPlaceholder: 'Company name', phonePlaceholder: 'Phone', websitePlaceholder: 'Company website',
-    teamSizePlaceholder: 'Team / company size',
-    techStackPlaceholder: 'Current Tech Stack (e.g. Python, React, AWS)',
-    problemPlaceholder: 'Describe the manual bottlenecks or system integrations you want to automate...',
     calendlyLabel: '// BOOK A CALL', estimateLabel: '// PRELIMINARY ESTIMATE',
     confirmedTitle: 'Audit request confirmed', confirmedFootnote: "We'll respond within one business day.",
     mapEyebrow: '// WHERE WE WORK', mapCaption: 'Engineers based in CET — full-day overlap with EU teams, no timezone handoff delay.',
@@ -2768,16 +2785,15 @@ const DICT = {
     processClosing: 'Konec spolupráce neurčuje kalendář, ale to, jestli to váš tým reálně provozuje sám. I pak zůstáváme dostupní pro úpravy a konzultace — jako tým, který systém postavil, ne jako podpora do e-mailu.',
     testimonialQuote: 'AerisQ vylepšili pipeline AI agentů, na kterých stojí jádro našeho produktu — ten, co pomáhá našim klientům najít a oslovit jejich ideální zákazníky. Spolehlivější, produkčně zralé a mnohem méně hlídání.',
     testimonialCaseIn: 'PŘÍPADOVÁ STUDIE V',
-    stepLabel: 'KROK', step1Title: 'Vyberte oblast zaměření', step2Title: 'Cílový rozpočet / rozsah', step3Title: 'Technická specifikace',
+    stepLabel: 'KROK', step1Title: 'Vyberte oblast zaměření', step2Title: 'Cílový rozpočet / rozsah',
+    qualifyStepTitle: 'Pár rychlých otázek', qualifyStepSub: 'Vyberte, co nejlíp sedí — tohle nám ve skutečnosti audit nasměruje.',
+    step4Title: 'Kontaktní údaje',
     continueBtn: 'Pokračovat →', backBtn: '← Zpět', submitBtn: 'Odeslat specifikaci auditu',
     submitBtnLoading: 'Odesílám…',
     submitErrorTitle: 'Odeslání se nepovedlo',
     submitErrorMsg: 'Nepodařilo se nám uložit vaši žádost — omlouváme se. Zkuste to prosím znovu za chvíli, nebo si rovnou vyberte termín níže a řekněte nám vše na hovoru:',
     namePlaceholder: 'Celé jméno', emailPlaceholder: 'Firemní e-mail',
     companyPlaceholder: 'Název firmy', phonePlaceholder: 'Telefon', websitePlaceholder: 'Webová stránka',
-    teamSizePlaceholder: 'Velikost týmu / firmy',
-    techStackPlaceholder: 'Používané technologie (např. Python, Node.js, AWS, Postgres)',
-    problemPlaceholder: 'Detailně popište systémy nebo ruční procesy, které chcete analyzovat / automatizovat...',
     calendlyLabel: '// REZERVOVAT HOVOR', estimateLabel: '// PŘEDBĚŽNÝ ODHAD',
     confirmedTitle: 'Žádost o audit potvrzena', confirmedFootnote: 'Ozveme se vám do jednoho pracovního dne.',
     mapEyebrow: '// KDE PŮSOBÍME', mapCaption: 'Naši inženýři sídlí v CET — plné pracovní překrytí s EU týmy, žádné čekání na časové pásmo.',
@@ -2831,22 +2847,72 @@ const DICT = {
 // generic fallback reply. That's deliberate: a guessed match (or an "we can't script this" bail-out
 // message) can misfire or read as hedging, and one weak-sounding answer undercuts trust in the demo
 // more than a slightly narrower set of options does.
-// Branches the main audit wizard's step 3 by which service the visitor picked in step 1 — same
-// two fields (teamSize/problem), just asking the question that's actually relevant to that
-// service instead of one generic prompt for everyone. Keeps the existing audit_requests schema
-// (focus/budget/problem etc.) untouched; this only changes what's asked, not what's stored.
-const FOCUS_STEP3_COPY = {
+// Branches the main audit wizard's final free-text field by which service the visitor picked in
+// step 1 — this is now just the "anything else" catch-all after the structured qualifying
+// questions below have already done the real work of collecting concrete, filterable data.
+const FOCUS_FINAL_NOTE_COPY = {
   cs: {
-    ai: { teamSize: 'Kde dnes žijí vaše data? (dokumenty, CRM, e-maily...)', problem: 'Co konkrétně chcete automatizovat?' },
-    mvp: { teamSize: 'Máte už tým nebo kód, nebo stavíme od nuly?', problem: 'Co přesně chcete postavit a do kdy potřebujete funkční prototyp?' },
-    enterprise: { teamSize: 'Jaký je současný tech stack?', problem: 'Kde konkrétně cítíte technický dluh nebo bottleneck?' },
-    training: { teamSize: 'Kolik lidí a jaké role by se tréninku účastnily?', problem: 'Jaká je dnes úroveň znalostí AI nástrojů ve firmě a jaký formát tréninku preferujete?' }
+    ai: 'Co konkrétně chcete automatizovat? Cokoliv dalšího, co bychom měli vědět.',
+    mvp: 'Co přesně chcete postavit? Cokoliv dalšího, co bychom měli vědět.',
+    enterprise: 'Kde konkrétně cítíte technický dluh nebo bottleneck? Cokoliv dalšího, co bychom měli vědět.',
+    training: 'Cokoliv dalšího o týmu nebo firmě, co bychom měli vědět.'
   },
   en: {
-    ai: { teamSize: 'Where does your data live today? (docs, CRM, email...)', problem: 'What exactly do you want to automate?' },
-    mvp: { teamSize: 'Do you already have a team or code, or starting from scratch?', problem: 'What exactly do you want to build, and by when do you need a working prototype?' },
-    enterprise: { teamSize: "What's your current tech stack?", problem: 'Where specifically do you feel technical debt or a bottleneck?' },
-    training: { teamSize: 'How many people, and what roles, would join the training?', problem: "What's your team's current level with AI tools, and what training format do you prefer?" }
+    ai: 'What exactly do you want to automate? Anything else we should know.',
+    mvp: 'What exactly do you want to build? Anything else we should know.',
+    enterprise: 'Where specifically do you feel technical debt or a bottleneck? Anything else we should know.',
+    training: 'Anything else about your team or company we should know.'
+  }
+};
+
+// Step 3 of the audit wizard: 3 concrete, click-to-answer qualifying questions specific to
+// whichever service was picked in step 1, replacing what used to be open-ended text fields.
+// Each question's `key` becomes a field inside the `qualification` jsonb column on submit —
+// genuinely structured, filterable data instead of a paragraph to interpret by hand.
+const FOCUS_QUALIFY_QUESTIONS = {
+  cs: {
+    ai: [
+      { key: 'data_location', question: 'Kde dnes žijí vaše data?', options: ['Dokumenty a soubory', 'CRM / interní systém', 'E-maily', 'Různě, napříč vším'] },
+      { key: 'user_count', question: 'Kolik lidí by nástroj denně používalo?', options: ['1–5', '6–20', '21–50', '50+'] },
+      { key: 'urgency', question: 'Jak brzy chcete začít?', options: ['Co nejdřív', 'Do měsíce', 'Zatím jen průzkum'] }
+    ],
+    mvp: [
+      { key: 'product_stage', question: 'V jaké fázi je váš produkt?', options: ['Jen nápad', 'Návrh / wireframes', 'Částečný kód', 'Starší verze k přepsání'] },
+      { key: 'tech_team', question: 'Máte už technický tým?', options: ['Žádný', 'Jen business tým', 'Malý tech tým', 'Máme CTO / lead'] },
+      { key: 'timeline', question: 'Do kdy potřebujete funkční prototyp?', options: ['Do 2 týdnů', 'Do měsíce', 'Do kvartálu', 'Flexibilní'] }
+    ],
+    enterprise: [
+      { key: 'bottleneck', question: 'Kde cítíte největší bottleneck?', options: ['Legacy kód / tech dluh', 'Infrastruktura / škálování', 'Integrace systémů', 'Bezpečnost / compliance'] },
+      { key: 'team_size', question: 'Velikost vašeho vývojářského týmu?', options: ['1–5', '6–15', '16–50', '50+'] },
+      { key: 'criticality', question: 'Jak kritický je systém pro provoz?', options: ['Business-critical', 'Denně používaný', 'Podpůrný nástroj'] }
+    ],
+    training: [
+      { key: 'headcount', question: 'Kolik lidí by se tréninku účastnilo?', options: ['1–5', '6–15', '16–40', '40+'] },
+      { key: 'roles', question: 'Jaké role?', options: ['Vedení / manažeři', 'Vývojáři', 'Obchod / marketing', 'Napříč firmou'] },
+      { key: 'skill_level', question: 'Aktuální úroveň znalostí AI nástrojů?', options: ['Začátečníci', 'Základy znají', 'Pokročilí', 'Mix úrovní'] }
+    ]
+  },
+  en: {
+    ai: [
+      { key: 'data_location', question: 'Where does your data live today?', options: ['Documents & files', 'CRM / internal system', 'Email', 'Scattered, everywhere'] },
+      { key: 'user_count', question: 'How many people would use it daily?', options: ['1–5', '6–20', '21–50', '50+'] },
+      { key: 'urgency', question: 'How soon do you want to start?', options: ['As soon as possible', 'Within a month', 'Just researching for now'] }
+    ],
+    mvp: [
+      { key: 'product_stage', question: 'What stage is your product at?', options: ['Just an idea', 'Design / wireframes', 'Partial codebase', 'Legacy version to rebuild'] },
+      { key: 'tech_team', question: 'Do you already have a tech team?', options: ['None', 'Business team only', 'Small tech team', 'We have a CTO / lead'] },
+      { key: 'timeline', question: 'By when do you need a working prototype?', options: ['Within 2 weeks', 'Within a month', 'Within a quarter', 'Flexible'] }
+    ],
+    enterprise: [
+      { key: 'bottleneck', question: 'Where do you feel the biggest bottleneck?', options: ['Legacy code / tech debt', 'Infrastructure / scaling', 'System integrations', 'Security / compliance'] },
+      { key: 'team_size', question: "What's your engineering team size?", options: ['1–5', '6–15', '16–50', '50+'] },
+      { key: 'criticality', question: 'How critical is the system to operations?', options: ['Business-critical', 'Used daily', 'Supporting tool'] }
+    ],
+    training: [
+      { key: 'headcount', question: 'How many people would join the training?', options: ['1–5', '6–15', '16–40', '40+'] },
+      { key: 'roles', question: 'What roles?', options: ['Leadership / managers', 'Engineers', 'Sales / marketing', 'Company-wide'] },
+      { key: 'skill_level', question: "Team's current level with AI tools?", options: ['Beginners', 'Know the basics', 'Advanced', 'Mixed levels'] }
+    ]
   }
 };
 
@@ -3384,8 +3450,8 @@ class Component extends DCLogic {
     page: pathToPage(window.location.pathname),
     lang: (new URLSearchParams(window.location.search).get('lang') === 'en') ? 'en' : 'cs',
     step: 1, focus: null, budget: null,
-    name: '', email: '', company: '', phone: '', website: '', teamSize: '', problem: '',
-    submitted: false, submitting: false, submitError: false, auditHp: '',
+    name: '', email: '', company: '', phone: '', website: '', problem: '',
+    submitted: false, submitting: false, submitError: false, auditHp: '', qualAnswers: {},
     accentColor: '#34d399', animatePipeline: true, compact: false,
     employees: 15, hoursPerDay: 10,
     mouseX: 50, mouseY: 50,
@@ -3991,9 +4057,13 @@ class Component extends DCLogic {
     ];
   }
 
-  selectFocus = (key) => this.setState({ focus: key, step: 2 });
+  // Changing focus mid-wizard invalidates any qualifying answers already picked for the
+  // previous branch (the questions themselves are about to change), so clear them here rather
+  // than let a stale answer from a different service silently ride along to submission.
+  selectFocus = (key) => this.setState({ focus: key, step: 2, qualAnswers: {} });
   selectBudget = (label) => this.setState({ budget: label, step: 3 });
-  goNext = () => this.setState(s => ({ step: Math.min(3, s.step + 1) }));
+  selectQual = (key, value) => this.setState(s => ({ qualAnswers: { ...s.qualAnswers, [key]: value } }));
+  goNext = () => this.setState(s => ({ step: Math.min(4, s.step + 1) }));
   goBack = () => this.setState(s => ({ step: Math.max(1, s.step - 1) }));
   setName = (e) => this.setState({ name: e.target.value });
   setEmail = (e) => this.setState({ email: e.target.value });
@@ -4001,7 +4071,6 @@ class Component extends DCLogic {
   setCompany = (e) => this.setState({ company: e.target.value });
   setPhone = (e) => this.setState({ phone: e.target.value });
   setWebsite = (e) => this.setState({ website: e.target.value });
-  setTeamSize = (e) => this.setState({ teamSize: e.target.value });
   setProblem = (e) => this.setState({ problem: e.target.value });
   setAccent = (v) => this.setState({ accentColor: v });
   setAnimatePipeline = (v) => this.setState({ animatePipeline: v });
@@ -4051,30 +4120,28 @@ class Component extends DCLogic {
     this.setState({ submitting: true, submitError: false });
     ensureCalendlyScript();
 
-    // audit_requests has no dedicated ROI/UTM columns yet (adding them is a Supabase dashboard
-    // step, not a code change) — so until that migration happens, fold both into the free-text
-    // `problem` field the sales call already reads, instead of silently losing them. Mirrors the
-    // ROI section's own calculation (see renderVals) so the lead carries the visitor's own numbers.
+    // ROI numbers and the step-3 qualifying answers now go as real columns (roi_* / qualification
+    // jsonb) instead of a free-text note buried in `problem` — mirrors the ROI section's own
+    // calculation (see renderVals) so the lead carries the visitor's own numbers, but sortable
+    // and filterable in admin instead of a paragraph to parse by hand.
     const HOURLY_RATE_CZK = 280, HOURLY_RATE_EUR = 11, AUTOMATION_SHARE = 0.35;
     const savedHoursMonthly = Math.round(s.employees * s.hoursPerDay * AUTOMATION_SHARE * 4.33);
     const hourlyRate = s.lang === 'cs' ? HOURLY_RATE_CZK : HOURLY_RATE_EUR;
     const savedYearly = Math.round(savedHoursMonthly * 12 * hourlyRate);
-    const savedYearlyFormatted = savedYearly.toLocaleString(s.lang === 'cs' ? 'cs-CZ' : 'en-US');
-    const roiNote = s.lang === 'cs'
-      ? `[ROI kalkulačka] tým ${s.employees}, ${s.hoursPerDay} h/týden rutinní práce → odhad ${savedHoursMonthly} h/měsíc, ${savedYearlyFormatted} Kč/rok.`
-      : `[ROI calculator] team ${s.employees}, ${s.hoursPerDay} h/week routine work → est. ${savedHoursMonthly} h/month, €${savedYearlyFormatted}/year.`;
 
     const utm = captureUtm();
     const utmNote = (utm.source || utm.medium || utm.campaign)
       ? `[Zdroj] utm_source=${utm.source || '—'} utm_medium=${utm.medium || '—'} utm_campaign=${utm.campaign || '—'}`
       : '';
-
-    const enrichedProblem = [roiNote, utmNote, s.problem.trim()].filter(Boolean).join('\n');
+    const enrichedProblem = [utmNote, s.problem.trim()].filter(Boolean).join('\n');
 
     const result = await postToApi('/api/submit-audit', {
       name: s.name, email: s.email, company: s.company, phone: s.phone,
-      website: s.website, teamSize: s.teamSize, problem: enrichedProblem,
+      website: s.website, problem: enrichedProblem,
       focus: s.focus, budget: s.budget, lang: s.lang,
+      qualification: s.qualAnswers,
+      roiEmployees: s.employees, roiHoursPerWeek: s.hoursPerDay,
+      roiSavedHoursMonthly: savedHoursMonthly, roiSavedYearly: savedYearly,
       website_hp: s.auditHp
     });
 
@@ -4308,6 +4375,12 @@ class Component extends DCLogic {
 
   baseChoiceStyle(selected, accent) {
     return `text-align:left;padding:14px 16px;background:${selected ? accent + '1a' : 'transparent'};color:${selected ? '#fafafa' : '#a1a1aa'};border:1px solid ${selected ? accent : 'rgba(255,255,255,.12)'};border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s;font-family:'Manrope',sans-serif`;
+  }
+
+  // Compact pill variant for step 3's qualifying-question options — several buttons per question,
+  // several questions per screen, so these need to read as quick taps, not full-width choices.
+  qualifyChoiceStyle(selected, accent) {
+    return `padding:9px 14px;background:${selected ? accent + '1a' : 'transparent'};color:${selected ? '#fafafa' : '#a1a1aa'};border:1px solid ${selected ? accent : 'rgba(255,255,255,.12)'};border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:'Manrope',sans-serif`;
   }
 
   getLang() { return this.state.lang; }
@@ -4895,15 +4968,28 @@ class Component extends DCLogic {
       { key: 'training', label: t.offeringTrainingLabel }
     ];
     const focusOptions = focusMeta.map(m => ({ label: m.label, box: s.focus === m.key ? '[×] ' : '[ ] ', onClick: () => this.selectFocus(m.key), style: this.baseChoiceStyle(s.focus === m.key, accent) }));
-    // Falls back to the 'ai' branch's copy if focus is somehow unset — step 3 is unreachable
-    // without picking one, so this is just a defensive default, never actually shown.
-    const step3Copy = (FOCUS_STEP3_COPY[s.lang] && FOCUS_STEP3_COPY[s.lang][s.focus]) || FOCUS_STEP3_COPY.cs.ai;
+    // Falls back to the 'ai' branch if focus is somehow unset — steps 3/4 are unreachable without
+    // picking one, so this is just a defensive default, never actually shown.
+    const finalNoteCopy = (FOCUS_FINAL_NOTE_COPY[s.lang] && FOCUS_FINAL_NOTE_COPY[s.lang][s.focus]) || FOCUS_FINAL_NOTE_COPY.cs.ai;
+    const qualifyQuestionsRaw = (FOCUS_QUALIFY_QUESTIONS[s.lang] && FOCUS_QUALIFY_QUESTIONS[s.lang][s.focus]) || FOCUS_QUALIFY_QUESTIONS.cs.ai;
+    const qualifyQuestions = qualifyQuestionsRaw.map(q => ({
+      question: q.question,
+      options: q.options.map(label => ({
+        label,
+        onClick: () => this.selectQual(q.key, label),
+        style: this.qualifyChoiceStyle(s.qualAnswers[q.key] === label, accent)
+      }))
+    }));
+    const noQualify = qualifyQuestionsRaw.some(q => !s.qualAnswers[q.key]);
     const budgetOptions = this.budgetMeta.map(label => ({ label, onClick: () => this.selectBudget(label), style: this.baseChoiceStyle(s.budget === label, accent) + ';text-align:center;justify-content:center' }));
 
     const noFocus = !s.focus;
     const noBudget = !s.budget;
-    const cannotSubmit = s.submitting || !(s.name.trim().length > 0 && /\S+@\S+\.\S+/.test(s.email) && s.company.trim().length > 0 && s.phone.trim().length > 0 && s.website.trim().length > 0 && s.teamSize.trim().length > 0 && s.problem.trim().length > 0);
-    const nextBtnStyle = `padding:12px 24px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:13px;cursor:pointer;opacity:${(s.step===1?noFocus:noBudget)?0.4:1}`;
+    // Step 3's qualifying questions already did the real data-collection work, so step 4 only
+    // insists on a way to reach back out — company/phone/website/notes are all optional now,
+    // trading a little extra context for fewer people dropping off on the last screen.
+    const cannotSubmit = s.submitting || !(s.name.trim().length > 0 && /\S+@\S+\.\S+/.test(s.email));
+    const nextBtnStyle = `padding:12px 24px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:13px;cursor:pointer;opacity:${(s.step===1?noFocus:s.step===2?noBudget:noQualify)?0.4:1}`;
     const submitBtnStyle = `padding:12px 24px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:13px;cursor:pointer;opacity:${cannotSubmit?0.4:1}`;
     const submitBtnLabel = s.submitting ? t.submitBtnLoading : t.submitBtn;
     const focusLabelMap = {
@@ -5109,8 +5195,8 @@ class Component extends DCLogic {
       newsletterHp: s.newsletterHp, setNewsletterHp: this.setNewsletterHp,
       newsletterSubmitted: s.newsletterSubmitted, newsletterCannotSubmit: !/\S+@\S+\.\S+/.test(s.newsletterEmail),
       newsletterBtnStyle: `padding:13px 20px;background:${accent};color:#000;border:none;border-radius:4px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;opacity:${/\S+@\S+\.\S+/.test(s.newsletterEmail)?1:0.4}`,
-      company: s.company, phone: s.phone, website: s.website, teamSize: s.teamSize, problem: s.problem,
-      setCompany: this.setCompany, setPhone: this.setPhone, setWebsite: this.setWebsite, setTeamSize: this.setTeamSize, setProblem: this.setProblem,
+      company: s.company, phone: s.phone, website: s.website, problem: s.problem,
+      setCompany: this.setCompany, setPhone: this.setPhone, setWebsite: this.setWebsite, setProblem: this.setProblem,
       auditCardMaxWidth: (s.step === 3 && !s.submitted) || s.submitted ? '900px' : '620px',
       showEstimate: !!s.focus && !s.submitted,
       estimateHeadline: this.estimateFor(s.focus, s.budget, s.lang).headline,
@@ -5128,10 +5214,10 @@ class Component extends DCLogic {
       pipelineAnim: s.animatePipeline ? 'flowDot 2.2s linear infinite' : 'none',
       pipelineAnim2: s.animatePipeline ? 'flowDot 2.2s linear infinite .7s' : 'none',
       heroDeployAI: this.heroDeployAI, heroBuildMVP: this.heroBuildMVP, goAuditWithRoi: this.goAuditWithRoi,
-      step: s.step, isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3,
-      notSubmitted: !s.submitted, submitted: s.submitted, progressPct: `${(s.step / 3) * 100}%`,
+      step: s.step, isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4,
+      notSubmitted: !s.submitted, submitted: s.submitted, progressPct: `${(s.step / 4) * 100}%`,
       focusOptions, budgetOptions, noFocus, noBudget, cannotSubmit, nextBtnStyle, submitBtnStyle, submitBtnLabel,
-      teamSizePlaceholder: step3Copy.teamSize, problemPlaceholderDynamic: step3Copy.problem,
+      qualifyQuestions, noQualify, problemPlaceholderDynamic: finalNoteCopy,
       submitting: s.submitting, submitError: s.submitError,
       goNext: this.goNext, goBack: this.goBack, name: s.name, email: s.email, setName: this.setName, setEmail: this.setEmail,
       handleSubmit: this.handleSubmit, summaryLine: `${focusLabelMap[s.focus] || '—'} · ${s.budget || '—'} · ${s.name}`,

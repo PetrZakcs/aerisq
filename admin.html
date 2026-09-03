@@ -95,15 +95,33 @@
                     <sc-if value="{{ lead.hasWebsite }}" hint-placeholder-val="{{ true }}">
                       <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">WEB:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ lead.website }}</span></div>
                     </sc-if>
-                    <sc-if value="{{ lead.hasTeamSize }}" hint-placeholder-val="{{ true }}">
-                      <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">TECH STACK / TÝM:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ lead.team_size }}</span></div>
-                    </sc-if>
                     <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">JAZYK:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ lead.lang }}</span></div>
                   </div>
 
+                  <sc-if value="{{ lead.hasQualification }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-bottom:14px">
+                      <strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399">KVALIFIKAČNÍ ODPOVĚDI:</strong>
+                      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:6px">
+                        <sc-for list="{{ lead.qualificationList }}" as="qa" hint-placeholder-count="3">
+                          <div style="background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.15);border-radius:4px;padding:8px 10px">
+                            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#71717a;text-transform:uppercase;margin-bottom:2px">{{ qa.label }}</div>
+                            <div style="font-size:13px;color:#fafafa">{{ qa.value }}</div>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ lead.hasRoi }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-bottom:14px;background:#050505;border-radius:4px;padding:10px;border:1px solid rgba(255,255,255,.06)">
+                      <strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">ROI KALKULAČKA:</strong>
+                      <div style="font-size:13px;color:#fafafa;margin-top:2px">{{ lead.roiSummary }}</div>
+                    </div>
+                  </sc-if>
+
                   <sc-if value="{{ lead.hasProblem }}" hint-placeholder-val="{{ false }}">
                     <div style="margin-bottom:14px">
-                      <strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">POPIS PROBLÉMU / ROI KALKULAČKA:</strong>
+                      <strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">DALŠÍ POZNÁMKA OD KLIENTA:</strong>
                       <p style="margin:4px 0 0;font-size:13px;color:#a1a1aa;line-height:1.5;background:#050505;padding:10px;border-radius:4px;white-space:pre-wrap">{{ lead.problem }}</p>
                     </div>
                   </sc-if>
@@ -716,6 +734,15 @@
 // multi-step form's own embedded Calendly step. api/calendly-webhook.js stores that raw value
 // verbatim in bookings.service (whichever of its two paths handled the call); this just makes it
 // readable here.
+// Short human labels for the step-3 qualifying-question keys (see FOCUS_QUALIFY_QUESTIONS in
+// index.html) — the jsonb column only stores { key: 'chosen answer' }, not the question text
+// itself, so admin needs its own lookup to show something readable rather than raw keys.
+const QUALIFICATION_KEY_LABELS = {
+  data_location: 'Kde jsou data', user_count: 'Počet uživatelů', urgency: 'Naléhavost',
+  product_stage: 'Fáze produktu', tech_team: 'Tech tým', timeline: 'Termín',
+  bottleneck: 'Bottleneck', team_size: 'Velikost týmu', criticality: 'Kritičnost',
+  headcount: 'Počet lidí', roles: 'Role', skill_level: 'Úroveň znalostí'
+};
 const LEAD_STATUS_META = {
   new: { label: '🆕 Nová', bg: 'rgba(251,191,36,.12)', fg: '#fbbf24' },
   contacted: { label: '📞 Kontaktováno', bg: 'rgba(52,211,153,.12)', fg: '#34d399' },
@@ -1536,12 +1563,21 @@ class Component extends DCLogic {
       auditRequests: s.auditRequests.map(a => {
         const notesValue = (s.leadNotesDrafts[a.id] !== undefined) ? s.leadNotesDrafts[a.id] : (a.notes || '');
         const statusMeta = LEAD_STATUS_META[a.status] || LEAD_STATUS_META.new;
+        const qualification = (a.qualification && typeof a.qualification === 'object') ? a.qualification : {};
+        const qualificationList = Object.entries(qualification).map(([key, value]) => ({
+          label: QUALIFICATION_KEY_LABELS[key] || key,
+          value
+        }));
+        const hasRoi = a.roi_employees != null;
         return {
           ...a,
           status: a.status || 'new',
           statusBadgeLabel: statusMeta.label,
           statusBadgeStyle: `font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 8px;border-radius:10px;background:${statusMeta.bg};color:${statusMeta.fg}`,
-          hasPhone: !!a.phone, hasWebsite: !!a.website, hasTeamSize: !!a.team_size, hasProblem: !!a.problem,
+          hasPhone: !!a.phone, hasWebsite: !!a.website, hasProblem: !!a.problem,
+          qualificationList, hasQualification: qualificationList.length > 0,
+          hasRoi,
+          roiSummary: hasRoi ? `${a.roi_employees} lidí × ${a.roi_hours_per_week} h/týden rutiny → odhad ${a.roi_saved_hours_monthly} h/měsíc, ${(a.roi_saved_yearly || 0).toLocaleString('cs-CZ')} Kč/rok` : '',
           notes: notesValue,
           onStatusChange: (e) => this.updateLeadStatus(a.id, e.target.value),
           onNotesChange: (e) => {
