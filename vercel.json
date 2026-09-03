@@ -1,12 +1,31 @@
 {
   "cleanUrls": true,
+  "proxy": {
+    "entrypoint": "proxy.js"
+  },
   "rewrites": [
     {
       "source": "/admin",
       "destination": "/admin.html"
     },
     {
-      "source": "/((?!admin|api|assets|_vercel).*)$",
+      "source": "/clients",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/clients/(.*)",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/portal",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/portal/(.*)",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]

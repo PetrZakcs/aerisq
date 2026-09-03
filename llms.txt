@@ -18,9 +18,9 @@
 - First working prototype (PoC) delivered within 14 days of kickoff.
 
 ## Pages
-- Homepage: https://aerisq.tech/AerisQ.dc.html
-- Case Studies: https://aerisq.tech/Case-Studies.dc.html
-- Blog: https://aerisq.tech/Blog.dc.html
+- Homepage: https://aerisq.tech/
+- Blog: https://aerisq.tech/blog
+- Careers: https://aerisq.tech/careers
 
 ## Contact
 - Email: petr@aerisq.tech
