@@ -3842,7 +3842,7 @@ class Component extends DCLogic {
     // moment a visitor actually finishes booking, not just clicks through. We don't get the
     // invitee's name/email this way (that's only in the notification email Calendly sends
     // directly) — just which service they booked, which is what actually needed solving here.
-    postToApi('/api/log-booking', { service: this._pendingBookingService || 'unknown' });
+    postToApi('/api/calendly-webhook', { service: this._pendingBookingService || 'unknown' });
     this._pendingBookingService = null;
   };
 

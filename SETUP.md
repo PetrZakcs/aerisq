@@ -28,11 +28,13 @@ create policy staff_full_access_bookings on bookings for all
   with check (exists (select 1 from team_members where id = auth.uid()));
 ```
 
-To je celé. `api/log-booking.js` se volá přímo z webu, jakmile Calendly (na jakémkoliv tarifu,
+To je celé. `api/calendly-webhook.js` se volá přímo z webu, jakmile Calendly (na jakémkoliv tarifu,
 včetně Free) pošle zpátky zprávu, že návštěvník dokončil rezervaci — nepotřebuje žádný klíč ani
-nastavení na Calendly straně. Neumí ale zjistit jméno/e-mail (to Calendly touhle cestou neposílá),
-takže se v adminu u takové rezervace zobrazí jen „Dokončeno na Calendly (bez detailu)" — jméno a
-e-mail uvidíte v samotném Calendly/e-mailové notifikaci.
+nastavení na Calendly straně (viz kód: bez `Calendly-Webhook-Signature` hlavičky se chová jako tenhle
+free-tier zápis, s ní jako plnohodnotný webhook níže — obojí sdílí jeden soubor kvůli limitu 12
+serverless funkcí na Vercel Hobby tarifu). Neumí ale zjistit jméno/e-mail (to Calendly touhle cestou
+neposílá), takže se v adminu u takové rezervace zobrazí jen „Dokončeno na Calendly (bez detailu)" —
+jméno a e-mail uvidíte v samotném Calendly/e-mailové notifikaci.
 
 **Jak ověřit, že to funguje:** zarezervujte si sami testovací hovor přes některé z tlačítek
 „Rezervovat hovor" na webu (dotáhněte to skutečně do konce, ne jen otevřete Calendly) → mělo by se

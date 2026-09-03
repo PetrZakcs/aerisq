@@ -160,9 +160,11 @@
           </div>
         </div>
         <div>
-          <!-- Populated by api/log-booking.js (free-tier path: Calendly's postMessage event,
-               triggered client-side, has no invitee name/email — just which service) and/or
-               api/calendly-webhook.js (paid-tier path: has full invitee details). See SETUP.md. -->
+          <!-- Populated by api/calendly-webhook.js, which handles two callers: our own frontend
+               right after Calendly's postMessage confirms a completed booking (free-tier path —
+               no invitee name/email, just which service), or a real Calendly webhook delivery if
+               this account is ever upgraded to a paid plan (has full invitee details). See
+               SETUP.md. -->
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:12px">// REZERVACE HOVORŮ Z CALENDLY ({{ bookings.length }})</div>
           <div style="display:flex;flex-direction:column;gap:12px">
             <sc-for list="{{ bookings }}" as="bk" hint-placeholder-count="2">
@@ -663,8 +665,9 @@
 <script type="text/x-dc" data-dc-script>
 // Matches the service tags index.html attaches to a booking — either via utm_campaign on the
 // direct per-service Calendly links (see goToServiceCalendly), or 'audit_wizard' for the main
-// multi-step form's own embedded Calendly step. api/log-booking.js and api/calendly-webhook.js
-// both store that raw value verbatim in bookings.service; this just makes it readable here.
+// multi-step form's own embedded Calendly step. api/calendly-webhook.js stores that raw value
+// verbatim in bookings.service (whichever of its two paths handled the call); this just makes it
+// readable here.
 const BOOKING_SERVICE_LABELS = {
   hospitality: 'Hotelnictví a gastro', realestate: 'Developeři & Reality',
   offering_ai: 'AI integrace', offering_mvp: 'MVP engineering',
@@ -1472,9 +1475,9 @@ class Component extends DCLogic {
         return {
           ...b,
           serviceLabel: BOOKING_SERVICE_LABELS[b.service] || b.service || '—',
-          // invitee_name/email are only populated via the paid-tier webhook path
-          // (api/calendly-webhook.js) — the free-tier path (api/log-booking.js) only knows which
-          // service was booked, so show that plainly instead of a blank name/line.
+          // invitee_name/email are only populated via api/calendly-webhook.js's paid-tier webhook
+          // path — its free-tier path only knows which service was booked, so show that plainly
+          // instead of a blank name/line.
           displayName: b.invitee_name || 'Dokončeno na Calendly (bez detailu)',
           displayContact: b.invitee_email || '—',
           notes: notesValue,
