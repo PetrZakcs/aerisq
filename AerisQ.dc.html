@@ -2419,13 +2419,21 @@ function trackEvent(name, data) {
 
 // Loads the Calendly inline-widget script once, lazily — only once a lead is actually about to see
 // the embed (right after a successful audit submission), not on every page load.
-function ensureCalendlyScript() {
-  if (document.getElementById('calendly-widget-script')) return;
-  const s = document.createElement('script');
-  s.id = 'calendly-widget-script';
-  s.src = 'https://assets.calendly.com/assets/external/widget.js';
-  s.async = true;
-  document.body.appendChild(s);
+// `onReady` fires once Calendly's script has actually executed (or immediately if it already
+// has) — needed because just injecting a `.calendly-inline-widget` div into the DOM later (e.g.
+// only once a form submission errors or succeeds) isn't reliably picked up by Calendly's own
+// page-load-time auto-scan; callers use this to explicitly call `Calendly.initInlineWidget(...)`.
+function ensureCalendlyScript(onReady) {
+  if (window.Calendly) { if (onReady) onReady(); return; }
+  let s = document.getElementById('calendly-widget-script');
+  if (!s) {
+    s = document.createElement('script');
+    s.id = 'calendly-widget-script';
+    s.src = 'https://assets.calendly.com/assets/external/widget.js';
+    s.async = true;
+    document.body.appendChild(s);
+  }
+  if (onReady) s.addEventListener('load', onReady, { once: true });
 }
 
 const SECTOR_SLUGS_REV = Object.fromEntries(Object.entries(SECTOR_SLUGS).map(([k, v]) => [v, k]));
@@ -3408,6 +3416,7 @@ class Component extends DCLogic {
     } catch(e) {}
     this.loadLiveRoles();
     this.initScrollReveal();
+    this.initCalendlyWidgets();
     if (this.state.page === 'hospitality') this.fetchDemoStat();
     if (this.state.page === 'realestate') this.fetchReDemoStat();
   }
@@ -3743,7 +3752,26 @@ class Component extends DCLogic {
     // never stuck showing stale state until the user's next scroll tick (handleStoryScroll is
     // itself a cheap no-op on every page that has neither #tStages nor #hStages).
     this.handleStoryScroll();
+    this.initCalendlyWidgets();
   }
+
+  // Every `.calendly-inline-widget` div on the site (audit success, audit error fallback, the
+  // per-sector demo CTAs) is only added to the DOM well after Calendly's own script first runs —
+  // e.g. only once a multi-step form actually reaches its success/error state — so Calendly's
+  // page-load-time auto-scan never sees it. Explicitly initializing each one via their documented
+  // `initInlineWidget` API (once the script's finished loading) is the reliable fix for that;
+  // `data-cal-init` just stops us from calling it twice on the same div across re-renders.
+  initCalendlyWidgets = () => {
+    const pending = document.querySelectorAll('.calendly-inline-widget:not([data-cal-init])');
+    if (!pending.length) return;
+    ensureCalendlyScript(() => {
+      document.querySelectorAll('.calendly-inline-widget:not([data-cal-init])').forEach(el => {
+        if (!window.Calendly || !el.dataset.url) return;
+        el.dataset.calInit = '1';
+        window.Calendly.initInlineWidget({ url: el.dataset.url, parentElement: el });
+      });
+    });
+  };
 
   componentWillUnmount() {
     window.removeEventListener('popstate', this.onPopState);
