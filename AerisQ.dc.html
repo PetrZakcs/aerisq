@@ -907,9 +907,9 @@ body{animation:pageFadeIn .35s ease both}
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <input placeholder="{{ t.websitePlaceholder }} *" value="{{ website }}" onChange="{{ setWebsite }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
-            <input placeholder="{{ t.techStackPlaceholder }} *" value="{{ teamSize }}" onChange="{{ setTeamSize }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
+            <input placeholder="{{ teamSizePlaceholder }} *" value="{{ teamSize }}" onChange="{{ setTeamSize }}" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif" style-focus="border-color:{{ accentColor }};outline:none">
           </div>
-          <textarea placeholder="{{ t.problemPlaceholder }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="4" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
+          <textarea placeholder="{{ problemPlaceholderDynamic }} *" value="{{ problem }}" onChange="{{ setProblem }}" rows="4" style="padding:13px 14px;background:#000;border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#fafafa;font-size:14px;font-family:'Manrope',sans-serif;resize:vertical" style-focus="border-color:{{ accentColor }};outline:none"></textarea>
         </div>
         <input type="text" tabindex="-1" autocomplete="off" aria-hidden="true" value="{{ auditHp }}" onChange="{{ setAuditHp }}" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
         <sc-if value="{{ submitError }}" hint-placeholder-val="{{ false }}">
@@ -2831,6 +2831,25 @@ const DICT = {
 // generic fallback reply. That's deliberate: a guessed match (or an "we can't script this" bail-out
 // message) can misfire or read as hedging, and one weak-sounding answer undercuts trust in the demo
 // more than a slightly narrower set of options does.
+// Branches the main audit wizard's step 3 by which service the visitor picked in step 1 — same
+// two fields (teamSize/problem), just asking the question that's actually relevant to that
+// service instead of one generic prompt for everyone. Keeps the existing audit_requests schema
+// (focus/budget/problem etc.) untouched; this only changes what's asked, not what's stored.
+const FOCUS_STEP3_COPY = {
+  cs: {
+    ai: { teamSize: 'Kde dnes žijí vaše data? (dokumenty, CRM, e-maily...)', problem: 'Co konkrétně chcete automatizovat?' },
+    mvp: { teamSize: 'Máte už tým nebo kód, nebo stavíme od nuly?', problem: 'Co přesně chcete postavit a do kdy potřebujete funkční prototyp?' },
+    enterprise: { teamSize: 'Jaký je současný tech stack?', problem: 'Kde konkrétně cítíte technický dluh nebo bottleneck?' },
+    training: { teamSize: 'Kolik lidí a jaké role by se tréninku účastnily?', problem: 'Jaká je dnes úroveň znalostí AI nástrojů ve firmě a jaký formát tréninku preferujete?' }
+  },
+  en: {
+    ai: { teamSize: 'Where does your data live today? (docs, CRM, email...)', problem: 'What exactly do you want to automate?' },
+    mvp: { teamSize: 'Do you already have a team or code, or starting from scratch?', problem: 'What exactly do you want to build, and by when do you need a working prototype?' },
+    enterprise: { teamSize: "What's your current tech stack?", problem: 'Where specifically do you feel technical debt or a bottleneck?' },
+    training: { teamSize: 'How many people, and what roles, would join the training?', problem: "What's your team's current level with AI tools, and what training format do you prefer?" }
+  }
+};
+
 const HOSP_DEMO_ORDER = ['checkin', 'review', 'cancel', 'wifi', 'overbooking', 'allergy', 'tablebooking', 'lostitem', 'groupbooking', 'noise'];
 const HOSP_DEMO = {
   en: {
@@ -4872,9 +4891,13 @@ class Component extends DCLogic {
     const focusMeta = [
       { key: 'ai', label: t.caseFilterAi },
       { key: 'mvp', label: t.caseFilterMvp },
-      { key: 'enterprise', label: t.caseFilterEnterprise }
+      { key: 'enterprise', label: t.caseFilterEnterprise },
+      { key: 'training', label: t.offeringTrainingLabel }
     ];
     const focusOptions = focusMeta.map(m => ({ label: m.label, box: s.focus === m.key ? '[×] ' : '[ ] ', onClick: () => this.selectFocus(m.key), style: this.baseChoiceStyle(s.focus === m.key, accent) }));
+    // Falls back to the 'ai' branch's copy if focus is somehow unset — step 3 is unreachable
+    // without picking one, so this is just a defensive default, never actually shown.
+    const step3Copy = (FOCUS_STEP3_COPY[s.lang] && FOCUS_STEP3_COPY[s.lang][s.focus]) || FOCUS_STEP3_COPY.cs.ai;
     const budgetOptions = this.budgetMeta.map(label => ({ label, onClick: () => this.selectBudget(label), style: this.baseChoiceStyle(s.budget === label, accent) + ';text-align:center;justify-content:center' }));
 
     const noFocus = !s.focus;
@@ -5108,6 +5131,7 @@ class Component extends DCLogic {
       step: s.step, isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3,
       notSubmitted: !s.submitted, submitted: s.submitted, progressPct: `${(s.step / 3) * 100}%`,
       focusOptions, budgetOptions, noFocus, noBudget, cannotSubmit, nextBtnStyle, submitBtnStyle, submitBtnLabel,
+      teamSizePlaceholder: step3Copy.teamSize, problemPlaceholderDynamic: step3Copy.problem,
       submitting: s.submitting, submitError: s.submitError,
       goNext: this.goNext, goBack: this.goBack, name: s.name, email: s.email, setName: this.setName, setEmail: this.setEmail,
       handleSubmit: this.handleSubmit, summaryLine: `${focusLabelMap[s.focus] || '—'} · ${s.budget || '—'} · ${s.name}`,
