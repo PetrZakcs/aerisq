@@ -2,12 +2,12 @@
 
 ## 🆕 3. 9. 2026 (2) — rezervace z Calendly viditelné v adminu, s poznámkami
 
-Tlačítka „Rezervovat hovor" na nabídkových a oborových stránkách teď otevírají Calendly rovnou
-(viz sekce níže). Aby se dokončená rezervace propsala i do administrace — se jménem, e-mailem,
-tím, ze které stránky/služby přišla, a polem na vaše poznámky — potřeba udělat dva kroky, oba mimo
-tenhle repozitář (nemám přístup ani do Calendly, ani do Vercel dashboardu):
+Tlačítka „Rezervovat hovor" na nabídkových a oborových stránkách otevírají Calendly rovnou. Aby se
+dokončená rezervace (a ze které stránky/služby přišla) propsala i do administrace, potřeba jediný
+krok mimo repozitář — Calendly ani Vercel dashboard, ke kterým nemám přístup, se **nemusí** vůbec
+řešit, funguje to zdarma na jakémkoliv Calendly tarifu:
 
-### 1. Supabase SQL Editor — nová tabulka `bookings`
+### Supabase SQL Editor — nová tabulka `bookings`
 
 ```sql
 create table if not exists bookings (
@@ -15,7 +15,7 @@ create table if not exists bookings (
   created_at timestamptz not null default now(),
   invitee_name text,
   invitee_email text,
-  service text,                    -- 'hospitality' | 'realestate' | 'offering_ai' | 'offering_mvp' | 'offering_enterprise' | 'offering_training'
+  service text,                    -- 'hospitality' | 'realestate' | 'offering_ai' | 'offering_mvp' | 'offering_enterprise' | 'offering_training' | 'audit_wizard'
   calendly_event_uri text,
   calendly_invitee_uri text,
   notes text
@@ -28,28 +28,33 @@ create policy staff_full_access_bookings on bookings for all
   with check (exists (select 1 from team_members where id = auth.uid()));
 ```
 
-### 2. Calendly — webhook subscription (vyžaduje placený tarif; na Free Calendly webhooky nenabízí)
+To je celé. `api/log-booking.js` se volá přímo z webu, jakmile Calendly (na jakémkoliv tarifu,
+včetně Free) pošle zpátky zprávu, že návštěvník dokončil rezervaci — nepotřebuje žádný klíč ani
+nastavení na Calendly straně. Neumí ale zjistit jméno/e-mail (to Calendly touhle cestou neposílá),
+takže se v adminu u takové rezervace zobrazí jen „Dokončeno na Calendly (bez detailu)" — jméno a
+e-mail uvidíte v samotném Calendly/e-mailové notifikaci.
+
+**Jak ověřit, že to funguje:** zarezervujte si sami testovací hovor přes některé z tlačítek
+„Rezervovat hovor" na webu (dotáhněte to skutečně do konce, ne jen otevřete Calendly) → mělo by se
+to objevit v adminu pod Leads → „REZERVACE HOVORŮ Z CALENDLY" během pár vteřin, se správně
+přiřazenou službou.
+
+### Volitelné, jen pokud budete mít Calendly na placeném tarifu: webhook s plným jménem/e-mailem
+
+`api/calendly-webhook.js` je hotový a čeká — dá vám navíc jméno a e-mail rezervace přímo v adminu
+(zapisuje do stejné tabulky `bookings`, jen s vyplněnými `invitee_name`/`invitee_email`), ale
+Calendly webhooky nenabízí na Free tarifu. Pokud byste na placený tarif někdy přešli:
 
 1. Calendly → Integrations → **Webhooks** → **Create Webhook Subscription**.
 2. **URL**: `https://www.aerisq.tech/api/calendly-webhook`
-3. **Events**: zaškrtněte jen **invitee.created** (ostatní se ignorují, není potřeba je posílat).
+3. **Events**: zaškrtněte jen **invitee.created**.
 4. **Scope**: podle toho, jestli je to jeden uživatelský účet, nebo organizace.
 5. Po vytvoření vám Calendly ukáže **signing secret** — zkopírujte ho.
+6. Vercel → Project Settings → Environment Variables → pro Production přidat
+   `CALENDLY_WEBHOOK_SIGNING_KEY = <signing secret z kroku 5>` → redeploy.
 
-### 3. Vercel — nová proměnná prostředí
-
-Project Settings → Environment Variables → přidat pro **Production**:
-```
-CALENDLY_WEBHOOK_SIGNING_KEY = <signing secret z kroku 2>
-```
-a redeploy (stejně jako u `SUPABASE_SERVICE_ROLE_KEY` výše).
-
-**Jak ověřit, že to funguje:** zarezervujte si sami testovací hovor přes některé z tlačítek
-„Rezervovat hovor" na webu → mělo by se to objevit v adminu pod Leads → „REZERVACE HOVORŮ Z
-CALENDLY" během pár vteřin, se správně přiřazenou službou. Pokud ne, zkontrolujte ve Vercel
-dashboardu → Deployments → poslední produkční deployment → Functions/Logs u
-`/api/calendly-webhook`, jestli tam nepadá `invalid_signature` (špatný/chybějící signing key) nebo
-jiná chyba.
+Bez tohohle kroku `api/calendly-webhook.js` prostě nikdy nikdo nezavolá — nijak neškodí, jen leží
+připravený.
 
 ## 🆕 3. 9. 2026 — opraveno: poptávky a přihlášky se nepropisovaly
 

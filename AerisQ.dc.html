@@ -3835,7 +3835,15 @@ class Component extends DCLogic {
   // Calendly's inline widget posts this message on a completed booking — this is how we know the
   // funnel actually closed, not just that the widget was shown.
   onCalendlyMessage = (e) => {
-    if (e?.data?.event === 'calendly.event_scheduled') trackEvent('calendly_booked');
+    if (e?.data?.event !== 'calendly.event_scheduled') return;
+    trackEvent('calendly_booked', { source: this._pendingBookingService || 'unknown' });
+    // Free-tier-compatible substitute for a Calendly webhook (those need a paid plan): Calendly's
+    // own booking page posts this message back to whichever window/tab opened or embedded it the
+    // moment a visitor actually finishes booking, not just clicks through. We don't get the
+    // invitee's name/email this way (that's only in the notification email Calendly sends
+    // directly) — just which service they booked, which is what actually needed solving here.
+    postToApi('/api/log-booking', { service: this._pendingBookingService || 'unknown' });
+    this._pendingBookingService = null;
   };
 
   alertClientPortalComingSoon = (e) => {
@@ -3880,12 +3888,17 @@ class Component extends DCLogic {
 
   // Per-service/sector CTAs skip the multi-step questionnaire entirely and open Calendly directly
   // in a new tab — no dependency on our own /api/submit-* pipeline at all, and utm_campaign tags
-  // which page the booking came from (visible in the Calendly notification/dashboard) so whoever
-  // takes the call already has that context.
+  // which page the booking came from. `_pendingBookingService` + onCalendlyMessage below is how
+  // that reaches admin without Calendly's paid-tier-only webhooks: deliberately NOT passing
+  // noopener/noreferrer here, since severing window.opener would also block the
+  // `calendly.event_scheduled` postMessage Calendly's own booking page sends back to whichever
+  // window opened it once the visitor actually finishes booking — that's the one signal we need
+  // back, so the (trusted, first-party) popup keeps its opener reference.
   goToServiceCalendly = (serviceKey) => {
     trackEvent('audit_cta_click', { source: serviceKey });
+    this._pendingBookingService = serviceKey;
     const url = `${CALENDLY_URL}?utm_campaign=${serviceKey}&utm_source=aerisq_site&hide_gdpr_banner=1`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, '_blank');
   };
   goCareers = () => this.goTo('careers');
   goBlog = () => this.goTo('blog');
@@ -4046,6 +4059,10 @@ class Component extends DCLogic {
       website_hp: s.auditHp
     });
 
+    // Both the success and the error-fallback view show an embedded Calendly widget (see the
+    // template) — either way this is the "audit wizard" booking, distinct from the direct
+    // per-service CTAs (see goToServiceCalendly) for the same onCalendlyMessage handler.
+    this._pendingBookingService = 'audit_wizard';
     if (result.ok) {
       trackEvent('audit_lead_submitted', { focus: s.focus, budget: s.budget });
       this.setState({ submitted: true, submitting: false, submitError: false });

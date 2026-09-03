@@ -160,16 +160,17 @@
           </div>
         </div>
         <div>
-          <!-- Populated by api/calendly-webhook.js — see SETUP.md for the one-time Calendly
-               webhook subscription + bookings table migration this needs to actually receive data. -->
+          <!-- Populated by api/log-booking.js (free-tier path: Calendly's postMessage event,
+               triggered client-side, has no invitee name/email — just which service) and/or
+               api/calendly-webhook.js (paid-tier path: has full invitee details). See SETUP.md. -->
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;letter-spacing:.04em;margin-bottom:12px">// REZERVACE HOVORŮ Z CALENDLY ({{ bookings.length }})</div>
           <div style="display:flex;flex-direction:column;gap:12px">
             <sc-for list="{{ bookings }}" as="bk" hint-placeholder-count="2">
               <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;padding:18px 20px">
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px">
                   <div>
-                    <h3 style="margin:0 0 4px;font-size:15px;color:#fafafa">{{ bk.invitee_name }}</h3>
-                    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a">{{ bk.invitee_email }} · {{ bk.created_at }}</div>
+                    <h3 style="margin:0 0 4px;font-size:15px;color:#fafafa">{{ bk.displayName }}</h3>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a">{{ bk.displayContact }}</div>
                   </div>
                   <span style="padding:5px 10px;background:rgba(52,211,153,.1);color:#34d399;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;white-space:nowrap">{{ bk.serviceLabel }}</span>
                 </div>
@@ -660,13 +661,15 @@
 
 </x-dc>
 <script type="text/x-dc" data-dc-script>
-// Matches the utm_campaign values the public site's "Rezervovat hovor" buttons attach to each
-// Calendly link (see goToServiceCalendly in index.html) — the webhook at api/calendly-webhook.js
-// stores that raw value verbatim in bookings.service, this just makes it readable here.
+// Matches the service tags index.html attaches to a booking — either via utm_campaign on the
+// direct per-service Calendly links (see goToServiceCalendly), or 'audit_wizard' for the main
+// multi-step form's own embedded Calendly step. api/log-booking.js and api/calendly-webhook.js
+// both store that raw value verbatim in bookings.service; this just makes it readable here.
 const BOOKING_SERVICE_LABELS = {
   hospitality: 'Hotelnictví a gastro', realestate: 'Developeři & Reality',
   offering_ai: 'AI integrace', offering_mvp: 'MVP engineering',
-  offering_enterprise: 'Enterprise škálovatelnost', offering_training: 'Trénink týmu'
+  offering_enterprise: 'Enterprise škálovatelnost', offering_training: 'Trénink týmu',
+  audit_wizard: 'Audit (hlavní formulář)'
 };
 const SUPABASE_URL = 'https://multgoxlzarxexeeapuo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11bHRnb3hsemFyeGV4ZWVhcHVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMjc0MDQsImV4cCI6MjEwMTcwMzQwNH0.ItQ4C6Z3MDdpOPqFjsDQ7roCN0rjDn1wsSz3Vu5a-XE';
@@ -1469,6 +1472,11 @@ class Component extends DCLogic {
         return {
           ...b,
           serviceLabel: BOOKING_SERVICE_LABELS[b.service] || b.service || '—',
+          // invitee_name/email are only populated via the paid-tier webhook path
+          // (api/calendly-webhook.js) — the free-tier path (api/log-booking.js) only knows which
+          // service was booked, so show that plainly instead of a blank name/line.
+          displayName: b.invitee_name || 'Dokončeno na Calendly (bez detailu)',
+          displayContact: b.invitee_email || '—',
           notes: notesValue,
           onNotesChange: (e) => {
             const val = e.target.value;
