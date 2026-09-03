@@ -75,14 +75,59 @@
       <div style="display:flex;flex-direction:column;gap:32px">
         <div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a;letter-spacing:.04em;margin-bottom:12px">AUDIT REQUESTS ({{ auditRequests.length }})</div>
-          <div style="border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden">
+          <div style="display:flex;flex-direction:column;gap:12px">
             <sc-for list="{{ auditRequests }}" as="lead" hint-placeholder-count="3">
-              <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:#0a0a0a;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;font-size:13px">
-                <div><strong style="color:#fafafa">{{ lead.name }}</strong><div style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ lead.email }}</div></div>
-                <div style="color:#a1a1aa">{{ lead.company }}</div>
-                <div style="color:#a1a1aa">{{ lead.focus }} · {{ lead.budget }}</div>
-                <div style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ lead.created_at }}</div>
-              </div>
+              <details style="border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0a0a0a;overflow:hidden">
+                <summary style="cursor:pointer;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:13px">
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;flex:1">
+                    <div><strong style="color:#fafafa">{{ lead.name }}</strong><div style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ lead.email }}</div></div>
+                    <div style="color:#a1a1aa">{{ lead.company }}</div>
+                    <div style="color:#a1a1aa">{{ lead.focus }} · {{ lead.budget }}</div>
+                    <div style="color:#71717a;font-family:'JetBrains Mono',monospace;font-size:11px">{{ lead.created_at }}</div>
+                  </div>
+                  <span style="{{ lead.statusBadgeStyle }}">{{ lead.statusBadgeLabel }}</span>
+                </summary>
+                <div style="padding:0 18px 18px;border-top:1px solid rgba(255,255,255,.08)">
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;background:#050505;padding:14px;border-radius:4px;border:1px solid rgba(255,255,255,.06);margin:14px 0">
+                    <sc-if value="{{ lead.hasPhone }}" hint-placeholder-val="{{ true }}">
+                      <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">TELEFON:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ lead.phone }}</span></div>
+                    </sc-if>
+                    <sc-if value="{{ lead.hasWebsite }}" hint-placeholder-val="{{ true }}">
+                      <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">WEB:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ lead.website }}</span></div>
+                    </sc-if>
+                    <sc-if value="{{ lead.hasTeamSize }}" hint-placeholder-val="{{ true }}">
+                      <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">TECH STACK / TÝM:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ lead.team_size }}</span></div>
+                    </sc-if>
+                    <div><strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">JAZYK:</strong> <span style="font-size:13px;color:#fafafa;display:block">{{ lead.lang }}</span></div>
+                  </div>
+
+                  <sc-if value="{{ lead.hasProblem }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-bottom:14px">
+                      <strong style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#71717a">POPIS PROBLÉMU / ROI KALKULAČKA:</strong>
+                      <p style="margin:4px 0 0;font-size:13px;color:#a1a1aa;line-height:1.5;background:#050505;padding:10px;border-radius:4px;white-space:pre-wrap">{{ lead.problem }}</p>
+                    </div>
+                  </sc-if>
+
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+                    <label style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399">STAV:</label>
+                    <select value="{{ lead.status }}" onChange="{{ lead.onStatusChange }}" style="{{ smallSelectStyle }}">
+                      <option value="new">🆕 Nová</option>
+                      <option value="contacted">📞 Kontaktováno</option>
+                      <option value="qualified">✅ Kvalifikováno</option>
+                      <option value="resolved">🏁 Vyřešeno</option>
+                      <option value="not_interested">❌ Nezájem</option>
+                    </select>
+                  </div>
+
+                  <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:12px">
+                    <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;margin-bottom:6px">INTERNÍ POZNÁMKY</label>
+                    <div style="display:flex;gap:10px">
+                      <textarea value="{{ lead.notes }}" onChange="{{ lead.onNotesChange }}" placeholder="Kdy jsme volali, co si klient přeje, další kroky..." rows="2" style="{{ inputStyle }};width:100%;resize:vertical"></textarea>
+                      <button onClick="{{ lead.onSaveNotes }}" style="{{ primaryBtnStyle }}">Uložit poznámku</button>
+                    </div>
+                  </div>
+                </div>
+              </details>
             </sc-for>
           </div>
         </div>
@@ -668,6 +713,13 @@
 // multi-step form's own embedded Calendly step. api/calendly-webhook.js stores that raw value
 // verbatim in bookings.service (whichever of its two paths handled the call); this just makes it
 // readable here.
+const LEAD_STATUS_META = {
+  new: { label: '🆕 Nová', bg: 'rgba(251,191,36,.12)', fg: '#fbbf24' },
+  contacted: { label: '📞 Kontaktováno', bg: 'rgba(52,211,153,.12)', fg: '#34d399' },
+  qualified: { label: '✅ Kvalifikováno', bg: 'rgba(52,211,153,.12)', fg: '#34d399' },
+  resolved: { label: '🏁 Vyřešeno', bg: 'rgba(255,255,255,.06)', fg: '#71717a' },
+  not_interested: { label: '❌ Nezájem', bg: 'rgba(248,113,113,.12)', fg: '#f87171' }
+};
 const BOOKING_SERVICE_LABELS = {
   hospitality: 'Hotelnictví a gastro', realestate: 'Developeři & Reality',
   offering_ai: 'AI integrace', offering_mvp: 'MVP engineering',
@@ -682,7 +734,7 @@ class Component extends DCLogic {
     session: null,
     loginEmail: '', loginPassword: '', loginError: '',
     activeTab: 'leads',
-    auditRequests: [], newsletterSubs: [], applications: [], appNotesDrafts: {},
+    auditRequests: [], leadNotesDrafts: {}, newsletterSubs: [], applications: [], appNotesDrafts: {},
     bookings: [], bookingNotesDrafts: {},
     clients: [], projects: [], milestonesByProject: {}, invoicesByProject: {}, documents: [], messagesByProject: {},
     newClientName: '', newClientCompany: '', newClientEmail: '',
@@ -805,6 +857,26 @@ class Component extends DCLogic {
       applications: s.applications.map(a => a.id === id ? { ...a, notes } : a)
     }));
     await fetch(`${SUPABASE_URL}/rest/v1/applications?id=eq.${id}`, {
+      method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ notes })
+    });
+  };
+
+  updateLeadStatus = async (id, status) => {
+    this.setState(s => ({
+      auditRequests: s.auditRequests.map(a => a.id === id ? { ...a, status } : a)
+    }));
+    await fetch(`${SUPABASE_URL}/rest/v1/audit_requests?id=eq.${id}`, {
+      method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ status })
+    });
+  };
+
+  updateLeadNotes = async (id, notes) => {
+    this.setState(s => ({
+      auditRequests: s.auditRequests.map(a => a.id === id ? { ...a, notes } : a)
+    }));
+    await fetch(`${SUPABASE_URL}/rest/v1/audit_requests?id=eq.${id}`, {
       method: 'PATCH', headers: { ...this.authHeaders(), 'Prefer': 'return=minimal' },
       body: JSON.stringify({ notes })
     });
@@ -1448,7 +1520,25 @@ class Component extends DCLogic {
       setNewUserFullName: this.setNewUserFullName, setNewUserEmail: this.setNewUserEmail, setNewUserPassword: this.setNewUserPassword, setNewUserRole: this.setNewUserRole,
       createUserAccount: this.createUserAccount, newUserCannotSubmit: s.newUserBusy || !(s.newUserFullName.trim() && s.newUserEmail.trim() && s.newUserPassword.length >= 8),
       newUserError: s.newUserError, newUserBtnLabel: s.newUserBusy ? 'Vytvářím…' : 'Vytvořit účet uživatele',
-      auditRequests: s.auditRequests, newsletterSubs: s.newsletterSubs,
+      auditRequests: s.auditRequests.map(a => {
+        const notesValue = (s.leadNotesDrafts[a.id] !== undefined) ? s.leadNotesDrafts[a.id] : (a.notes || '');
+        const statusMeta = LEAD_STATUS_META[a.status] || LEAD_STATUS_META.new;
+        return {
+          ...a,
+          status: a.status || 'new',
+          statusBadgeLabel: statusMeta.label,
+          statusBadgeStyle: `font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 8px;border-radius:10px;background:${statusMeta.bg};color:${statusMeta.fg}`,
+          hasPhone: !!a.phone, hasWebsite: !!a.website, hasTeamSize: !!a.team_size, hasProblem: !!a.problem,
+          notes: notesValue,
+          onStatusChange: (e) => this.updateLeadStatus(a.id, e.target.value),
+          onNotesChange: (e) => {
+            const val = e.target.value;
+            this.setState(st => ({ leadNotesDrafts: { ...st.leadNotesDrafts, [a.id]: val } }));
+          },
+          onSaveNotes: () => this.updateLeadNotes(a.id, notesValue)
+        };
+      }),
+      newsletterSubs: s.newsletterSubs,
       applications: s.applications.map(a => {
         const notesValue = (s.appNotesDrafts[a.id] !== undefined) ? s.appNotesDrafts[a.id] : (a.notes || '');
         return {
