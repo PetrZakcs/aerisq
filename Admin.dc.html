@@ -266,6 +266,9 @@
               </sc-if>
               <button onClick="{{ client.onToggleArchive }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#71717a;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">{{ client.archiveBtnLabel }}</button>
             </div>
+            <sc-if value="{{ client.hasInviteError }}" hint-placeholder-val="{{ false }}">
+              <div style="width:100%;font-family:'JetBrains Mono',monospace;font-size:11px;color:#f87171">{{ client.inviteError }}</div>
+            </sc-if>
           </div>
         </sc-for>
       </div>
@@ -738,7 +741,7 @@ class Component extends DCLogic {
     bookings: [], bookingNotesDrafts: {},
     clients: [], projects: [], milestonesByProject: {}, invoicesByProject: {}, documents: [], messagesByProject: {},
     newClientName: '', newClientCompany: '', newClientEmail: '',
-    clientFilter: 'active', inviteBusyByClient: {},
+    clientFilter: 'active', inviteBusyByClient: {}, inviteErrorByClient: {},
     newProjectName: '', newProjectClientId: '', newProjectPhase: '1', newProjectTargetDate: '',
     newDocProjectId: '', newDocTitle: '', newDocCategory: 'general', newDocFile: null,
     projectDrafts: {},
@@ -1097,15 +1100,23 @@ class Component extends DCLogic {
   // /api/invite-client — see that file for why this can't be a direct Supabase call (needs the
   // service_role key to create an Auth user).
   inviteClient = async (id) => {
-    this.setState(s => ({ inviteBusyByClient: { ...s.inviteBusyByClient, [id]: true } }));
+    this.setState(s => ({ inviteBusyByClient: { ...s.inviteBusyByClient, [id]: true }, inviteErrorByClient: { ...s.inviteErrorByClient, [id]: '' } }));
+    let ok = false;
     try {
-      await fetch('/api/invite-client', {
+      const res = await fetch('/api/invite-client', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.state.session.access_token}` },
         body: JSON.stringify({ clientId: id })
       });
+      ok = res.ok;
+      if (!ok) {
+        const data = await res.json().catch(() => ({}));
+        console.error('inviteClient failed', res.status, data);
+        this.setState(s => ({ inviteErrorByClient: { ...s.inviteErrorByClient, [id]: `Nepodařilo se (${res.status}): ${data.error || 'neznámá chyba'}` } }));
+      }
     } catch (e) {
       console.error('inviteClient failed', e);
+      this.setState(s => ({ inviteErrorByClient: { ...s.inviteErrorByClient, [id]: 'Nepodařilo se — zkontrolujte připojení a zkuste to znovu.' } }));
     }
     this.setState(s => ({ inviteBusyByClient: { ...s.inviteBusyByClient, [id]: false } }));
     this.loadAll(this.state.session);
@@ -1362,6 +1373,8 @@ class Component extends DCLogic {
         inviteBusy: busy,
         inviteBtnLabel: busy ? 'Odesílám…' : (invited ? 'Poslat znovu' : 'Pozvat do portálu'),
         inviteBtnStyle: `background:transparent;border:1px solid rgba(52,211,153,.35);color:#34d399;border-radius:4px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;opacity:${busy?0.5:1}`,
+        inviteError: s.inviteErrorByClient[c.id] || '',
+        hasInviteError: !!s.inviteErrorByClient[c.id],
         onInvite: () => this.inviteClient(c.id),
         archiveBtnLabel: status === 'archived' ? 'Obnovit' : 'Archivovat',
         onToggleArchive: () => this.toggleClientArchive(c.id, status)
