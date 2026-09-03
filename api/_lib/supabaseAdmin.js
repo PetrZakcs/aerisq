@@ -1,7 +1,7 @@
 // Server-side Supabase access using the service_role key.
 // NEVER import this file's key into client code — it bypasses Row Level Security entirely.
 // Requires env vars SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (Vercel dashboard → env vars).
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://multgoxlzarxexeeapuo.supabase.co';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://kwgpwbpgpxztcndhvixe.supabase.co';
 
 function requireServiceKey() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
